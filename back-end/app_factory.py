@@ -17,8 +17,8 @@ def create_app():
 
     app.debug = bool(int(os.getenv('DEBUG')))
     
-    app.include_router(index_router, prefix='ntuaflix_api/', tags=['index'])
-    app.include_router(admin_router, prefix='ntuaflix_api/admin', tags=['admin'])
+    app.include_router(index_router, prefix='/ntuaflix_api', tags=['index'])
+    app.include_router(admin_router, prefix='/ntuaflix_api/admin', tags=['admin'])
 
     return app
 
