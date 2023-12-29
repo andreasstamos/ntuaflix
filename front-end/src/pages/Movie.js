@@ -10,6 +10,9 @@ export default function Movie() {
         <div className='movie-container'>
             <div className='movie-column'>
                 <div className='movie-row'>
+                    
+                    <p className='movie-genres'>Adventure, Sci-fi, Drama</p>
+
                     <h1 className='title-with-line'>The Dark Knight</h1>
 
                     <div className='movie-metas'>

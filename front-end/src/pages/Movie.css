@@ -1,6 +1,7 @@
 .movie-page-container { 
     background:linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url("../assets/images/poster-2.jpg");
     min-height: 100%;
+    width: 100%;
     position: absolute;
     top: 0;
     background-size: cover;
@@ -25,6 +26,11 @@
     margin: 0 auto;
     margin-top: 12rem;
     padding-inline: max(5%, 0.7rem);
+}
+.movie-genres {
+    color: var(--citrine);
+    font-weight: 600;
+    font-size: 14px;
 }
 .movie-container img {
     max-height: 100%;
