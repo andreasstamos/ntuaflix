@@ -23,6 +23,9 @@ export default function Index() {
                 <MovieCard MovieImage={InterstellarImage}/>
                 <MovieCard MovieImage={BatmanImage}/>
                 <MovieCard MovieImage={OppenheimerImage}/>
+                <MovieCard MovieImage={BatmanImage}/>
+                <MovieCard MovieImage={BatmanImage}/>
+
             </div>
         </div>
 

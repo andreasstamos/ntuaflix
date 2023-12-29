@@ -1,13 +1,16 @@
 .cards-container {
     display: -webkit-box;
     display: flex;
+    flex-wrap: wrap;
+    row-gap: 1.5rem;
+    column-gap: 0.3rem;
     width: 100%;
     justify-content: space-between;
     margin-top: 2rem;
   }
   
   .card {
-    width: 20%;
+    width: min(25%, 300px);
     height: 350px;
     border-radius: 15px;
     padding: 1.5rem;
@@ -71,13 +74,18 @@
   .card .info h1 {
     margin: 0px;
   }
+  .card .info h2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
   .card .info p {
     letter-spacing: 1px;
     font-size: 12px;
     margin-top: 8px;
   }
-  .card .info button {
-    padding: 0.6rem;
+  .card .info a {
+    padding: 0.4rem;
     outline: none;
     border: none;
     border-radius: 3px;
@@ -87,13 +95,15 @@
     cursor: pointer;
     -webkit-transition: 0.4s ease;
     transition: 0.4s ease;
+    font-size: 12px!important;
+    text-decoration: none;
   }
-  .card .info button:hover {
+  .card .info a:hover {
     background:var(--citrine);
     color: white;
   }
-  .card .info button.idea {
-    padding: 0.6rem;
+  .card .info a.idea {
+    padding: 0.4rem;
     outline: none;
     border: none;
     border-radius: 3px;
@@ -104,7 +114,7 @@
     -webkit-transition: 0.4s ease;
     transition: 0.4s ease;
   }
-  .card .info button.idea:hover {
+  .card .info a.idea:hover {
     background: red;
     color: white;
   }
