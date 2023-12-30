@@ -18,3 +18,12 @@
     color: var(--citrine);
     transition: all 0.2s ;
 }
+
+@keyframes scrollAnimation {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%); 
+    }
+  }

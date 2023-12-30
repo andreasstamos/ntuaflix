@@ -6,7 +6,7 @@ export default function Hero() {
 
     function handleScroll() {
         window.scrollTo({
-            top:  window.innerHeight + 20,
+            top:  window.innerHeight + 65,
             behavior: 'smooth', // Optional: Adds smooth scrolling animation
           });
     }

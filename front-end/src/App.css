@@ -80,7 +80,7 @@ html, body {
 }
 
 .section-index {
-  padding: 2rem;
+  padding: 4rem 0 1.5rem 2rem;
 }
 .colored-subtitle {
   color: var(--white);
@@ -111,6 +111,7 @@ html, body {
 mark {
   background-color: var(--citrine);
   color: var(--white);
+  border-radius: 4px;
 }
 a.a-transition {
   text-decoration: underline;

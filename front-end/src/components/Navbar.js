@@ -114,8 +114,11 @@ export default function Navbar() {
     {/* <nav className={`navigation ${!match && 'colored'}`} id='#top-nav' role='navigation' aria-label='Main navigation'> */}
     <nav className={`navigation ${!match}`} id='#top-nav' role='navigation' aria-label='Main navigation'>
         <ul className="menu">
-          <li className="logo"><NavLink className='not-color' to={`/`}><img src={NtuaflixLogo} width="85" alt='IEEE NTUA Student Branch.' /></NavLink></li>
-          <li className="item"><NavLink to={`/`}>Αρχικη</NavLink></li>
+          {/* <li className="logo"><NavLink className='not-color' to={`/`}><img src={NtuaflixLogo} width="85" alt='IEEE NTUA Student Branch.' /></NavLink></li> */}
+          <li className="logo"><NavLink className='not-color' to={`/`}><h1>Ntua<mark>flix</mark></h1></NavLink></li>
+
+          <li className="item"><NavLink to={`/`}>Home</NavLink></li>
+          <li className="item"><NavLink to={`/movies`}>Movies</NavLink></li>
           <li className="item"><NavLink to={`/watchlist/`}>WatchList</NavLink></li>
           <li className="item"><NavLink to={`/preloader/`}>Preloader</NavLink></li>
           <li className="item has-submenu">
@@ -136,7 +139,6 @@ export default function Navbar() {
               <li class="subitem"><a href="#">Enterprise</a></li>
             </ul>
           </li> */}
-          <li className="item"><NavLink to={`/events`}>Movies</NavLink></li>
 
             <li className="item">
               <NavLink to={`/auth/register`} className='not-color cta' >

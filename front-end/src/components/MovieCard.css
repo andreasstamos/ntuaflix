@@ -1,19 +1,26 @@
 .cards-container {
     display: -webkit-box;
-    display: flex;
-    flex-wrap: wrap;
-    row-gap: 3rem;
-    column-gap: 0.3rem;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    overflow-x: scroll;
+    overflow-y: hidden;
+    overflow: hidden;
+    /* row-gap: 3rem; */
+    /* column-gap: 2rem; */
     width: 100%;
-    justify-content: space-around;
+    height: fit-content;
+    /* justify-content: space-around; */
     margin-top: 2rem;
+    /* animation: scrollAnimation 30s linear infinite; */
+    /* white-space: nowrap; */
+
   }
   
   .card {
-    width: max(15%, 300px);
-    height: 350px;
+    width: 250px;
+    height: 380px;
     border-radius: 15px;
-    padding: 1.5rem;
+    padding: 1rem 1rem 2rem 1.5rem;
     background: white;
     position: relative;
     display: -webkit-box;
@@ -22,7 +29,7 @@
     align-items: flex-end;
     -webkit-transition: 0.4s ease-out;
     transition: 0.4s ease-out;
-    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5); */
   }
   .card:hover {
     -webkit-transform: translateY(20px);
@@ -74,14 +81,14 @@
   .card .info h1 {
     margin: 0px;
   }
-  .card .info h2 {
+  .card .info h3 {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
   .card .info p {
     letter-spacing: 1px;
-    font-size: 12px;
+    font-size: 10px;
     margin-top: 8px;
   }
   .card .info a {
