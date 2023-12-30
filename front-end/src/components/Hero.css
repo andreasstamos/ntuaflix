@@ -88,8 +88,8 @@
     font-size: var(--fs-11);
     font-weight: var(--fw-700);
     text-transform: uppercase;
-    letter-spacing: 2px;
-    display: flex;
+    letter-spacing: 1px;
+    /* display: flex; */
     align-items: center;
     gap: 10px;
     padding: 16px 30px;
@@ -97,6 +97,7 @@
     border-radius: 50px;
     transition: var(--transition-1);
     cursor: pointer;
+    font-size: 14px;
   }
   
   .btn > ion-icon { font-size: 18px; }
@@ -107,7 +108,10 @@
     background: var(--citrine);
     color: var(--xiketic);
   }
-  
+  .btn-w100 {
+    width: 100%;
+  }
+
 .h1,
 .h2,
 .h3 {
@@ -132,3 +136,16 @@
 }
 
 .section-title { text-align: center; }
+
+
+@media screen and (max-width: 800px) {
+  .hero {
+    background-position: 75% 50%;
+  }
+}
+
+@media screen and (max-width: 535px) {
+  .hero {
+    padding: 50px;
+  }
+}

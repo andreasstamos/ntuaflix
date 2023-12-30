@@ -48,7 +48,8 @@ nav {
   nav a.active:not(.not-color):not(.subitem-link) { /* if a tag is active in navbar and it is not the logo or the 'join ieee' */
     /* background-color: #3b49df; */
     background-color: #fff;
-    color:rgba(0, 98, 155, 1);
+    /* color:rgba(0, 98, 155, 1); */
+    color: var(--citrine);
     border-radius: 30px;
     transition: 0.3s;
     padding: 10px 20px; /* this could also be in a tag (whether it is active or not)*/

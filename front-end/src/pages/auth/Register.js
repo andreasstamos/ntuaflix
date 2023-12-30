@@ -45,7 +45,7 @@ export default function Register() {
   return (
     <div className='form-wrapper'>
         <form onSubmit={submit}>
-        <h1>Sign Up</h1>
+        <h1>Sign up</h1>
 
             <div className='form-input'>
                 <input type='text' placeholder='Username' required value={username} onChange={(e) => setUsername(e.target.value)}/>
@@ -68,7 +68,7 @@ export default function Register() {
             </div>
 
 
-            <button type='submit' className='form-btn'>Sign Up</button>
+            <button type='submit' className='btn btn-primary btn-w100'>Sign Up</button>
             
             <p className='form-error'>{error}</p>
             <p className='form-success'>{success}</p>

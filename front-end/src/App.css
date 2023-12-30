@@ -37,10 +37,12 @@
    * typography
    */
 
-  --ff-poppins: 'Poppins', sans-serif;
+  --font-family: 'Poppins', sans-serif;
 
   /* --fs-1: 36px; */
-  --fs-1: 3rem;
+
+  /* --fs-1: 3rem; */
+  --fs-1: clamp(1.7rem, 4vw, 3rem);
   --fs-2: 32px;
   --fs-3: 30px;
   --fs-4: 24px;
@@ -74,6 +76,7 @@ html, body {
   text-rendering: optimizelegibility;
   background-color: var(--background-color);
   color: var(--white);
+  font-family: var(--font-family)!important;
 }
 
 .section-index {
@@ -104,4 +107,16 @@ html, body {
   -webkit-text-fill-color: var(--white);
   background-color: var(--citrine);
   color: var(--dark-blue);
+}
+mark {
+  background-color: var(--citrine);
+  color: var(--white);
+}
+a.a-transition {
+  text-decoration: underline;
+  color: inherit;
+}
+a.a-transition:hover {
+  color: var(--citrine);
+  transition: all var(--transition-1);
 }

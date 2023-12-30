@@ -38,7 +38,7 @@ export default function Login() {
                 <input type='password' placeholder='Password' required value={password} onChange={(e) => setPassword(e.target.value)}/>
             </div>
 
-            <button type='submit' className='form-btn'>Sign in</button>
+            <button type='submit' className='btn btn-primary btn-w100'>Sign in</button>
             
             <p className='form-error'></p>
 
