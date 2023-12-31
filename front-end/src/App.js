@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Movie from './pages/Movie';
 import NotRegistered from './pages/NotRegistered';
 import Preloader from './components/Preloader';
+import Movies from './pages/Movies';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path='/' exact element={<Index />} />
           <Route path='/movie/' exact element={<Movie />} />
+          <Route path='/movies/' exact element={<Movies />} />
 
           <Route path='/preloader/' exact element={<Preloader />} />
           <Route path='/admin/' exact element={<Admin />} />
