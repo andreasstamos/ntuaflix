@@ -17,6 +17,10 @@
     margin-bottom: 15rem;
     color: var(--white);
     font-size: 4rem;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    font-family: var(--font-family);
+    font-weight: 900;
 }
 .boxes {
     height: 32px;

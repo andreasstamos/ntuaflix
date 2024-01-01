@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import axiosInstance from '../../api/api';
+import  AuthContext  from '../../context/AuthContext';
+import {useContext} from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const navigate = useNavigate();
 
-
+    const {saveTokens} = useContext(AuthContext);
+    
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     async function submit(e) {
         e.preventDefault();
-        setError(null);
+        setError('');
         setLoading(true);
 
 
@@ -21,7 +27,15 @@ export default function Login() {
         }
         setPassword('');
 
-        console.log(payload);
+        try{
+            const response = await axiosInstance.post(`/login?username=${username}&password=${password}`, payload);
+            console.log(response);
+            saveTokens(response?.data?.token);
+            navigate('/', {replace:true})
+        }
+        catch (error) {
+            setError(error?.response?.data?.detail)
+        }
     }
 
 
@@ -40,8 +54,8 @@ export default function Login() {
 
             <button type='submit' className='btn btn-primary btn-w100'>Sign in</button>
             
-            <p className='form-error'></p>
-
+            <p className='form-error'>{error}</p>
+            
             <div className='alternative-link'>
                 <p>Don't have an account yet? Sign up <Link to='/auth/register'>here</Link>.</p>
             </div>

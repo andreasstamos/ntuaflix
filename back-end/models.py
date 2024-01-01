@@ -32,34 +32,34 @@ class User(Base):
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     email = Column(String(50), unique=True, nullable=False)
-    password = Column(String(50), nullable=False)
+    password = Column(String(500), nullable=False)
     dob = Column(Date, nullable=False)
     is_admin = Column(Boolean, default=False)
 
 
-# Create the table in the database
+# # Create the table in the database
 Base.metadata.create_all(engine)
 
-# Create a session to interact with the database
-Session = sessionmaker(bind=engine)
-session = Session()
+# # Create a session to interact with the database
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
-# Example: Adding a user to the database with date of birth and password
-new_user = User (
-    username='user',
-    first_name='user_firstname',
-    last_name='user_lastname',
-    email='user@example.com',
-    dob=date(2002, 2, 2),  # Replace with the actual date of birth
-    password='secure_password'  # Replace with the actual password
-)
+# # Example: Adding a user to the database with date of birth and password
+# new_user = User (
+    # username='user',
+    # first_name='user_firstname',
+    # last_name='user_lastname',
+    # email='user@example.com',
+    # dob=date(2002, 2, 2),  # Replace with the actual date of birth
+    # password='secure_password'  # Replace with the actual password
+# )
 
-session.add(new_user)
-session.commit()
+# session.add(new_user)
+# session.commit()
 
-# Querying the database
-user_query = session.query(User).filter_by(username='user').first()
-print(user_query.username, user_query.email, user_query.dob, user_query.password)
+# # Querying the database
+# user_query = session.query(User).filter_by(username='user').first()
+# print(user_query.username, user_query.email, user_query.dob, user_query.password)
 
-# Remember to close the session when done
-session.close()
+# # Remember to close the session when done
+# session.close()

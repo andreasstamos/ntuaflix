@@ -10,6 +10,8 @@ import Movie from './pages/Movie';
 import NotRegistered from './pages/NotRegistered';
 import Preloader from './components/Preloader';
 import Movies from './pages/Movies';
+import { AuthProvider } from './context/AuthContext';
+import Watchlist from './pages/Watchlist';
 
 
 function App() {
@@ -17,26 +19,27 @@ function App() {
   return (
     <div className="App">
       <Router>
+        <AuthProvider>
+          <Navbar/>
 
-      <Navbar/>
+          <Routes>
+            <Route path='/' exact element={<Index />} />
+            <Route path='/movie/' exact element={<Movie />} />
+            <Route path='/movies/' exact element={<Movies />} />
 
-        <Routes>
-          <Route path='/' exact element={<Index />} />
-          <Route path='/movie/' exact element={<Movie />} />
-          <Route path='/movies/' exact element={<Movies />} />
-
-          <Route path='/preloader/' exact element={<Preloader />} />
-          <Route path='/admin/' exact element={<Admin />} />
-          <Route path='/watchlist/' exact element={<NotRegistered />} />
-          
-          
-          <Route path='/auth' exact element={<Auth/>}>
-            <Route path='login/' element={<Login/>} />
-            <Route path='register/' element={<Register/>} />
-          </Route>
+            <Route path='/preloader/' exact element={<Preloader />} />
+            <Route path='/admin/' exact element={<Admin />} />
+            <Route path='/watchlist/' exact element={<Watchlist />} />
 
 
-        </Routes>
+            <Route path='/auth' exact element={<Auth/>}>
+              <Route path='login/' element={<Login/>} />
+              <Route path='register/' element={<Register/>} />
+            </Route>
+
+
+          </Routes>
+        </AuthProvider>
     </Router>
   </div>
 
