@@ -4,6 +4,7 @@ import os
 from routes.admin import router as admin_router
 from routes.index import router as index_router
 from routes.auth import router as auth_router
+from routes.title import router as title_router
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -34,6 +35,7 @@ def create_app():
     app.include_router(auth_router, prefix='/ntuaflix_api', tags=['auth'])
     app.include_router(admin_router, prefix='/ntuaflix_api/admin', tags=['admin'])
 
+    app.include_router(title_router, prefix='/ntuaflix_api', tags=['title'])
 
     app.add_middleware(
         CORSMiddleware,
