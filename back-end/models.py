@@ -1,7 +1,8 @@
 # Import necessary libraries
-from sqlalchemy import create_engine, Sequence,Column, Integer, String, Date, Boolean, ForeignKey, Float, CHAR, REAL, Index
+from typing import List
+from sqlalchemy import create_engine, Sequence,Column, Integer, String, Date, Boolean, ForeignKey, Float, CHAR, REAL, Index, Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Mapped
 import os
 from dotenv import load_dotenv
 from datetime import date
@@ -23,6 +24,7 @@ engine = create_engine(DATABASE_URL)
 # Create a declarative base class
 Base = declarative_base()
 
+
 # Define the User class
 class User(Base):
     __tablename__ = 'users'
@@ -36,41 +38,6 @@ class User(Base):
     dob = Column(Date, nullable=False)
     is_admin = Column(Boolean, default=False)
 
-# Creating the tables and the indexes ...
-class Title(Base):
-    __tablename__ = 'title'
-    
-    tconst = Column(CHAR(9), primary_key=True)
-    end_year = Column(Integer)
-    primary_title = Column(String(100), nullable=False)
-    original_title = Column(String(100), nullable=False)
-    title_type = Column(String(10), nullable=False)
-    runtime_minutes = Column(Integer, nullable=False)
-    genre_id = Column(String(100), nullable=False)
-    known_for_by = Column(Integer)
-    start_year = Column(Integer, nullable=False)
-    is_adult = Column(Boolean, nullable=False)
-    image_url = Column(String(100))
-    principals = Column(Integer, nullable=False)
-    average_rating = Column(Float)
-    num_votes = Column(Integer)
-    directors = Column(Integer)
-    writers = Column(Integer)
-    
-# Add the index
-Index('idx_title_type', Title.title_type)
-
-class TitleEpisode(Base):
-    __tablename__ = 'title_episode'
-    
-    episode_tconst = Column(CHAR(9), primary_key=True)
-    parent_tconst = Column(CHAR(9), ForeignKey('title.tconst'), nullable=False)
-    season_number = Column(Integer)
-    episode_number = Column(Integer)
-
-# Add the title_episode index
-Index('idx_parent_tconst',TitleEpisode.parent_tconst) 
-
 
 class PersonalCollection(Base):
     __tablename__ = 'personal_collection'
@@ -82,15 +49,91 @@ class PersonalCollection(Base):
 Index('idx_users_id', PersonalCollection.users_id)
 Index('idx_tconst', PersonalCollection.tconst)
 
+table_person_known_for_titles = Table(
+        "person_known_for_titles",
+        Base.metadata,
+        Column("tconst", ForeignKey("title.tconst"), primary_key=True),
+        Column("nconst", ForeignKey("person.nconst"), primary_key=True),
+        )
+
+table_title_director = Table(
+        "title_director",
+        Base.metadata,
+        Column("tconst", ForeignKey("title.tconst"), primary_key=True),
+        Column("nconst", ForeignKey("person.nconst"), primary_key=True),
+        )
+
+table_title_writer = Table(
+        "title_writer",
+        Base.metadata,
+        Column("tconst", ForeignKey("title.tconst"), primary_key=True),
+        Column("nconst", ForeignKey("person.nconst"), primary_key=True),
+        )
+
+table_title_genre = Table(
+        "title_genre",
+        Base.metadata,
+        Column("genre", ForeignKey("genre.id"), primary_key=True),
+        Column("tconst", ForeignKey("title.tconst"), primary_key=True),
+        )
+
+
+
+# Creating the tables and the indexes ...
+class Title(Base):
+    __tablename__ = 'title'
+    
+    tconst = Column(CHAR(9), primary_key=True)
+    end_year = Column(Integer)
+    primary_title = Column(String(100), nullable=False)
+    original_title = Column(String(100), nullable=False)
+    title_type = Column(String(10), nullable=False)
+    runtime_minutes = Column(Integer, nullable=True)
+    start_year = Column(Integer, nullable=False)
+    is_adult = Column(Boolean, nullable=False)
+    image_url = Column(String(100))
+    principals = Column(Integer, nullable=False)
+    average_rating = Column(Float)
+    num_votes = Column(Integer)
+
+    known_for_by: Mapped[List['Person']] = relationship(secondary=table_person_known_for_titles, back_populates="known_for_titles")
+    principals: Mapped[List['Principals']] = relationship(back_populates="title")
+    directors: Mapped[List['Person']] = relationship(secondary=table_title_director, back_populates="titles_as_director")
+    writers: Mapped[List['Person']] = relationship(secondary=table_title_writer, back_populates="titles_as_writer")
+    aliases: Mapped['TitleAlias'] = relationship(back_populates="title")
+    genres: Mapped[List['Genre']] = relationship(secondary=table_title_genre, back_populates="titles")
+
+    episodes: Mapped[List['TitleEpisode']] = relationship(back_populates="parent", foreign_keys="TitleEpisode.parent_tconst")
+
+# Add the index
+Index('idx_title_type', Title.title_type)
+
+class TitleEpisode(Base):
+    __tablename__ = 'title_episode'
+    
+    episode_tconst = Column(CHAR(9), ForeignKey('title.tconst'), primary_key=True)
+    episode: Mapped['Title'] = relationship(foreign_keys=[episode_tconst])
+
+    parent_tconst = Column(CHAR(9), ForeignKey('title.tconst'), nullable=False)
+    parent: Mapped['Title'] = relationship(foreign_keys=[parent_tconst], back_populates="episodes")
+    
+    season_number = Column(Integer)
+    episode_number = Column(Integer)
+
+# Add the title_episode index
+Index('idx_parent_tconst',TitleEpisode.parent_tconst) 
+
 class TitleAlias(Base):
     __tablename__ = 'title_alias'
     
     id = Column(Integer, primary_key=True)
     tconst = Column(CHAR(9), ForeignKey('title.tconst'), nullable=False)
-    title = Column(String(255), nullable=False)
+    title: Mapped['Title'] = relationship(back_populates="aliases")
+    
+    title_name = Column(String(255), nullable=False)
     ordering = Column(Integer, nullable=False)
-    region = Column(String(2), nullable=False)
-    language = Column(String(2))
+    region = Column(String(2), nullable=True)
+    language = Column(String(2), nullable=True)
     types = Column(String(10))
     attributes = Column(String(255))
     is_original_title = Column(Boolean, nullable=False)
@@ -98,21 +141,23 @@ class TitleAlias(Base):
 # Index for tilte_alias
 Index('idx_tconst_alias', TitleAlias.tconst)
 
+
 class Genre(Base):
     __tablename__ = 'genre'
     
     id = Column(Integer, primary_key=True)
-    name = Column(String(255), nullable=False)
+    name = Column(String(255), unique=True, nullable=False)
+    titles: Mapped[List['Title']] = relationship(secondary=table_title_genre, back_populates="genres")
 
-class TitleGenre(Base):
-    __tablename__ = 'title_genre'
-    
-    title_tconst = Column(CHAR(9), ForeignKey('title.tconst'), primary_key=True)
-    genre_id = Column(Integer, ForeignKey('genre.id'), primary_key=True)
 
-# Indexes for title_genre
-Index('idx_title_tconst_genre', TitleGenre.title_tconst)
-Index('idx_genre_id', TitleGenre.genre_id)
+
+table_person_profession = Table(
+        "person_profession",
+        Base.metadata,
+        Column("profession", ForeignKey("profession.id"), primary_key=True),
+        Column("nconst", ForeignKey("person.nconst"), primary_key=True),
+        )
+
 
 class Person(Base):
     __tablename__ = 'person'
@@ -123,30 +168,41 @@ class Person(Base):
     birth_year = Column(Integer)
     death_year = Column(Integer)
 
+    primary_professions: Mapped[List['Profession']] = relationship(secondary=table_person_profession, back_populates="people")
+    known_for_titles: Mapped[List['Title']] = relationship(secondary=table_person_known_for_titles, back_populates="known_for_by")
+
+    image_url = Column(String(100))
+
+    titles_as_principal: Mapped[List['Principals']] = relationship(back_populates="person")
+
+    titles_as_director: Mapped[List['Title']] = relationship(secondary=table_title_director, back_populates="directors")
+    titles_as_writer: Mapped[List['Title']] = relationship(secondary=table_title_writer, back_populates="writers")
+
+
+
 class Profession(Base):
     __tablename__ = 'profession'
     
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
+    name = Column(String(50), unique=True, nullable=False)
+    people: Mapped[List['Person']] = relationship(secondary=table_person_profession, back_populates="primary_professions")
 
-class PersonPrimaryProfession(Base):
-    __tablename__ = 'person_primary_profession'
-    
-    person_nconst = Column(CHAR(9), ForeignKey('person.nconst'), primary_key=True)
-    profession_id = Column(Integer, ForeignKey('profession.id'), primary_key=True)
-
-# Indexes for person_primary_profession
-Index('idx_person_nconst_profession', PersonPrimaryProfession.person_nconst)
-Index('idx_profession_id', PersonPrimaryProfession.profession_id)
 
 class Principals(Base):
     __tablename__ = 'principals'
     
     id = Column(Integer, primary_key=True)
     tconst = Column(CHAR(9), ForeignKey('title.tconst'), nullable=False)
+    title: Mapped['Title'] = relationship(back_populates="principals")
     nconst = Column(CHAR(9), ForeignKey('person.nconst'), nullable=False)
+    person: Mapped['Person'] = relationship(back_populates="titles_as_principal")
+    
     category_id = Column(Integer, ForeignKey('profession.id'), nullable=False)
+    category: Mapped['Profession'] = relationship(foreign_keys=[category_id])
+
     job_id = Column(Integer, ForeignKey('profession.id'))
+    job: Mapped['Profession'] = relationship(foreign_keys=[job_id])
+
     ordering = Column(Integer)
     characters = Column(String(255))
     image_url = Column(String(255))
@@ -156,37 +212,6 @@ Index('idx_tconst_principals', Principals.tconst)
 Index('idx_nconst_principals', Principals.nconst)
 Index('idx_category_id_principals', Principals.category_id)
 Index('idx_job_id_principals', Principals.job_id)
-
-class PersonTitlesKnownFor(Base):
-    __tablename__ = 'person_titles_known_for'
-    
-    person_nconst = Column(CHAR(9), ForeignKey('person.nconst'), primary_key=True)
-    title_tconst = Column(CHAR(9), ForeignKey('title.tconst'), primary_key=True)
-
-# Indexes for person_titles_known_for
-Index('idx_title_tconst_known_for', PersonTitlesKnownFor.title_tconst)
-Index('idx_person_nconst_known_for', PersonTitlesKnownFor.person_nconst)
-
-class TitleDirector(Base):
-    __tablename__ = 'title_director'
-    
-    title_tconst = Column(CHAR(9), ForeignKey('title.tconst'), primary_key=True)
-    person_nconst = Column(CHAR(9), ForeignKey('person.nconst'), primary_key=True)
-
-# Indexes for title_director
-Index('idx_title_tconst_director', TitleDirector.title_tconst)
-Index('idx_person_nconst_director', TitleDirector.person_nconst)
-
-class TitleWriter(Base):
-    __tablename__ = 'title_writer'
-    
-    title_tconst = Column(CHAR(9), ForeignKey('title.tconst'), primary_key=True)
-    person_nconst = Column(CHAR(9), ForeignKey('person.nconst'), primary_key=True)
-    
-# Indexes for title_writer
-Index('idx_title_tconst_writer', TitleWriter.title_tconst)
-Index('idx_person_nconst_writer', TitleWriter.person_nconst)
-
 
 
 # # Create the table in the database
