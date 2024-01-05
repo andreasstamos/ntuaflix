@@ -1,18 +1,19 @@
+from typing import Optional
 from fastapi import APIRouter, Depends
-from models import Title
 from sqlalchemy.orm import Session
 from database import get_db
 
-from .title_schema import TitleObject, TqueryObject, GqueryObject
+from models import Title
+from schemas import TitleObject, TqueryObject, GqueryObject
 
 router = APIRouter()
 
-@router.get("/title/{titleID}", response_model=TitleObject | None)
+@router.get("/title/{titleID}", response_model = Optional[TitleObject])
 async def get_title(titleID: str, db: Session = Depends(get_db)):
     return db.query(Title).filter_by(tconst=titleID).first()
 
-@router.get("/searchTitle")
-@router.post("/searchTitle")
+@router.get("/searchtitle")
+@router.post("/searchtitle")
 async def search_title_name(query: TqueryObject, db: Session = Depends(get_db)) -> list[TitleObject]:
     return db.query(Title).filter(Title.primary_title.contains(query.titlePart))
 
