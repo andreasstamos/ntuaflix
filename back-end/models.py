@@ -17,6 +17,7 @@ DB_DATABASE = str(os.getenv('DB_DATABASE'))
 
 # Replace 'your_username', 'your_password', 'your_database', and 'your_host' with your PostgreSQL credentials
 DATABASE_URL = f"postgresql://{DB_USERSNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
+#DATABASE_URL = "sqlite+pysqlite:///ntuaflix.sqlite3" #### TODO: ONLY FOR DEV
 
 # Create a SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
@@ -100,7 +101,7 @@ class Title(Base):
     principals: Mapped[List['Principals']] = relationship(back_populates="title")
     directors: Mapped[List['Person']] = relationship(secondary=table_title_director, back_populates="titles_as_director")
     writers: Mapped[List['Person']] = relationship(secondary=table_title_writer, back_populates="titles_as_writer")
-    aliases: Mapped['TitleAlias'] = relationship(back_populates="title")
+    aliases: Mapped[List['TitleAlias']] = relationship(back_populates="title")
     genres: Mapped[List['Genre']] = relationship(secondary=table_title_genre, back_populates="titles")
 
     episodes: Mapped[List['TitleEpisode']] = relationship(back_populates="parent", foreign_keys="TitleEpisode.parent_tconst")
