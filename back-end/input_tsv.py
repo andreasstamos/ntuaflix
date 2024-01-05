@@ -41,6 +41,8 @@ with Session(engine) as session:
             runtime_minutes=int(row['runtimeMinutes']) if not pd.isna(row['runtimeMinutes']) else None,
             image_url=row['img_url_asset']
         )
+        session.add(title)
+        
         # Ratings data
         ratings_row = titles_ratings_df[titles_ratings_df['tconst'] == row['tconst']]
         if not ratings_row.empty:
@@ -53,7 +55,6 @@ with Session(engine) as session:
             for genre_name in genres:
                 title.genres.append(get_or_create(session, Genre, name=genre_name))
 
-        session.add(title)
 
     # Inserting data into the Person table
     for _, row in names_basics_df.iterrows():
@@ -64,6 +65,7 @@ with Session(engine) as session:
             death_year=int(row['deathYear']) if not pd.isna(row['deathYear']) else None,
             image_url=row['img_url_asset']
         )
+        session.add(person)
 
         professions = row['primaryProfession'].split(',') if not pd.isna(row['primaryProfession']) else []
         for profession_name in professions:
@@ -74,8 +76,6 @@ with Session(engine) as session:
             known_title = session.query(Title).filter_by(tconst=title_id).first()
             if known_title:
                 person.known_for_titles.append(known_title)
-
-        session.add(person)
 
     # Inserting data into Title_Principals
     for _, row in titles_principals_df.iterrows():
