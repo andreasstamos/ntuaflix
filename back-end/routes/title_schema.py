@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field, validator, root_validator
+from typing import Optional, Annotated
+from pydantic import BaseModel, Field, validator, root_validator, StringConstraints
 
 class ORMModel(BaseModel):
     class Config:
@@ -23,9 +24,9 @@ class Principal(ORMModel):
         data.category_name = data.category.name
         return data
 
-class Rating(ORMModel):
-    avRating: str
-    nVotes: str
+class Rating(BaseModel):
+    avRating: str | None
+    nVotes: str | None
 
 class TitleObject(ORMModel):
     tconst: str = Field(..., alias="titleID")
@@ -41,11 +42,33 @@ class TitleObject(ORMModel):
 
     @root_validator(pre=True)
     def get_ratings(cls, values):
-        values.rating = Rating(avRating=f"{values.average_rating:.1f}", nVotes=str(values.num_votes))
+        values.rating = Rating(avRating=values.average_rating and f"{values.average_rating:.1f}", nVotes=values.num_votes and str(values.num_votes))
         return values
     
     @validator('start_year', 'end_year', pre=True)
     def int_to_str(cls, value: int) -> str:
         return str(value)
 
+
+class QueryModel(BaseModel):
+    class Config:
+        extra = "forbid"
+
+class TqueryObject(QueryModel):
+    titlePart: str
+
+class GqueryObject(QueryModel):
+    qgenre: str
+    minrating: Annotated[str, StringConstraints(pattern=r'^[0-9](.[0-9])?$')]
+    yrFrom: Optional[Annotated[str, StringConstraints(pattern=r'^[0-9]*$')]] = None
+    yrTo: Optional[Annotated[str, StringConstraints(pattern=r'^[0-9]*$')]] = None
+
+    @root_validator(pre=True)
+    def check_both_or_none(cls, values):
+        if "yrFrom" in values and values["yrFrom"] is not None and ("yrTo" not in values or values["yrTo"] is None):
+            raise ValueError("Both yrFrom and yrTo must be set or neither.")
+        if "yrTo" in values and values["yrTo"] is not None and ("yrFrom" not in values or values["yrFrom"] is None):
+            raise ValueError("Both yrFrom and yrTo must be set or neither.")
+
+        return values
 
