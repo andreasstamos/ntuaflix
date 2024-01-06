@@ -23,4 +23,3 @@ async def search_title_genre(query: GqueryObject, db: Session = Depends(get_db))
     if query.yrFrom is not None and query.yrTo is not None:
         titles = titles.filter(query.yrFrom <= Title.start_year).filter(Title.start_year <= query.yrTo)
     return titles
-

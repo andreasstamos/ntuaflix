@@ -25,7 +25,6 @@ def get_or_create(session, model, **kwargs):
         session.add(instance)
         return instance
 
-
 # Insert data into the database
 with Session(engine) as session:
     # Inserting data into the Title table
@@ -39,10 +38,10 @@ with Session(engine) as session:
             start_year=int(row['startYear']) if not pd.isna(row['startYear']) else None,
             end_year=int(row['endYear']) if not pd.isna(row['endYear']) else None,
             runtime_minutes=int(row['runtimeMinutes']) if not pd.isna(row['runtimeMinutes']) else None,
-            image_url=row['img_url_asset']
+            image_url=row['img_url_asset'].replace('{width_variable}', 'original') if not pd.isna(row['img_url_asset']) else None,
         )
         session.add(title)
-        
+
         # Ratings data
         ratings_row = titles_ratings_df[titles_ratings_df['tconst'] == row['tconst']]
         if not ratings_row.empty:
