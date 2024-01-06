@@ -1,9 +1,9 @@
 from typing_extensions import Annotated
 import typer
-from rich import print
+from rich import print, print_json
 import requests
 
-from utils import load_config, store_config, authenticated
+from utils import load_config, store_config, authenticated, handle_request, Format
 from config import *
 
 app = typer.Typer(help="ntuaFLIX CLI manager")
@@ -34,7 +34,6 @@ def login(
 @app.command()
 @authenticated
 def logout():
-    store_config("api_key", None)
     try:
         response = requests.post(API_URL + "/logout", headers={"X-OBSERVATORY-AUTH": api_key})
         if response.status_code == 200:
@@ -44,7 +43,37 @@ def logout():
             print(":white_exclamation_mark: [bright_black]Although server probably failed, your authentication token has been deleted from local db.")
     except requests.ConnectionError:
         print(":cross_mark: [bright_black]Server is down.[/bright_black]")
-        print(":white_exclamation_mark: [bright_black]Your authentication token has been deleted from local db, though the server is not aware of this.") 
+        print(":white_exclamation_mark: [bright_black]Your authentication token will be deleted from local db, though the server will not become aware of this.") 
+    store_config("api_key", None)
+
+@app.command()
+@authenticated
+def adduser(
+        username:   Annotated[str, typer.Option(help="Username", show_default=False)],
+        passw:      Annotated[str, typer.Option(help="Password", show_default=False)] 
+        ):
+    response = handle_request(f"/admin/usermod/{urllib.parse.quote(username)}/{urllib.parse.quote(passw)}", api_key=api_key)
+    if response is not None:
+        print(":white_check_mark: [bold green]User successfully created.[/bold green]")
+
+@app.command()
+@authenticated
+def user(
+        username:   Annotated[str, typer.Option(help="Username", show_default=False)],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+
+    response = handle_request(f"/admin/usermod/{urllib.parse.quote(username)}", api_key=api_key, parse_json=True if format==Format.json else False)
+    if response is not None:
+        if format == format.json:
+            if response == {}:
+                print(":magnifying_glass_tilted_right: [bold bright_black]User not found.[/bold bright_black]")
+            else:
+                print(":white_check_mark: [bold green]User found with with following details.[/bold green]")
+                print_json(response)
+        elif format == format.csv:
+            print_csv(response.text)
+            #TODO: what if no user?
 
 if __name__ == '__main__':
     app()
