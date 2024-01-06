@@ -23,3 +23,12 @@ async def search_title_genre(query: GqueryObject, db: Session = Depends(get_db))
     if query.yrFrom is not None and query.yrTo is not None:
         titles = titles.filter(query.yrFrom <= Title.start_year).filter(Title.start_year <= query.yrTo)
     return titles
+
+TITLES_PER_PAGE = 28
+
+@router.get("/get-movies")
+async def get_movies(page:int or None = 1, qgenre: int or None = None, db: Session = Depends(get_db)) -> list[TitleObject]:
+    titles = db.query(Title).limit(TITLES_PER_PAGE)
+    if qgenre:
+        titles = titles.filter(Title.genres.any(id=qgenre))
+    return titles

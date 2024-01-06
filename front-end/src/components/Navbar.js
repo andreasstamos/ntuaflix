@@ -123,7 +123,7 @@ const {logoutUser, user} = useContext(AuthContext);
           <li className="item"><NavLink to={`/movies`}>Movies</NavLink></li>
           <li className="item"><NavLink to={`/watchlist/`}>WatchList</NavLink></li>
           <li className="item"><NavLink to={`/preloader/`}>Preloader</NavLink></li>
-          <li className="item has-submenu">
+          {/* <li className="item has-submenu">
             <a tabIndex="0">Genres<ExpandMoreIcon/></a>
             <ul className="submenu">
               <li className="subitem"><NavLink to={`/chapter/computer-society`} className='subitem-link'>Computer Society</NavLink></li>
@@ -132,7 +132,9 @@ const {logoutUser, user} = useContext(AuthContext);
               <li className="subitem"><NavLink to={`/chapter/engineering-in-medicine-biology-society`} className='subitem-link'>Engineering in Medicine & Biology Society</NavLink></li>
               <li className="subitem"><NavLink to={`/chapter/communications-society`} className='subitem-link'>Communications Society</NavLink></li>
             </ul>
-          </li>
+          </li> */}
+
+          
           {/* <li class="item has-submenu">
             <a tabIndex="0">Projects</a>
             <ul class="submenu">

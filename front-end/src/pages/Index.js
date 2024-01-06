@@ -21,11 +21,11 @@ export default function Index() {
       
 
       setData(response?.data);
-      console.log(response?.data)
+      // console.log(response?.data)
       setLoading(false);
 
       for(let i =0; i < response?.data.length; ++i) {
-        initiateHorizontalScroll(response?.data[i].genre);
+        setTimeout(() => initiateHorizontalScroll(response?.data[i].genre), 2000);
       }
     }
 
@@ -63,29 +63,34 @@ export default function Index() {
 
 
     function initiateHorizontalScroll(genre) {
+      try {
       const cardContainer = document.getElementById(`${genre}-container`);
-    const cards = cardContainer.querySelectorAll('.card');
-    const cardWidth = cards[0].offsetWidth; // Width of a card plus margin
+      const cards = cardContainer.querySelectorAll('.card');
+      const cardWidth = cards[0].offsetWidth; // Width of a card plus margin
 
-    let scrollPosition = 0;
+      let scrollPosition = 0;
 
 
 
-    function scrollCards() {
+      function scrollCards() {
 
-      scrollPosition += 0.5;
-      cardContainer.scrollLeft = scrollPosition;
+        scrollPosition += 0.5;
+        cardContainer.scrollLeft = scrollPosition;
 
-      if (scrollPosition >= cardWidth * cards.length - cardContainer.offsetWidth + 100) {
-        scrollPosition = 0;
+        if (scrollPosition >= cardWidth * cards.length - cardContainer.offsetWidth + 100) {
+          scrollPosition = 0;
+        }
+
+
+        requestAnimationFrame(scrollCards);
       }
 
-
-      requestAnimationFrame(scrollCards);
+      // Start scrolling on page load
+        scrollCards();
+    } catch(error)  {
+      console.log(error);
     }
-
-    // Start scrolling on page load
-      scrollCards();
+    
     }
     
   if(loading) return <Preloader />
@@ -118,7 +123,7 @@ export default function Index() {
            </div>
            <div className='cards-container' id={`${genre.genre}-container`}>
                {genre.movies.map((movie) => {
-                return <MovieCard movie_title={movie.primary_title} image_url={movie.image_url || "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=2000"} />
+                return <MovieCard key={movie.tconst} movie_title={movie.primary_title}  average_rating={movie.average_rating} image_url={movie.image_url || "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=2000"} />
                })}
                {/* <MovieCard MovieImage={MandalorianImage}/>
                <MovieCard MovieImage={TopGunImage}/>
