@@ -98,8 +98,8 @@ with Session(engine) as session:
             ordering=int(row['ordering']),
             region=row['region'] if not pd.isna(row['region']) else None,
             language=row['language'] if not pd.isna(row['language']) else None,
-            types=row['types'],
-            attributes=row['attributes'],
+            types=str(row['types']),
+            attributes=str(row['attributes']),
             is_original_title=row['isOriginalTitle'] == '1'
         )
         session.add(title_alias)

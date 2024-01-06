@@ -44,7 +44,7 @@ class PersonalCollection(Base):
     __tablename__ = 'personal_collection'
     
     users_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    tconst = Column(CHAR(9), ForeignKey('title.tconst'), primary_key=True)
+    tconst = Column(CHAR(10), ForeignKey('title.tconst'), primary_key=True)
 
 # Indexes for personal_collection
 Index('idx_users_id', PersonalCollection.users_id)
@@ -84,7 +84,7 @@ table_title_genre = Table(
 class Title(Base):
     __tablename__ = 'title'
     
-    tconst = Column(CHAR(9), primary_key=True)
+    tconst = Column(CHAR(10), primary_key=True)
     end_year = Column(Integer)
     primary_title = Column(String(100), nullable=False)
     original_title = Column(String(100), nullable=False)
@@ -112,10 +112,10 @@ Index('idx_title_type', Title.title_type)
 class TitleEpisode(Base):
     __tablename__ = 'title_episode'
     
-    episode_tconst = Column(CHAR(9), ForeignKey('title.tconst'), primary_key=True)
+    episode_tconst = Column(CHAR(10), ForeignKey('title.tconst'), primary_key=True)
     episode: Mapped['Title'] = relationship(foreign_keys=[episode_tconst])
 
-    parent_tconst = Column(CHAR(9), ForeignKey('title.tconst'), nullable=False)
+    parent_tconst = Column(CHAR(10), ForeignKey('title.tconst'), nullable=False)
     parent: Mapped['Title'] = relationship(foreign_keys=[parent_tconst], back_populates="episodes")
     
     season_number = Column(Integer)
@@ -128,14 +128,14 @@ class TitleAlias(Base):
     __tablename__ = 'title_alias'
     
     id = Column(Integer, primary_key=True)
-    tconst = Column(CHAR(9), ForeignKey('title.tconst'), nullable=False)
+    tconst = Column(CHAR(10), ForeignKey('title.tconst'), nullable=False)
     title: Mapped['Title'] = relationship(back_populates="aliases")
     
     title_name = Column(String(255), nullable=False)
     ordering = Column(Integer, nullable=False)
-    region = Column(String(2), nullable=True)
-    language = Column(String(2), nullable=True)
-    types = Column(String(10))
+    region = Column(String(10), nullable=True)
+    language = Column(String(10), nullable=True)
+    types = Column(String(255))
     attributes = Column(String(255))
     is_original_title = Column(Boolean, nullable=False)
 
@@ -163,7 +163,7 @@ table_person_profession = Table(
 class Person(Base):
     __tablename__ = 'person'
     
-    nconst = Column(CHAR(9), primary_key=True)
+    nconst = Column(CHAR(10), primary_key=True)
     image_url = Column(String(255))
     primary_name = Column(String(100), nullable=False)
     birth_year = Column(Integer)
@@ -185,7 +185,7 @@ class Profession(Base):
     __tablename__ = 'profession'
     
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True, nullable=False)
+    name = Column(String(250), unique=True, nullable=False)
     people: Mapped[List['Person']] = relationship(secondary=table_person_profession, back_populates="primary_professions")
 
 
@@ -193,9 +193,9 @@ class Principals(Base):
     __tablename__ = 'principals'
     
     id = Column(Integer, primary_key=True)
-    tconst = Column(CHAR(9), ForeignKey('title.tconst'), nullable=False)
+    tconst = Column(CHAR(10), ForeignKey('title.tconst'), nullable=False)
     title: Mapped['Title'] = relationship(back_populates="principals")
-    nconst = Column(CHAR(9), ForeignKey('person.nconst'), nullable=False)
+    nconst = Column(CHAR(10), ForeignKey('person.nconst'), nullable=False)
     person: Mapped['Person'] = relationship(back_populates="titles_as_principal")
     
     category_id = Column(Integer, ForeignKey('profession.id'), nullable=False)
