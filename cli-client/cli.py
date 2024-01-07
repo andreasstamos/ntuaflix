@@ -13,6 +13,7 @@ def login(
         username:   Annotated[str, typer.Option(help="Username", show_default=False)],
         passw:      Annotated[str, typer.Option(help="Password", show_default=False)]
         ):
+    """Logs in and stores token to local storage."""
     store_config("api_key", None)
     try:
         response = requests.post(API_URL + "/login", params={'username': username, 'password': passw})
@@ -34,6 +35,7 @@ def login(
 @app.command()
 @authenticated
 def logout():
+    """Logs out and deletes token from local storage."""
     try:
         response = requests.post(API_URL + "/logout", headers={"X-OBSERVATORY-AUTH": api_key})
         if response.status_code == 200:
@@ -52,9 +54,13 @@ def adduser(
         username:   Annotated[str, typer.Option(help="Username", show_default=False)],
         passw:      Annotated[str, typer.Option(help="Password", show_default=False)] 
         ):
+    """Adds user to system. Requires authentication."""
     response = handle_request(f"/admin/usermod/{urllib.parse.quote(username)}/{urllib.parse.quote(passw)}", api_key=api_key)
     if response is not None:
         print(":white_check_mark: [bold green]User successfully created.[/bold green]")
+    else:
+        print(":cross_mark: [bold red]User creation failed for unknownr reason.[/bold red]")
+
 
 @app.command()
 @authenticated
@@ -62,18 +68,113 @@ def user(
         username:   Annotated[str, typer.Option(help="Username", show_default=False)],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
-
-    response = handle_request(f"/admin/usermod/{urllib.parse.quote(username)}", api_key=api_key, parse_json=True if format==Format.json else False)
+    """Returns user details. Requires authentication."""
+    response = handle_request(f"/admin/usermod/{urllib.parse.quote(username)}", api_key=api_key)
     if response is not None:
-        if format == format.json:
-            if response == {}:
-                print(":magnifying_glass_tilted_right: [bold bright_black]User not found.[/bold bright_black]")
-            else:
-                print(":white_check_mark: [bold green]User found with with following details.[/bold green]")
-                print_json(response)
-        elif format == format.csv:
-            print_csv(response.text)
-            #TODO: what if no user?
+        print_response(response,
+                format=format,
+                found_msg=":white_check_mark: [bold green]User found with with following details.[/bold green]",
+                empty_msg=":magnifying_glass_tilted_right: [bold bright_black]User not found.[/bold bright_black]"
+                )
+
+
+@app.command()
+@authenticated
+def healthcheck(
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Checks the health of the API. Requires authentication."""
+    response = handle_request("/admin/healthcheck")
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+def resetall(
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Resets database to initial state. Requires authentication."""
+    response = handle_request("/admin/resetall")
+    if response is not None:
+        print_response(response, format=format)
+
+
+@app.command()
+def newtitles(
+        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Uploads data for Titles. Requires authentication."""
+    with open(filename, "rb") as f:
+        response = handle_request("/admin/upload/titlebasics", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+def newakas(
+        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Uploads data for Aliases. Requires authentication."""
+    with open(filename, "rb") as f:
+        response = handle_request("/admin/upload/titleakas", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+def newnames(
+        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Uploads data for Aliases. Requires authentication."""
+    with open(filename, "rb") as f:
+        response = handle_request("/admin/upload/namebasics", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+def newcrew(
+        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Uploads data for Crews. Requires authentication."""
+    with open(filename, "rb") as f:
+        response = handle_request("/admin/upload/titlecrew", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+def newepisode(
+        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Uploads data for Episodes. Requires authentication."""
+    with open(filename, "rb") as f:
+        response = handle_request("/admin/upload/titleepisode", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+def newprincipals(
+        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Uploads data for Title Principals. Requires authentication."""
+    with open(filename, "rb") as f:
+        response = handle_request("/admin/upload/titleprincipals", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+def newratings(
+        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Uploads data for Title Ratings. Requires authentication."""
+    with open(filename, "rb") as f:
+        response = handle_request("/admin/upload/titleratings", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
 
 if __name__ == '__main__':
     app()

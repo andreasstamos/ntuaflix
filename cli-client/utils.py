@@ -67,34 +67,57 @@ def authenticated(func):
             print(":locked_with_key: [bold red]You are not authenticated. Please login first.[/bold red]")
     return wrapper
 
-def handle_request(path, payload=None, api_key=None, parse_json=False):
+def handle_request(path, *, api_key=None, **kwargs):
     try:
         response = requests.post(API_URL + path,
                 **({'headers': {"X-OBSERVATORY-AUTH": api_key}} if api_key is not None else {}),
-                **({'payload': payload} if payload is not None else {}),
-                    )
+                **kwargs
+                )
         if response.status_code == 200:
-            return response.json() if parse_json else response
+            return response
         else:
             print(":no_good: [bold red]Server responded in an irregular manner (bad status code). Please contact system administrator.[/bold red]")
     except requests.ConnectionError:
         print(":cross_mark: [bright_black]Server is down.[/bright_black]")
-    except requests.JSONDecodeError:
-        print(":no_good: [bold red]Server responded in an irregular manner (bad JSON). Please contact system administrator.[/bold red]")
     return None
 
-def print_csv(text):
+def print_csv(text, *, found_msg=None, empty_msg=None):
     csv_data = io.StringIO(text)
     csv_reader = csv.reader(csv_data)
     table = Table()
     try:
-        headers = next(csv_reader)
+        headers = next(csv_reader, None)
+        if headers is None:
+            print(":no_good: [bold red]Server responded in an irregular manner (bad CSV). Please contact system administrator.[/bold red]")
+            return
         for header in headers:
             table.add_column(header)
+        first_row = next(csv_reader, None)
+        if first_row is None:
+            if empty_msg is not None: print(empty_msg)
+            return
+        table.add_row(*first_row)
         for row in csv_reader:
             table.add_row(*row)
     except csv.Error:
         print(":no_good: [bold red]Server responded in an irregular manner (bad CSV). Please contact system administrator.[/bold red]")
         return
+    if found_msg is not None: print(found_msg)
     print(table)
+
+
+def print_response(response, *, format, found_msg=None, empty_msg=None):
+    if format == format.json:
+        try:
+            response = response.json()
+        except requests.JSONDecodeError:
+            print(":no_good: [bold red]Server responded in an irregular manner (bad JSON). Please contact system administrator.[/bold red]") 
+            return
+        if response == {}:
+            if empty_msg is not None: print(empty_msg)
+        else:
+            if found_msg is not None: print(found_msg)
+            print_json(response)
+    elif format == format.csv:
+        print_csv(response.text, found_msg=found_msg, empty_msg=empty_msg)
 
