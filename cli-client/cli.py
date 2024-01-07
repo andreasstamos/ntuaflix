@@ -1,9 +1,9 @@
 from typing import Annotated, Optional
 import typer
-from rich import print, print_json
+from rich import print
 import requests
 import urllib
-from utils import load_config, store_config, authenticated, handle_request, Format
+from utils import load_config, store_config, authenticated, handle_request, print_response, Format
 from config import *
 
 app = typer.Typer(help="ntuaFLIX CLI manager")
@@ -218,41 +218,58 @@ def title(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Searches for title details based on title ID. Requires authentication."""
-    response = handle_request(f"/title/{urllib.parse.quote(titleID)}")
+    response = handle_request(f"/title/{urllib.parse.quote(titleID)}", method="GET", params={'format': format})
     if response is not None:
-        print_response(response, format=format)
+        print_response(response,
+                format=format,
+                found_msg=":white_check_mark: [bold green]Title found with following details.[/bold green]",
+                empty_msg=":magnifying_glass_tilted_right: [bold bright_black]Title not found.[/bold bright_black]" 
+                )
 
 @app.command()
 @authenticated
 def searchtitle(
-        titlepart: Annotated[str, typer.Option("--titleID", help="Substring of primary title.")],
+        titlepart: Annotated[str, typer.Option(help="Substring of primary title.")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Searches for titles that their primary title contains a given string. Requires authentication."""
-    response = handle_request(f"/searchtitle", method="GET", payload={"titlepart": titlepart})
+    response = handle_request(f"/searchtitle", method="GET", params={'format': format}, json={"titlePart": titlepart})
     if response is not None:
-        print_response(response, format=format)
+        print_response(response,
+                format=format,
+                found_msg=":white_check_mark: [bold green]Titles found with following details.[/bold green]",
+                empty_msg=":magnifying_glass_tilted_right: [bold bright_black]No Title found.[/bold bright_black]" 
+                )
 
 @app.command()
 @authenticated
 def bygenre(
         genre: Annotated[str, typer.Option(help="Genre")],
-        _min: Annotated[int, typer.Option("--min", help="Minimum rating.")],
+        _min: Annotated[float, typer.Option("--min", help="Minimum rating (must be between 0 and 10).")],
         _from: Annotated[Optional[int], typer.Option("--from", help="Start year must be after this year. If defined '--to' must also be defined.")] = None,
-        to: Annotated[Optional[int], typer.Option(help="Start year must be before this year. If defined '--from' must also be defined.")] = None
+        to: Annotated[Optional[int], typer.Option(help="Start year must be before this year. If defined '--from' must also be defined.")] = None,
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Searches for titles using criteria. Requires authentication."""
 
     if (_from is None) != (to is None):
         print(":no_entry: [bold red]Options '--from', '--to' must either both be defined or neither.[/bold red]")
         return
-    payload = {'qgenre': genre, 'minrating': _min}
+    if _min < 0 or _min > 10:
+        print(":no_entry: [bold red] Minimum rating must be between 0 and 10.")
+        return 
+    payload = {'qgenre': genre, 'minrating': f"{_min:.1f}"}
     if _from is not None:
-        payload["yrFrom"] = _from
-        payload["yrTo"] = to
-    response = handle_request(f"/bygenre", method="GET", payload=payload)
+        payload["yrFrom"] = str(_from)
+        payload["yrTo"] = str(to)
+    response = handle_request(f"/bygenre", method="GET", params={'format': format}, json=payload)
     if response is not None:
-        print_response(response, format=format)
+        print_response(response,
+                format=format,
+                found_msg=":white_check_mark: [bold green]Titles found with following details.[/bold green]",
+                empty_msg=":magnifying_glass_tilted_right: [bold bright_black]No Title found.[/bold bright_black]" 
+                )
+
 
 @app.command()
 @authenticated
@@ -261,21 +278,29 @@ def name(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Searches for person details based on name ID. Requires authentication."""
-    response = handle_request(f"/name/{urllib.parse.quote(nameid)}")
+    response = handle_request(f"/name/{urllib.parse.quote(nameid)}", method="GET", params={'format': format})
     if response is not None:
-        print_response(response, format=format)
+        print_response(response,
+                format=format,
+                found_msg=":white_check_mark: [bold green]Person found with following details.[/bold green]",
+                empty_msg=":magnifying_glass_tilted_right: [bold bright_black]Person not found.[/bold bright_black]" 
+                )
+
 
 @app.command()
 @authenticated
 def searchname(
-        namepart: Annotated[str, typer.Option("--titleID", help="Substring of name.")],
+        namepart: Annotated[str, typer.Option(help="Substring of name.")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Searches for peoples that their name contains a given string. Requires authentication."""
-    response = handle_request(f"/searchname", method="GET", payload={"namepart": namepart})
+    response = handle_request(f"/searchname", method="GET", json={"namePart": namepart}, params={'format': format})
     if response is not None:
-        print_response(response, format=format)
-
+        print_response(response,
+                format=format,
+                found_msg=":white_check_mark: [bold green]People found with following details.[/bold green]",
+                empty_msg=":magnifying_glass_tilted_right: [bold bright_black]No Person found.[/bold bright_black]" 
+                )
 
 if __name__ == '__main__':
     app()

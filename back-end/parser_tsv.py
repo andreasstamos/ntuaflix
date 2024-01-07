@@ -39,7 +39,7 @@ async def parse_title_basics(afp):
 async def parse_title_ratings(afp):
     with Session(engine) as session:
         async for row in aiocsv.AsyncDictReader(afp, delimiter='\t'):
-            title = session.query(Title).filter_by(tconst = row['tconst'])
+            title = session.query(Title).filter_by(tconst = row['tconst']).first()
             if title is None: continue
             title.average_rating = float(row['averageRating']) if row['averageRating'] != NULL_TOKEN else None
             title.num_votes = int(row['numVotes']) if row['numVotes'] != NULL_TOKEN else None

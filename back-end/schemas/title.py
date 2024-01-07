@@ -52,7 +52,7 @@ class TqueryObject(QueryModel):
 
 class GqueryObject(QueryModel):
     qgenre: str
-    minrating: Annotated[str, StringConstraints(pattern=r'^[0-9](.[0-9])?$')]
+    minrating: Annotated[str, StringConstraints(pattern=r'^1?[0-9](.[0-9])?$')]
     yrFrom: Optional[Annotated[str, StringConstraints(pattern=r'^[0-9]*$')]] = None
     yrTo: Optional[Annotated[str, StringConstraints(pattern=r'^[0-9]*$')]] = None
 

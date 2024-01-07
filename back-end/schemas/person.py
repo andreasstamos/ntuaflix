@@ -15,8 +15,8 @@ class NameObject(ORMModel):
     nconst: str = Field(..., alias="nameID")
     primary_name: str = Field(..., alias="name")
     image_url: Optional[str] = Field(..., alias="namePoster")
-    birth_year: str = Field(..., alias="birthYr")
-    death_year: str = Field(..., alias="deathYr")
+    birth_year: Optional[str] = Field(..., alias="birthYr")
+    death_year: Optional[str] = Field(..., alias="deathYr")
 
     primary_professions: str = Field(..., alias="profession")
 
@@ -27,8 +27,8 @@ class NameObject(ORMModel):
         return ','.join([profession.name for profession in value])
 
     @validator('birth_year', 'death_year', pre=True)
-    def int_to_str(cls, value: int) -> str:
-        return str(value)
+    def int_to_str(cls, value: Optional[int]) -> Optional[str]:
+        return str(value) if value is not None else None
 
 
 class NqueryObject(QueryModel):

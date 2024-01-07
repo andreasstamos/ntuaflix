@@ -64,9 +64,10 @@ $ bygenre [OPTIONS]
 **Options**:
 
 * `--genre TEXT`: Genre  [required]
-* `--min INTEGER`: Minimum rating.  [required]
+* `--min FLOAT`: Minimum rating (must be between 0 and 10).  [required]
 * `--from INTEGER`: Start year must be after this year. If defined '--to' must also be defined.
 * `--to INTEGER`: Start year must be before this year. If defined '--from' must also be defined.
+* `--format [json|csv]`: Format to query  [default: json]
 * `--help`: Show this message and exit.
 
 ## `healthcheck`
@@ -269,7 +270,7 @@ $ searchname [OPTIONS]
 
 **Options**:
 
-* `--titleID TEXT`: Substring of name.  [required]
+* `--namepart TEXT`: Substring of name.  [required]
 * `--format [json|csv]`: Format to query  [default: json]
 * `--help`: Show this message and exit.
 
@@ -285,7 +286,7 @@ $ searchtitle [OPTIONS]
 
 **Options**:
 
-* `--titleID TEXT`: Substring of primary title.  [required]
+* `--titlepart TEXT`: Substring of primary title.  [required]
 * `--format [json|csv]`: Format to query  [default: json]
 * `--help`: Show this message and exit.
 

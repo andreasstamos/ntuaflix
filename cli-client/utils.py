@@ -2,7 +2,7 @@ from functools import wraps
 from pathlib import Path
 import typer
 import json
-from rich import print
+from rich import print, print_json
 from rich.table import Table
 import io
 import csv
@@ -83,17 +83,17 @@ def handle_request(path, *, method="POST", api_key=None, **kwargs):
 def print_csv(text, *, found_msg=None, empty_msg=None):
     csv_data = io.StringIO(text)
     csv_reader = csv.reader(csv_data)
-    table = Table()
+    table = Table(show_header=True)
     try:
         headers = next(csv_reader, None)
         if headers is None:
-            print(":no_good: [bold red]Server responded in an irregular manner (bad CSV). Please contact system administrator.[/bold red]")
+            if empty_msg is not None: print(empty_msg)
             return
         for header in headers:
             table.add_column(header)
         first_row = next(csv_reader, None)
         if first_row is None:
-            if empty_msg is not None: print(empty_msg)
+            print(":no_good: [bold red]Server responded in an irregular manner (bad CSV). Please contact system administrator.[/bold red]")
             return
         table.add_row(*first_row)
         for row in csv_reader:
@@ -106,17 +106,17 @@ def print_csv(text, *, found_msg=None, empty_msg=None):
 
 
 def print_response(response, *, format, found_msg=None, empty_msg=None):
-    if format == format.json:
+    if format == Format.json:
         try:
             response = response.json()
         except requests.JSONDecodeError:
             print(":no_good: [bold red]Server responded in an irregular manner (bad JSON). Please contact system administrator.[/bold red]") 
             return
-        if response == {}:
+        if response == {} or response == [] or response == None:
             if empty_msg is not None: print(empty_msg)
         else:
             if found_msg is not None: print(found_msg)
-            print_json(response)
-    elif format == format.csv:
+            print_json(data=response)
+    elif format == Format.csv:
         print_csv(response.text, found_msg=found_msg, empty_msg=empty_msg)
 
