@@ -17,20 +17,20 @@ $ [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `adduser`: Adds user to system.
-* `bygenre`: Searches for titles using criteria.
+* `bygenre`: Searches for Titles using criteria.
 * `healthcheck`: Checks the health of the API.
 * `login`: Logs in and stores token to local storage.
 * `logout`: Logs out and deletes token from local...
-* `name`: Searches for person details based on name ID.
+* `name`: Searches for Person details based on name ID.
 * `newakas`: Uploads data for Aliases.
 * `newcrew`: Uploads data for Crews.
 * `newepisode`: Uploads data for Episodes.
-* `newnames`: Uploads data for Aliases.
+* `newnames`: Uploads data for People.
 * `newprincipals`: Uploads data for Title Principals.
 * `newratings`: Uploads data for Title Ratings.
 * `newtitles`: Uploads data for Titles.
 * `resetall`: Resets database to initial state.
-* `searchname`: Searches for peoples that their name...
+* `searchname`: Searches for People that their name...
 * `searchtitle`: Searches for titles that their primary...
 * `title`: Searches for title details based on title ID.
 * `user`: Returns user details.
@@ -53,7 +53,7 @@ $ adduser [OPTIONS]
 
 ## `bygenre`
 
-Searches for titles using criteria. Requires authentication.
+Searches for Titles using criteria. Requires authentication.
 
 **Usage**:
 
@@ -117,7 +117,7 @@ $ logout [OPTIONS]
 
 ## `name`
 
-Searches for person details based on name ID. Requires authentication.
+Searches for Person details based on name ID. Requires authentication.
 
 **Usage**:
 
@@ -181,7 +181,7 @@ $ newepisode [OPTIONS]
 
 ## `newnames`
 
-Uploads data for Aliases. Requires authentication.
+Uploads data for People. Requires authentication.
 
 **Usage**:
 
@@ -260,7 +260,7 @@ $ resetall [OPTIONS]
 
 ## `searchname`
 
-Searches for peoples that their name contains a given string. Requires authentication.
+Searches for People that their name contains a given string. Requires authentication.
 
 **Usage**:
 

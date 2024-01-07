@@ -84,9 +84,9 @@ def healthcheck(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Checks the health of the API. Requires authentication."""
-    response = handle_request("/admin/healthcheck")
+    response = handle_request("/admin/healthcheck", method="GET", params={'format': format})
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The following health status was received.[/bold green]")
 
 @app.command()
 @authenticated
@@ -94,9 +94,9 @@ def resetall(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Resets database to initial state. Requires authentication."""
-    response = handle_request("/admin/resetall")
+    response = handle_request("/admin/resetall", params={'format': format})
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 
 @app.command()
@@ -108,12 +108,13 @@ def newtitles(
     """Uploads data for Titles. Requires authentication."""
     try:
         with open(filename, "rb") as f:
-            response = handle_request("/admin/upload/titlebasics", data=f)
+            response = handle_request("/admin/upload/titlebasics", api_key=api_key, params={'format': format},
+                    files = {'file': ('', f, 'text/csv')})
     except OSError:
         print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
         return
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 @app.command()
 @authenticated
@@ -124,12 +125,13 @@ def newakas(
     """Uploads data for Aliases. Requires authentication."""
     try:
         with open(filename, "rb") as f:
-            response = handle_request("/admin/upload/titleakas", data=f)
+            response = handle_request("/admin/upload/titleakas", api_key=api_key, params={'format': format},
+                    files = {'file': ('', f, 'text/csv')})
     except OSError:
         print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
         return
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 @app.command()
 @authenticated
@@ -137,15 +139,16 @@ def newnames(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
-    """Uploads data for Aliases. Requires authentication."""
+    """Uploads data for People. Requires authentication."""
     try:
         with open(filename, "rb") as f:
-            response = handle_request("/admin/upload/namebasics", data=f)
+            response = handle_request("/admin/upload/namebasics", api_key=api_key, params={'format': format},
+                    files = {'file': ('', f, 'text/csv')})
     except OSError:
         print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
         return
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 @app.command()
 @authenticated
@@ -156,12 +159,13 @@ def newcrew(
     """Uploads data for Crews. Requires authentication."""
     try:
         with open(filename, "rb") as f:
-            response = handle_request("/admin/upload/titlecrew", data=f)
+            response = handle_request("/admin/upload/titlecrew", api_key=api_key, params={'format': format},
+                    files = {'file': ('', f, 'text/csv')})
     except OSError:
         print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
         return
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 @app.command()
 @authenticated
@@ -172,12 +176,13 @@ def newepisode(
     """Uploads data for Episodes. Requires authentication."""
     try:
         with open(filename, "rb") as f:
-            response = handle_request("/admin/upload/titleepisode", data=f)
+            response = handle_request("/admin/upload/titleepisode", api_key=api_key, params={'format': format},
+                    files = {'file': ('', f, 'text/csv')})
     except OSError:
         print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
         return
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 @app.command()
 @authenticated
@@ -188,12 +193,13 @@ def newprincipals(
     """Uploads data for Title Principals. Requires authentication."""
     try:
         with open(filename, "rb") as f:
-            response = handle_request("/admin/upload/titleprincipals", data=f)
+            response = handle_request("/admin/upload/titleprincipals", api_key=api_key, params={'format': format},
+                    files = {'file': ('', f, 'text/csv')})
     except OSError:
         print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
         return
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 @app.command()
 @authenticated
@@ -204,12 +210,13 @@ def newratings(
     """Uploads data for Title Ratings. Requires authentication."""
     try:
         with open(filename, "rb") as f:
-            response = handle_request("/admin/upload/titleratings", data=f)
+            response = handle_request("/admin/upload/titleratings", api_key=api_key, params={'format': format},
+                    files = {'file': ('', f, 'text/csv')})
     except OSError:
         print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
         return
     if response is not None:
-        print_response(response, format=format)
+        print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 
 @app.command()
 @authenticated
@@ -250,7 +257,7 @@ def bygenre(
         to: Annotated[Optional[int], typer.Option(help="Start year must be before this year. If defined '--from' must also be defined.")] = None,
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
-    """Searches for titles using criteria. Requires authentication."""
+    """Searches for Titles using criteria. Requires authentication."""
 
     if (_from is None) != (to is None):
         print(":no_entry: [bold red]Options '--from', '--to' must either both be defined or neither.[/bold red]")
@@ -277,7 +284,7 @@ def name(
         nameid: Annotated[str, typer.Option(help="ID of person (nconst)")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
-    """Searches for person details based on name ID. Requires authentication."""
+    """Searches for Person details based on name ID. Requires authentication."""
     response = handle_request(f"/name/{urllib.parse.quote(nameid)}", method="GET", params={'format': format})
     if response is not None:
         print_response(response,
@@ -293,7 +300,7 @@ def searchname(
         namepart: Annotated[str, typer.Option(help="Substring of name.")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
-    """Searches for peoples that their name contains a given string. Requires authentication."""
+    """Searches for People that their name contains a given string. Requires authentication."""
     response = handle_request(f"/searchname", method="GET", json={"namePart": namepart}, params={'format': format})
     if response is not None:
         print_response(response,

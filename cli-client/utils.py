@@ -68,8 +68,10 @@ def authenticated(func):
 
 def handle_request(path, *, method="POST", api_key=None, **kwargs):
     try:
+        if api_key is not None:
+            if 'headers' not in kwargs: kwargs['headers'] = {}
+            kwargs['headers']["X-OBSERVATORY-AUTH"] = api_key
         response = requests.request(method, API_URL + path,
-                **({'headers': {"X-OBSERVATORY-AUTH": api_key}} if api_key is not None else {}),
                 **kwargs
                 )
         if response.status_code == 200:
