@@ -1,8 +1,8 @@
-from typing_extensions import Annotated
+from typing import Annotated, Optional
 import typer
 from rich import print, print_json
 import requests
-
+import urllib
 from utils import load_config, store_config, authenticated, handle_request, Format
 from config import *
 
@@ -89,6 +89,7 @@ def healthcheck(
         print_response(response, format=format)
 
 @app.command()
+@authenticated
 def resetall(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
@@ -99,8 +100,9 @@ def resetall(
 
 
 @app.command()
+@authenticated
 def newtitles(
-        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Titles. Requires authentication."""
@@ -110,8 +112,9 @@ def newtitles(
         print_response(response, format=format)
 
 @app.command()
+@authenticated
 def newakas(
-        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Aliases. Requires authentication."""
@@ -121,8 +124,9 @@ def newakas(
         print_response(response, format=format)
 
 @app.command()
+@authenticated
 def newnames(
-        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Aliases. Requires authentication."""
@@ -132,8 +136,9 @@ def newnames(
         print_response(response, format=format)
 
 @app.command()
+@authenticated
 def newcrew(
-        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Crews. Requires authentication."""
@@ -143,8 +148,9 @@ def newcrew(
         print_response(response, format=format)
 
 @app.command()
+@authenticated
 def newepisode(
-        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Episodes. Requires authentication."""
@@ -154,8 +160,9 @@ def newepisode(
         print_response(response, format=format)
 
 @app.command()
+@authenticated
 def newprincipals(
-        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Title Principals. Requires authentication."""
@@ -165,13 +172,79 @@ def newprincipals(
         print_response(response, format=format)
 
 @app.command()
+@authenticated
 def newratings(
-        filename: Annotated[Format, typer.Option(help=".tsv filename")],
+        filename: Annotated[str, typer.Option(help=".tsv filename")],
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Title Ratings. Requires authentication."""
     with open(filename, "rb") as f:
         response = handle_request("/admin/upload/titleratings", data=f)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+@authenticated
+def title(
+        titleID: Annotated[str, typer.Option("--titleID", help="ID of title (tconst)")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Searches for title details based on title ID. Requires authentication."""
+    response = handle_request(f"/title/{urllib.parse.quote(titleID)}")
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+@authenticated
+def searchtitle(
+        titlepart: Annotated[str, typer.Option("--titleID", help="Substring of primary title.")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Searches for titles that their primary title contains a given string. Requires authentication."""
+    response = handle_request(f"/searchtitle", method="GET", payload={"titlepart": titlepart})
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+@authenticated
+def bygenre(
+        genre: Annotated[str, typer.Option(help="Genre")],
+        _min: Annotated[int, typer.Option("--min", help="Minimum rating.")],
+        _from: Annotated[Optional[int], typer.Option("--from", help="Start year must be after this year. If defined '--to' must also be defined.")] = None,
+        to: Annotated[Optional[int], typer.Option(help="Start year must be before this year. If defined '--from' must also be defined.")] = None
+        ):
+    """Searches for titles using criteria. Requires authentication."""
+
+    if (_from is None) != (to is None):
+        print(":no_entry: [bold red]Options '--from', '--to' must either both be defined or neither.[/bold red]")
+        return
+    payload = {'qgenre': genre, 'minrating': _min}
+    if _from is not None:
+        payload["yrFrom"] = _from
+        payload["yrTo"] = to
+    response = handle_request(f"/bygenre", method="GET", payload=payload)
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+@authenticated
+def name(
+        nameid: Annotated[str, typer.Option(help="ID of person (nconst)")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Searches for person details based on name ID. Requires authentication."""
+    response = handle_request(f"/name/{urllib.parse.quote(nameid)}")
+    if response is not None:
+        print_response(response, format=format)
+
+@app.command()
+@authenticated
+def searchname(
+        namepart: Annotated[str, typer.Option("--titleID", help="Substring of name.")],
+        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        ):
+    """Searches for peoples that their name contains a given string. Requires authentication."""
+    response = handle_request(f"/searchname", method="GET", payload={"namepart": namepart})
     if response is not None:
         print_response(response, format=format)
 

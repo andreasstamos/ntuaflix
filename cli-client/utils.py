@@ -6,6 +6,7 @@ from rich import print
 from rich.table import Table
 import io
 import csv
+import requests
 
 from config import *
 
@@ -25,8 +26,6 @@ def load_config(var):
             if var in config:
                 return config[var]
         except: pass
-    else:
-        print("doesnt exist")
     return None
 
 def store_config(var, value):
@@ -67,9 +66,9 @@ def authenticated(func):
             print(":locked_with_key: [bold red]You are not authenticated. Please login first.[/bold red]")
     return wrapper
 
-def handle_request(path, *, api_key=None, **kwargs):
+def handle_request(path, *, method="POST", api_key=None, **kwargs):
     try:
-        response = requests.post(API_URL + path,
+        response = requests.request(method, API_URL + path,
                 **({'headers': {"X-OBSERVATORY-AUTH": api_key}} if api_key is not None else {}),
                 **kwargs
                 )
