@@ -106,8 +106,12 @@ def newtitles(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Titles. Requires authentication."""
-    with open(filename, "rb") as f:
-        response = handle_request("/admin/upload/titlebasics", data=f)
+    try:
+        with open(filename, "rb") as f:
+            response = handle_request("/admin/upload/titlebasics", data=f)
+    except OSError:
+        print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
+        return
     if response is not None:
         print_response(response, format=format)
 
@@ -118,8 +122,12 @@ def newakas(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Aliases. Requires authentication."""
-    with open(filename, "rb") as f:
-        response = handle_request("/admin/upload/titleakas", data=f)
+    try:
+        with open(filename, "rb") as f:
+            response = handle_request("/admin/upload/titleakas", data=f)
+    except OSError:
+        print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
+        return
     if response is not None:
         print_response(response, format=format)
 
@@ -130,8 +138,12 @@ def newnames(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Aliases. Requires authentication."""
-    with open(filename, "rb") as f:
-        response = handle_request("/admin/upload/namebasics", data=f)
+    try:
+        with open(filename, "rb") as f:
+            response = handle_request("/admin/upload/namebasics", data=f)
+    except OSError:
+        print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
+        return
     if response is not None:
         print_response(response, format=format)
 
@@ -142,8 +154,12 @@ def newcrew(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Crews. Requires authentication."""
-    with open(filename, "rb") as f:
-        response = handle_request("/admin/upload/titlecrew", data=f)
+    try:
+        with open(filename, "rb") as f:
+            response = handle_request("/admin/upload/titlecrew", data=f)
+    except OSError:
+        print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
+        return
     if response is not None:
         print_response(response, format=format)
 
@@ -154,8 +170,12 @@ def newepisode(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Episodes. Requires authentication."""
-    with open(filename, "rb") as f:
-        response = handle_request("/admin/upload/titleepisode", data=f)
+    try:
+        with open(filename, "rb") as f:
+            response = handle_request("/admin/upload/titleepisode", data=f)
+    except OSError:
+        print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
+        return
     if response is not None:
         print_response(response, format=format)
 
@@ -166,8 +186,12 @@ def newprincipals(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Title Principals. Requires authentication."""
-    with open(filename, "rb") as f:
-        response = handle_request("/admin/upload/titleprincipals", data=f)
+    try:
+        with open(filename, "rb") as f:
+            response = handle_request("/admin/upload/titleprincipals", data=f)
+    except OSError:
+        print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
+        return
     if response is not None:
         print_response(response, format=format)
 
@@ -178,8 +202,12 @@ def newratings(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Uploads data for Title Ratings. Requires authentication."""
-    with open(filename, "rb") as f:
-        response = handle_request("/admin/upload/titleratings", data=f)
+    try:
+        with open(filename, "rb") as f:
+            response = handle_request("/admin/upload/titleratings", data=f)
+    except OSError:
+        print(":cross_mark: [bold red]The file could not be opened.[/bold red]")
+        return
     if response is not None:
         print_response(response, format=format)
 
