@@ -1,0 +1,109 @@
+from typing import Optional, Annotated
+from fastapi import APIRouter, Depends, HTTPException, status, Path
+from sqlalchemy import and_, delete
+from sqlalchemy.orm import Session
+from database import get_db
+from pydantic import BaseModel
+
+from models import Watchlist, WatchlistContent,Title, User
+from schemas import TitleObject, TqueryObject, GqueryObject
+from utils import CSVResponse, FormatType
+from utils import authorize_user, token_dependency
+from functools import wraps
+
+router = APIRouter()
+
+db_dependency = Annotated[Session,Depends(get_db)]
+
+class WatchlistObj(BaseModel):
+    library_name: str
+    items: int
+    
+#----------------> WATCHLISTS NAV <-----------------
+
+@router.get("/watchlists/{user_id}")
+@authorize_user
+async def view_watchlists(
+    db: db_dependency,
+    user_id: int,
+    session_id: token_dependency,
+    format: FormatType = FormatType.json) -> list[WatchlistObj]:
+    results = db.query(Watchlist).filter(Watchlist.user_id==user_id).all()
+    if not results:
+        raise HTTPException(status_code=204, detail=f"You haven't created any watchlist so far")
+    user_libs = []
+    for result in results:
+        user_libs.append(WatchlistObj(library_name=result.library_name, items=result.item_count))
+    if format==FormatType.csv: pass
+    else: return user_libs
+
+@router.get("/watchlists/{user_id}/{lib_name}")
+@authorize_user
+async def view_watchlist_contents(
+    user_id:int, session_id: token_dependency, lib_name: str, db: db_dependency,
+    format: FormatType = FormatType.json) -> list[TitleObject]:
+    db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name==lib_name),Watchlist.user_id==user_id).first()
+    if not db_watchlist:
+        raise HTTPException(status_code=404, detail=f"Watchlist {lib_name} doesn't exist")
+    if db_watchlist.item_count==0 :  
+        raise HTTPException(status_code=204, detail=f"Watchlist {lib_name} is empty!")    
+    else:  
+        watchlist_id = db_watchlist.id
+        contents = []
+        results = db.query(Title).join(WatchlistContent).filter(WatchlistContent.watchlist==watchlist_id).all()
+        for result in results:
+            contents.append(result)   
+        if format==FormatType.csv: pass
+        else: return contents
+ 
+
+
+@router.post("/watchlists/{user_id}")
+@authorize_user
+async def create_watchlist(lib_name: str, user_id: int, session_id: token_dependency, db: db_dependency, contents: list[TitleObject] = []):
+    db_watchlist = Watchlist(library_name = lib_name, item_count = 0, user_id=user_id)
+    db.add(db_watchlist)
+    db.commit()
+    db.refresh(db_watchlist)
+    if contents is not []:
+        for content in contents:
+            db_content = WatchlistContent(watchlist_id=db_watchlist.id, title_id=content.tconst)
+            #TODO-> ++item_count with trigger on insert ??
+            db.add(db_content)
+            #db_watchlist.item_count+=1
+        db.commit()
+              
+async def remove_watchlist(lib_name: str, user_id: int, session_id: token_dependency, db: db_dependency):
+    db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name == lib_name),Watchlist.user_id==user_id).first()
+    watchlist_id = db_watchlist.id
+    #remove references 
+    db.delete(WatchlistContent).where(WatchlistContent.watchlist_id==watchlist_id)
+    #trigger for item_count-=1
+    db.commit()
+    #remove watchlist
+    db.delete(db_watchlist)
+    db.commit()
+ 
+@router.post("/watchlists/{user_id}/{lib_name}")
+async def add_contents(movies: list[TitleObject], lib_name: str, db: db_dependency, user_id: int, session_id: token_dependency):
+    db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name == lib_name),Watchlist.user_id==user_id).first()
+    watchlist_id = db_watchlist.id
+    db.refresh(db_watchlist)
+    for movie in movies:
+        db_link = WatchlistContent(title_id=movie.tconst, watchlist_id=watchlist_id)
+        db.add(db_link)
+    db.commit()
+    
+async def remove_contents(movies: list[TitleObject], lib_name: str, db: db_dependency, user_id: int, session_id: token_dependency):
+    db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name == lib_name),Watchlist.user_id==user_id).first()
+    watchlist_id = db_watchlist.id
+    db.refresh(db_watchlist)
+    #db.delete(WatchlistContent).where(and_(WatchlistContent.title_id==movie.tconst),WatchlistContent.watchlist_id==watchlist_id)
+    for movie in movies:
+        db_link = db.query(WatchlistContent).filter(and_(WatchlistContent.title_id==movie.tconst),WatchlistContent.watchlist_id==watchlist_id).first()
+        if db_link:
+            db.delete(db_link)
+        else:
+            raise HTTPException(status_code=400, detail=f"Title {movie.originalTitle} is not in this watchlist")
+    db.commit()
+    
