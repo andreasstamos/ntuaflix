@@ -1,6 +1,7 @@
 # Import necessary libraries
 from typing import List
 from sqlalchemy import create_engine, Sequence,Column, Integer, String, Date, Boolean, ForeignKey, Float, CHAR, REAL, Index, Table
+from sqlalchemy import UniqueConstraint, CheckConstraint, DDL, event
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Mapped
 import os
@@ -39,16 +40,100 @@ class User(Base):
     dob = Column(Date, nullable=False)
     is_admin = Column(Boolean, default=False)
 
-
-class PersonalCollection(Base):
-    __tablename__ = 'personal_collection'
+class Watchlist(Base):
+    __tablename__ = 'watchlists'
     
-    users_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    tconst = Column(CHAR(10), ForeignKey('title.tconst'), primary_key=True)
+    id = Column(Integer,primary_key=True, index=True)
+    library_name = Column(String, nullable=False, index=True)
+    item_count = Column(Integer,nullable=False,default=0)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    
+    __table_args__ = (
+        UniqueConstraint(library_name,user_id, name='unique_user_library'),
+    )
+    
+    
+class WatchlistContent(Base):
+    __tablename__ = 'watchlist_content'
+    
+    id = Column(Integer, primary_key=True, index=False)
+    title_id = Column(CHAR(9),ForeignKey("title.tconst"))
+    watchlist_id = Column(Integer, ForeignKey("watchlists.id"))
+    
+#create different index here  
+Index('watchlist_idx', WatchlistContent.watchlist_id)
 
-# Indexes for personal_collection
-Index('idx_users_id', PersonalCollection.users_id)
-Index('idx_tconst', PersonalCollection.tconst)
+#add triggers to handle insertions and deletions automatically 
+#hmm or handle this in backend...?
+trigger_ddl_insert = DDL("""
+CREATE OR REPLACE FUNCTION inc_item_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE watchlists
+    SET item_count = item_count + 1
+    WHERE id = NEW.watchlist_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER inc_trigger
+AFTER INSERT ON watchlist_content
+FOR EACH ROW
+EXECUTE FUNCTION inc_item_count();
+""")
+event.listen(
+    WatchlistContent.__table__,
+    'after_create',
+    trigger_ddl_insert
+)
+
+trigger_ddl_delete = DDL("""
+CREATE OR REPLACE FUNCTION dec_item_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE watchlists
+    SET item_count = item_count - 1
+    WHERE id = OLD.watchlist_id;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER dec_trigger
+AFTER DELETE ON watchlist_content
+FOR EACH ROW
+EXECUTE FUNCTION dec_item_count();
+""")
+
+event.listen(
+    WatchlistContent.__table__,
+    'after_create',
+    trigger_ddl_delete
+)
+class Review(Base):
+    __tablename__ = 'reviews'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    text = Column(String, nullable=True)
+    stars = Column(Integer,nullable=False)
+    date = Column(Date,default=date)
+    likes = Column(Integer,nullable=True)
+    dislikes = Column(Integer, nullable=True)
+    user_id = Column(Integer,ForeignKey("users.id"))
+    title_id = Column(CHAR(9), ForeignKey("title.tconst"))
+    
+    __table_args__ = (
+        CheckConstraint('stars >= 1 AND stars <= 5', name='check_stars_range'),
+    )
+    
+class ReviewReactions(Base):
+    __tablename__ = 'reviews_reactions'
+    
+    id = Column(Integer, primary_key=True, index=False)
+    type = Column(Boolean, nullable=False) #like==1, dislike==0
+    user_id = Column(Integer,ForeignKey("users.id"))
+    review_id = Column(Integer, ForeignKey("reviews.id"))
+
+#create triggers for likes and dislikes in Review -> is this really needed?
 
 table_person_known_for_titles = Table(
         "person_known_for_titles",
