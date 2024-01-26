@@ -4,6 +4,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker,relationship
 import os
 from dotenv import load_dotenv
 from datetime import date
+from db_type import *
 
 env_path = '.env'
 load_dotenv(dotenv_path=env_path)
@@ -13,8 +14,7 @@ DB_PASSWORD = str(os.getenv('DB_PASSWORD'))
 DB_HOST = str(os.getenv('DB_HOST'))
 DB_DATABASE = str(os.getenv('DB_DATABASE'))
 
-# Replace 'your_username', 'your_password', 'your_database', and 'your_host' with your PostgreSQL credentials
-DATABASE_URL = f"postgresql://{DB_USERSNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
+DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)
 
 # Create a SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
