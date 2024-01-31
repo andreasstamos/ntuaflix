@@ -1,7 +1,10 @@
-from fastapi import APIRouter, Depends, UploadFile
+from fastapi import APIRouter, Depends, UploadFile, HTTPException
+from typing import Annotated, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import text, MetaData
 import codecs
+
+from utils import admin_required, role_dependency
 
 from models import *
 from database import get_db
@@ -12,12 +15,30 @@ from schemas import HealthCheckObject, ResetAllObject, UploadFileObject
 
 router = APIRouter()
 
+db_dependency = Annotated[Session,Depends(get_db)]
+
+@router.get("/healthcheck")
+@admin_required
+async def connection_status(
+    role: role_dependency, 
+    db: db_dependency,
+    format: FormatType = FormatType.json):
+    response = {"status":"failed", "dataconnection": str(db.bind.url)}
+    try:
+        db.execute(text('SELECT 1'))
+        response["status"] = "OK"
+    except Exception as e:
+        pass
+    finally:
+        if format == FormatType.csv : return CSVResponse([HealthCheckObject.model_validate(response)])
+        return response
+""""
 @router.get('/healthcheck')
 async def health_check(
         format: FormatType = FormatType.json,
         db: Session = Depends(get_db)
         ) -> HealthCheckObject:
-    """Returns health status of backend and database."""
+    #Returns health status of backend and database.
     ret = {"status": "failed", "dataconnection": str(db.bind.url)}
     try:
         if db.execute(text('SELECT 1')).first() == (1,):
@@ -26,12 +47,14 @@ async def health_check(
         pass
     if format == FormatType.csv: return CSVResponse([HealthCheckObject.model_validate(ret)])
     return ret
+    """
 
 @router.post('/resetall')
+@admin_required
 async def reset_all(
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
-        ) -> ResetAllObject:
+        role: role_dependency,
+        db: db_dependency,
+        format: FormatType = FormatType.json) -> ResetAllObject:
     """Resets database to initial state."""
     for table in reversed(Base.metadata.sorted_tables):
         db.execute(table.delete())
@@ -52,11 +75,13 @@ class UploadFileAdapter:
         return data
 
 @router.post('/upload/titlebasics')
+@admin_required
 async def upload_title_basics(
-        file: UploadFile,
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
-        ) -> UploadFileObject:
+    role: role_dependency,
+    db: db_dependency,
+    file: UploadFile,
+    format: FormatType = FormatType.json,
+    ) -> UploadFileObject:
     """Upload .tsv file for Title Basics."""
     if db.query(db.query(Title).exists()).scalar():
         ret = {"status": "failed", "reason": "Titles table is not empty."}
@@ -68,10 +93,12 @@ async def upload_title_basics(
     return ret
 
 @router.post('/upload/titleakas')
+@admin_required
 async def upload_title_akas(
+        role: role_dependency,
+        db: db_dependency,
         file: UploadFile,
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
+        format: FormatType = FormatType.json
         ) -> UploadFileObject:
     """Upload .tsv file for Title Aliases."""
     if db.query(db.query(TitleAlias).exists()).scalar():
@@ -84,10 +111,12 @@ async def upload_title_akas(
     return ret
 
 @router.post('/upload/namebasics')
+@admin_required
 async def upload_name_basics(
+        role: role_dependency,
+        db: db_dependency,
         file: UploadFile,
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
+        format: FormatType = FormatType.json
         ) -> UploadFileObject:
     """Upload .tsv file for Name Basics."""
     if db.query(db.query(Person).exists()).scalar():
@@ -100,10 +129,12 @@ async def upload_name_basics(
     return ret
 
 @router.post('/upload/titlecrew')
+@admin_required
 async def upload_title_crew(
+        role: role_dependency,
+        db: db_dependency,
         file: UploadFile,
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
+        format: FormatType = FormatType.json
         ) -> UploadFileObject:
     """Upload .tsv file for Crew Basics."""
     if db.query(db.query(Title).join(Title.directors).exists()).scalar():
@@ -120,10 +151,12 @@ async def upload_title_crew(
     return ret
 
 @router.post('/upload/titleepisode')
+@admin_required
 async def upload_title_episode(
+        role: role_dependency,
+        db: db_dependency,
         file: UploadFile,
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
+        format: FormatType = FormatType.json
         ) -> UploadFileObject:
     """Upload .tsv file for Title Episode."""
     if db.query(db.query(TitleEpisode).exists()).scalar():
@@ -137,10 +170,12 @@ async def upload_title_episode(
 
 
 @router.post('/upload/titleprincipals')
+@admin_required
 async def upload_title_principals(
+        role: role_dependency,
+        db: db_dependency,
         file: UploadFile,
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
+        format: FormatType = FormatType.json
         ) -> UploadFileObject:
     """Upload .tsv file for Title Principals."""
     if db.query(db.query(Principals).exists()).scalar():
@@ -153,10 +188,12 @@ async def upload_title_principals(
     return ret
 
 @router.post('/upload/titleratings')
+@admin_required
 async def upload_title_ratings(
+        role: role_dependency,
+        db: db_dependency,
         file: UploadFile,
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
+        format: FormatType = FormatType.json
         ) -> UploadFileObject:
     """Upload .tsv file for Title Ratings."""
     await parse_title_ratings(UploadFileAdapter(file), db)
@@ -164,3 +201,29 @@ async def upload_title_ratings(
     if format == FormatType.csv: return CSVResponse([UploadFileObject.model_validate(ret)])
     return ret
 
+@router.post("/myadmin/usermod/{username}/{password}")
+@admin_required
+async def user_credentials(
+    role: role_dependency, 
+    db: db_dependency, 
+    username: str, password: str):
+    user = db.query(User).filter(User.username==username).first()
+    if user:
+        user.password = password #hash this
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail=f"User {username} doesn't exist")
+
+    
+@router.get("/myadmin/users/{username}")
+@admin_required
+async def view_user_details(
+    role: role_dependency, 
+    db: db_dependency, 
+    username:str,
+    format: FormatType = FormatType.json):
+    values = db.query(User).filter(User.username==username).all()
+    if (values==[]):
+        raise HTTPException(status_code=404, detail=f"User {username} doesn't exist!") 
+    if format==FormatType.csv: pass
+    return values
