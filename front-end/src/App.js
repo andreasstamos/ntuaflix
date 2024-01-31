@@ -12,6 +12,7 @@ import Preloader from './components/Preloader';
 import Movies from './pages/Movies';
 import { AuthProvider } from './context/AuthContext';
 import Watchlist from './pages/Watchlist';
+import Recommender from './pages/Recommender';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path='/preloader/' exact element={<Preloader />} />
             <Route path='/admin/' exact element={<Admin />} />
             <Route path='/watchlist/' exact element={<Watchlist />} />
+            <Route path='/recommend/' exact element={<Recommender />} />
 
 
             <Route path='/auth' exact element={<Auth/>}>

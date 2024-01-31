@@ -122,7 +122,8 @@ const {logoutUser, user} = useContext(AuthContext);
           <li className="item"><NavLink to={`/`}>Home</NavLink></li>
           <li className="item"><NavLink to={`/movies`}>Movies</NavLink></li>
           <li className="item"><NavLink to={`/watchlist/`}>WatchList</NavLink></li>
-          <li className="item"><NavLink to={`/preloader/`}>Preloader</NavLink></li>
+          <li className="item"><NavLink to={`/recommend/`}>Recommender</NavLink></li>
+
           {/* <li className="item has-submenu">
             <a tabIndex="0">Genres<ExpandMoreIcon/></a>
             <ul className="submenu">
