@@ -1,6 +1,7 @@
 from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import func 
 from database import get_db
 
 from models import Title
@@ -48,3 +49,21 @@ async def get_movies(page:int or None = 1, qgenre: int or None = None, db: Sessi
     if qgenre:
         titles = titles.filter(Title.genres.any(id=qgenre))
     return titles
+
+
+#basically returns a random movie and optimized for postgresql... 
+
+@router.get("/recommend-movie")
+async def recommend_movie(db: Session = Depends(get_db)) -> TitleObject:
+    count_query = db.query(func.count(Title.id)).filter(Title.is_adult == False)
+    total_count = count_query.scalar()
+    random_index = func.floor(func.random() * total_count).as_scalar()
+    random_title_query = db.query(Title)\
+                        .filter(Title.is_adult == False)\
+                        .offset(random_index)\
+                        .limit(1)
+    random_title = random_title_query.first()
+    return random_title
+
+
+    
