@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from datetime import date
+
 class ORMModel(BaseModel):
     class Config:
         from_attributes = True
@@ -10,3 +12,10 @@ class QueryModel(BaseModel):
         extra = "forbid"
 
 
+class UserObject(BaseModel):
+    username: str
+    first_name: str
+    last_name: str
+    email: str
+    birtday: date
+    
