@@ -5,6 +5,7 @@ from sqlalchemy import text, MetaData
 import codecs
 
 from utils import admin_required, role_dependency
+from passlib.context import CryptContext
 
 from models import *
 from database import get_db
@@ -32,22 +33,6 @@ async def connection_status(
     finally:
         if format == FormatType.csv : return CSVResponse([HealthCheckObject.model_validate(response)])
         return response
-""""
-@router.get('/healthcheck')
-async def health_check(
-        format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)
-        ) -> HealthCheckObject:
-    #Returns health status of backend and database.
-    ret = {"status": "failed", "dataconnection": str(db.bind.url)}
-    try:
-        if db.execute(text('SELECT 1')).first() == (1,):
-            ret = {"status": "OK", "dataconnection": str(db.bind.url)}
-    except:
-        pass
-    if format == FormatType.csv: return CSVResponse([HealthCheckObject.model_validate(ret)])
-    return ret
-    """
 
 @router.post('/resetall')
 @admin_required
@@ -201,7 +186,9 @@ async def upload_title_ratings(
     if format == FormatType.csv: return CSVResponse([UploadFileObject.model_validate(ret)])
     return ret
 
-@router.post("/myadmin/usermod/{username}/{password}")
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+
+@router.post("/usermod/{username}/{password}")
 @admin_required
 async def user_credentials(
     role: role_dependency, 
@@ -209,13 +196,13 @@ async def user_credentials(
     username: str, password: str):
     user = db.query(User).filter(User.username==username).first()
     if user:
-        user.password = password #hash this
+        user.password = pwd_context.hash(password) 
         db.commit()
     else:
         raise HTTPException(status_code=404, detail=f"User {username} doesn't exist")
 
     
-@router.get("/myadmin/users/{username}")
+@router.get("/users/{username}")
 @admin_required
 async def view_user_details(
     role: role_dependency, 
