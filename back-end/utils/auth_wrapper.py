@@ -16,13 +16,13 @@ pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 secret_key = os.getenv("SECRET_KEY")
 algorithm = os.getenv("ALGORITHM")
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-        
-    credentials_exception = HTTPException(
+credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(token, secret_key, algorithms=[algorithm])
         user_id: int = payload.get("user_id")
@@ -32,6 +32,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise credentials_exception
 
     return user_id
+        
 
 token_dependency = Annotated[int ,Depends(get_current_user)]
 
@@ -42,3 +43,28 @@ def authorize_user(func):
             raise HTTPException(status_code=403, detail="Permission denied: Cross user validation failed")
         return await func(*args, user_id=user_id, session_id=session_id, **kwargs)
     return wrapper
+
+
+#admin validation
+  
+def get_user_role(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+        role: str = payload.get("role")
+        if role is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    return role
+
+role_dependency = Annotated[str, Depends(get_user_role)]
+
+def admin_required(func):
+    @wraps(func)
+    async def admin_wrapper(*args, role:role_dependency, **kwargs):
+        if (role!="admin") :
+            raise HTTPException(status_code=403, detail=f"Permission Denied: Only admin can access this source!")
+        return await func(*args, role=role, **kwargs)
+    return admin_wrapper
+ 
+ 
