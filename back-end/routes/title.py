@@ -51,21 +51,17 @@ async def get_movies(page:int or None = 1, qgenre: int or None = None, db: Sessi
     return titles
 
 
-#basically returns a random movie and optimized for postgresql... 
+# basically returns a random movie and optimized for postgresql... 
 
 @router.get("/recommend-movie")
 async def recommend_movie(db: Session = Depends(get_db)) -> TitleObject:
     count_query = db.query(func.count(Title.tconst)).filter(Title.is_adult == False)
     total_count = count_query.scalar()
     random_index = func.floor(func.random() * total_count)
-    
     random_title_query = db.query(Title)\
                         .filter(Title.is_adult == False)\
                         .offset(random_index)\
                         .limit(1)
-    
     random_title = random_title_query.first()
     return random_title
-
-
     
