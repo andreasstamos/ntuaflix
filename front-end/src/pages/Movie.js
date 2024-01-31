@@ -1,29 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import InterstellarImage from '../assets/images/poster-2.jpg'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import './Movie.css'
+import axiosInstance from '../api/api';
+import Preloader from '../components/Preloader';
+import { useParams } from 'react-router-dom';
 
 
 export default function Movie() {
+
+    const {movieID} = useParams();
+    const [movieData, setMovieData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+
+    async function fetchMovieData() {
+        const response = await axiosInstance.get(`/title/${movieID}`);
+        
+        setMovieData(response?.data);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        fetchMovieData();
+    }, [])
+
+  if (loading) return <Preloader/>
   return (
-    <div className='movie-page-container'>
+    <div className='movie-page-container' style={{background: `linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url(${movieData.titlePoster})`}}>
         <div className='movie-container'>
             <div className='movie-column'>
                 <div className='movie-row'>
                     
-                    <p className='movie-genres'>Adventure, Sci-fi, Drama</p>
+                    <p className='movie-genres'>{movieData.genres.map(obj => obj.genreName).join(', ')}</p>
 
-                    <h1 className='title-with-line'>The Dark Knight</h1>
+                    <h1 className='title-with-line'>{movieData.original_title}</h1>
 
                     <div className='movie-metas'>
-                        <div className='movie-stars'><StarBorderIcon/><h4>8.6/10</h4></div>
-                        <div className='movie-year'><h4>2003</h4></div>
-                        <div className='movie-duration'><h4>2h 35m</h4></div>
+                        {movieData.rating.avRating && <div className='movie-stars'><StarBorderIcon/><h4>{movieData.rating.avRating}/10</h4></div>}
+                        {movieData.startYear && <div className='movie-year'><h4>{movieData.startYear}</h4></div>}
+                        {movieData.type && <div className='movie-type'><h4>{movieData.type}</h4></div>}
+                        {/* <div className='movie-duration'><h4>2h 35m</h4></div> */}
                     </div>
 
-                    <div className='movie-description'>
+                    {/* <div className='movie-description'>
                         <p>When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.</p>
-                    </div>
+                    </div> */}
 
                     <div className='movie-actions'>
                         <button className='btn btn-primary'>Add to WatchList</button>
@@ -37,7 +59,7 @@ export default function Movie() {
 
                 </div> */}
             </div>
-            <img src={InterstellarImage} />
+            <img src={movieData.titlePoster} />
 
         </div>
 

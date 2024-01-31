@@ -3,17 +3,17 @@ import './MovieCard.css'
 import { Link } from 'react-router-dom'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
-export default function MovieCard({image_url, movie_title, average_rating}) {
+export default function MovieCard({imageUrl, movieTitle, averageRating, movieID}) {
   
   return (
         <div className="card">
-        <img src={image_url} />
+        <img src={imageUrl} />
         <div className="info">
-            <h3 className='h3'>{movie_title}</h3>
+            <h3 className='h3'>{movieTitle}</h3>
             {/* <p>In the future, where Earth is becoming uninhabitable, farmer and ex-NASA pilot Cooper is asked to pilot a spacecraft
             along with a team of researchers to find a new planet for humans.</p> */}
-            {average_rating && <h3 className='h3'><StarBorderIcon/> {average_rating}</h3>}
-            <Link to='/movie'>View More</Link>
+            {averageRating && <h3 className='h3'><StarBorderIcon/> {averageRating}</h3>}
+            <Link to={`/movie/${movieID}`}>View More</Link>
         </div>
         </div>
  )

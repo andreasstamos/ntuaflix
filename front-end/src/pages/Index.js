@@ -21,7 +21,7 @@ export default function Index() {
       
 
       setData(response?.data);
-      // console.log(response?.data)
+      console.log(response?.data)
       setLoading(false);
 
       for(let i =0; i < response?.data.length; ++i) {
@@ -123,18 +123,10 @@ export default function Index() {
            </div>
            <div className='cards-container' id={`${genre.genre}-container`}>
                {genre.movies.map((movie) => {
-                return <MovieCard key={movie.tconst} movie_title={movie.primary_title}  average_rating={movie.average_rating} image_url={movie.image_url || "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=2000"} />
+                return <MovieCard key={movie.tconst} movieID={movie.tconst} movieTitle={movie.primary_title} 
+                averageRating={movie.average_rating} 
+                imageUrl={movie.image_url || "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=2000"} />
                })}
-               {/* <MovieCard MovieImage={MandalorianImage}/>
-               <MovieCard MovieImage={TopGunImage}/>
-               <MovieCard MovieImage={InterstellarImage}/>
-               <MovieCard MovieImage={BatmanImage}/>
-               <MovieCard MovieImage={OppenheimerImage}/>
-               <MovieCard MovieImage={BatmanImage}/>
-               <MovieCard MovieImage={OppenheimerImage}/>
-               <MovieCard MovieImage={BatmanImage}/>
-               <MovieCard MovieImage={InterstellarImage}/>
-               <MovieCard MovieImage={MandalorianImage}/> */}
            </div>
        </div>
         })}

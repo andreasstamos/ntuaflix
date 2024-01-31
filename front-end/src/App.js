@@ -24,7 +24,7 @@ function App() {
 
           <Routes>
             <Route path='/' exact element={<Index />} />
-            <Route path='/movie/' exact element={<Movie />} />
+            <Route path='/movie/:movieID/' exact element={<Movie />} />
             <Route path='/movies/' exact element={<Movies />} />
 
             <Route path='/preloader/' exact element={<Preloader />} />

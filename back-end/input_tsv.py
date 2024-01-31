@@ -32,4 +32,3 @@ async def main():
 
 asyncio.run(main())
 print("Data import complete.")
-
