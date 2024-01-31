@@ -7,6 +7,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Mapped
 import os
 from dotenv import load_dotenv
 from datetime import date
+from db_type import *
 
 env_path = '.env'
 load_dotenv(dotenv_path=env_path)
@@ -16,9 +17,8 @@ DB_PASSWORD = str(os.getenv('DB_PASSWORD'))
 DB_HOST = str(os.getenv('DB_HOST'))
 DB_DATABASE = str(os.getenv('DB_DATABASE'))
 
-# Replace 'your_username', 'your_password', 'your_database', and 'your_host' with your PostgreSQL credentials
-DATABASE_URL = f"postgresql://{DB_USERSNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
-#DATABASE_URL = "sqlite+pysqlite:///ntuaflix.sqlite3" #### TODO: ONLY FOR DEV
+DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)
+
 
 # Create a SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
@@ -45,12 +45,21 @@ class Watchlist(Base):
     
     id = Column(Integer,primary_key=True, index=True)
     library_name = Column(String, nullable=False, index=True)
+    # DIFFERENT
+    if DB_TYPE == 'mysql': 
+        library_name = Column(String(255), nullable=False, index=True)
     item_count = Column(Integer,nullable=False,default=0)
     user_id = Column(Integer, ForeignKey("users.id"))
     
-    __table_args__ = (
-        UniqueConstraint(library_name,user_id, name='unique_user_library'),
-    )
+    # DIFFERENT
+    if DB_TYPE != 'mysql': 
+        __table_args__ = (
+            UniqueConstraint(library_name,user_id, name='unique_user_library'),
+        )
+
+# DIFFERENT   
+if DB_TYPE == 'mysql': 
+    Index('unique_user_library', Watchlist.library_name, Watchlist.user_id, unique=True)    
     
     
 class WatchlistContent(Base):
@@ -81,6 +90,20 @@ AFTER INSERT ON watchlist_content
 FOR EACH ROW
 EXECUTE FUNCTION inc_item_count();
 """)
+# DIFFERENT
+if DB_TYPE == 'mysql':
+    # Modify DDL triggers for MySQL syntax
+    trigger_ddl_insert = DDL("""
+CREATE TRIGGER inc_trigger
+AFTER INSERT ON watchlist_content
+FOR EACH ROW
+BEGIN
+    UPDATE watchlists
+    SET item_count = item_count + 1
+    WHERE id = NEW.watchlist_id;
+END;
+""")
+
 event.listen(
     WatchlistContent.__table__,
     'after_create',
@@ -104,6 +127,19 @@ FOR EACH ROW
 EXECUTE FUNCTION dec_item_count();
 """)
 
+# DIFFERENT 
+if DB_TYPE == 'mysql':
+    trigger_ddl_delete = DDL("""
+CREATE TRIGGER dec_trigger
+AFTER DELETE ON watchlist_content
+FOR EACH ROW
+BEGIN
+    UPDATE watchlists
+    SET item_count = item_count - 1
+    WHERE id = OLD.watchlist_id;
+END;
+""")
+
 event.listen(
     WatchlistContent.__table__,
     'after_create',
@@ -114,6 +150,9 @@ class Review(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String, nullable=True)
+    # DIFFERENT
+    if DB_TYPE == 'mysql':
+        text = Column(String(255), nullable=True)
     stars = Column(Integer,nullable=False)
     date = Column(Date,default=date)
     likes = Column(Integer,nullable=True)

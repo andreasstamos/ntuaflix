@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from datetime import date
 from models import *
 import csv
+from db_type import *
 
 # Load environment variables
 env_path = '.env'
@@ -16,7 +17,7 @@ DB_PASSWORD = str(os.getenv('DB_PASSWORD'))
 DB_HOST = str(os.getenv('DB_HOST'))
 DB_DATABASE = str(os.getenv('DB_DATABASE'))
 
-DATABASE_URL = f"postgresql://{DB_USERSNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
+DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)
 
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
