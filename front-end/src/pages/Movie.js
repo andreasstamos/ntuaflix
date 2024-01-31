@@ -4,7 +4,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import './Movie.css'
 import axiosInstance from '../api/api';
 import Preloader from '../components/Preloader';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 export default function Movie() {
@@ -29,6 +29,7 @@ export default function Movie() {
   return (
     <div className='movie-page-container' style={{background: `linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url(${movieData.titlePoster})`}}>
         <div className='movie-container'>
+            
             <div className='movie-column'>
                 <div className='movie-row'>
                     
@@ -46,7 +47,7 @@ export default function Movie() {
                     {/* <div className='movie-description'>
                         <p>When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.</p>
                     </div> */}
-
+                    
                     <div className='movie-actions'>
                         <button className='btn btn-primary'>Add to WatchList</button>
                     </div>
@@ -64,10 +65,20 @@ export default function Movie() {
         </div>
 
         
+    <div className='movie-container'>
+        <ul>
+        {movieData.principals.map(principal=>{
+            return <li> 
+                <div>
+                <p><Link className='a-transition' to= {`/person/${principal.nameID}`}>{principal.primaryName}</Link></p>
+                <p>{principal.category}</p>
 
-        
-
-
+                </div> 
+                </li>  
+        })}
+      
+        </ul>
+    </div>
        
 
     </div>
