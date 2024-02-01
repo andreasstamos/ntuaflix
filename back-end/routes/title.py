@@ -1,12 +1,14 @@
 from typing import Optional
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func 
 from database import get_db
-
-from models import Title
+from typing import Union, List
+from pydantic import BaseModel
+from models import Title, Genre
 from schemas import TitleObject, TqueryObject, GqueryObject
 from utils import CSVResponse, FormatType
+from math import ceil
 
 router = APIRouter()
 
@@ -42,16 +44,38 @@ async def search_title_genre(
     return titles
 
 
+class GetMoviesResponse(BaseModel):
+    titles: List[TitleObject]
+    total_pages: int
 
+TITLES_PER_PAGE = 15
+TITLES_PER_PAGE_SEARCH = 8
+@router.get('/search-titles-autocomplete')
+async def search_titles_autocomplete(
+                    search_title: str,
+                    db: Session = Depends(get_db)) -> list[TitleObject]:
+    titles = db.query(Title).filter(Title.original_title.ilike(f"%{search_title}%")).limit(TITLES_PER_PAGE_SEARCH)
+    return titles
 
-TITLES_PER_PAGE = 28
+@router.get("/get-movies", response_model=GetMoviesResponse)
+async def get_movies(page: int or None = 1, 
+                     qgenre: Union[int, None] = Query(None, alias="qgenre"), 
+                     db: Session = Depends(get_db)):    
+    titles = db.query(Title)
 
-@router.get("/get-movies")
-async def get_movies(page:int or None = 1, qgenre: int or None = None, db: Session = Depends(get_db)) -> list[TitleObject]:
-    titles = db.query(Title).limit(TITLES_PER_PAGE)
     if qgenre:
         titles = titles.filter(Title.genres.any(id=qgenre))
-    return titles
+
+    total_titles = titles.count()
+    total_pages = ceil(total_titles / TITLES_PER_PAGE)
+    
+    titles = titles.offset((page-1) * TITLES_PER_PAGE).limit(TITLES_PER_PAGE)
+    return {"titles": titles, "total_pages": total_pages}
+
+@router.get('/get-genres')
+async def get_genres(db:Session =  Depends(get_db)):
+    genres = db.query(Genre).all()
+    return genres
 
 # basically returns a random movie and optimized for postgresql... 
 

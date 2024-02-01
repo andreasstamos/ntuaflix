@@ -114,7 +114,7 @@ const {logoutUser, user} = useContext(AuthContext);
     <>
 
     {/* <nav className={`navigation ${!match && 'colored'}`} id='#top-nav' role='navigation' aria-label='Main navigation'> */}
-    <nav className={`navigation ${!match}`} id='#top-nav' role='navigation' aria-label='Main navigation'>
+    <nav className={`navigation ${!match}`} id='top-nav' role='navigation' aria-label='Main navigation'>
         <ul className="menu">
           {/* <li className="logo"><NavLink className='not-color' to={`/`}><img src={NtuaflixLogo} width="85" alt='IEEE NTUA Student Branch.' /></NavLink></li> */}
           <li className="logo"><NavLink className='not-color' to={`/`}><h1>Ntua<mark>flix</mark></h1></NavLink></li>

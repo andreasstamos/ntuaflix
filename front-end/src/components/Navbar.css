@@ -1,4 +1,4 @@
-nav {
+nav#top-nav {
     /* background: rgba(0, 98, 155, 0.5); */
     /* background-color: 	#002855;  IEEE*/
     /* backdrop-filter: blur(6px); */  
@@ -11,10 +11,10 @@ nav {
     z-index: 99999;
     text-transform: uppercase;    
   }
-  nav.colored {
+  nav#top-nav.colored {
     background-color: #222; /* if the page is not the homepage color the navigation bar */
   }
-  nav:has(.menu.active) { 
+  nav#top-nav:has(.menu.active) { 
     background-color: #222; /* f the page is the HomePage and the navbar is active color the navbar */
     transition: 0.1s ease-in;
     -webkit-transition: 0.1s ease-in;
@@ -22,13 +22,13 @@ nav {
     -o-transition: 0.1s ease-in;
   }
 
-  nav svg {
+  nav#top-nav svg {
     fill: #fff;
     mix-blend-mode: exclusion;
     /* width: 3rem; */
     width: 2.5rem;
   }
-  nav a {
+  nav#top-nav a {
     align-items: center;
     color: #fff;
     cursor: pointer;
@@ -45,7 +45,7 @@ nav {
     /* width: fit-content; */
 
   }
-  nav a.active:not(.not-color):not(.subitem-link) { /* if a tag is active in navbar and it is not the logo or the 'join ieee' */
+  nav#top-nav a.active:not(.not-color):not(.subitem-link) { /* if a tag is active in navbar and it is not the logo or the 'join ieee' */
     /* background-color: #3b49df; */
     background-color: #fff;
     /* color:rgba(0, 98, 155, 1); */
@@ -56,7 +56,7 @@ nav {
   }
 
 
-  nav a:hover, .hero a:focus {
+  nav#top-nav a:hover, .hero a:focus {
     border-color: #389dd6;
   }
   nav .menu,

@@ -121,3 +121,6 @@ a.a-transition:hover {
   color: var(--citrine);
   transition: all var(--transition-1);
 }
+a.non-underlined {
+  text-decoration: none;
+}
