@@ -41,6 +41,9 @@ async def search_title_genre(
     if format == FormatType.csv: return CSVResponse(map(TitleObject.model_validate, titles))
     return titles
 
+
+
+
 TITLES_PER_PAGE = 28
 
 @router.get("/get-movies")
@@ -49,7 +52,6 @@ async def get_movies(page:int or None = 1, qgenre: int or None = None, db: Sessi
     if qgenre:
         titles = titles.filter(Title.genres.any(id=qgenre))
     return titles
-
 
 # basically returns a random movie and optimized for postgresql... 
 
@@ -64,4 +66,3 @@ async def recommend_movie(db: Session = Depends(get_db)) -> TitleObject:
                         .limit(1)
     random_title = random_title_query.first()
     return random_title
-    

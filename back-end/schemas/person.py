@@ -1,6 +1,6 @@
 from typing import Optional, Annotated
 from pydantic import Field, validator, root_validator, StringConstraints
-
+from .title import TitleObject
 from .basic import ORMModel, QueryModel
 
 class NameTitle(ORMModel):
@@ -33,4 +33,3 @@ class NameObject(ORMModel):
 
 class NqueryObject(QueryModel):
     namePart: str
-

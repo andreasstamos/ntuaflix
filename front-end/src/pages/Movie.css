@@ -34,9 +34,10 @@
     font-weight: 700;
     font-size: 14px;
 }
-.movie-container img {
+.movie-container .movie-poster {
     max-height: 60vh;
     border-radius: 4px;
+    /* max-width: 45%; */
     /* min-width: 50%; */
     /* object-fit: cover; */
     /* background-position: 0% 0%; */
@@ -94,9 +95,13 @@
     border: none;
 }
 
-
+.principals-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
 @media screen and (max-width: 1077px) {
-    .movie-container img {
+    .movie-container .movie-poster {
         display: none;
     }
     .movie-container .movie-column {

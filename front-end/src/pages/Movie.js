@@ -60,27 +60,37 @@ export default function Movie() {
 
                 </div> */}
             </div>
-            <img src={movieData.titlePoster} />
+            <img src={movieData.titlePoster} className='movie-poster' />
 
         </div>
 
         
-    <div className='movie-container'>
-        <ul>
-        {movieData.principals.map(principal=>{
-            return <li> 
-                <div>
-                <p><Link className='a-transition' to= {`/person/${principal.nameID}`}>{principal.primaryName}</Link></p>
-                <p>{principal.category}</p>
+        <div className='movie-container'>
+            <div className='movie-column'>
+                        <div className='movie-row'>
+                            
 
-                </div> 
-                </li>  
-        })}
-      
-        </ul>
-    </div>
-       
+                            <h1 className='title-with-line'>Principals</h1>
+                            {movieData.principals && 
+                            <ul style={{marginTop:35}} className='principals-list'>
+                                    {movieData.principals.map(principal=>{
+                                        return <li> 
+                                            <div>
+                                            <p><Link className='a-transition' to= {`/person/${principal.nameID}`}>{principal.primaryName}</Link></p>
+                                            <p>{principal.category}</p>
 
+                                            </div> 
+                                            </li>  
+                                    })}
+            
+                            </ul>
+                            }
+                            
+                    </div>
+
+            </div>
+        
+        </div>
     </div>
   )
 }

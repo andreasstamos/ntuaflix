@@ -35,10 +35,16 @@ export default function Movies() {
     <div className='page-container'>
         <hr/>
         <div className='movies-container'>
-                   
-                    {titles && titles.map((title) => {
-                      return <MovieCard key={title.titleID} movieID={title.titleID} movieTitle={title.original_title} averageRating={title.rating.avRating} imageUrl={title.titlePoster || "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=2000"}/>
-                    })}
+ 
+            {titles && titles.map((title) => {
+              return <MovieCard 
+                key={title.titleID} 
+                movieID={title.titleID} 
+                movieTitle={title.original_title} 
+                averageRating={title.rating.avRating} 
+                imageUrl={title?.titlePoster}/>
+            })}
+
         </div>
     </div>
   )

@@ -125,7 +125,7 @@ export default function Index() {
                {genre.movies.map((movie) => {
                 return <MovieCard key={movie.tconst} movieID={movie.tconst} movieTitle={movie.primary_title} 
                 averageRating={movie.average_rating} 
-                imageUrl={movie.image_url || "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=2000"} />
+                imageUrl={movie.image_url} />
                })}
            </div>
        </div>
