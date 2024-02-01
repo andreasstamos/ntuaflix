@@ -14,6 +14,8 @@ import { AuthProvider } from './context/AuthContext';
 import Watchlist from './pages/Watchlist';
 import Recommender from './pages/Recommender';
 import Person from './pages/Person';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 
 function App() {
   
@@ -38,6 +40,9 @@ function App() {
             <Route path='/auth' exact element={<Auth/>}>
               <Route path='login/' element={<Login/>} />
               <Route path='register/' element={<Register/>} />
+              <Route path='forgot-password/' element={<ForgotPassword />} />
+              <Route path='reset-password/:secretToken/' element={<ResetPassword />} />
+
             </Route>
 
 

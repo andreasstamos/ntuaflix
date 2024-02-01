@@ -53,7 +53,7 @@ export default function Person() {
                                       imageUrl={title.image_url}
                                       movieTitle={title.title_name}
                                       averageRating={title.averageRating}
-                            />
+                                  />
                           })}  
                         </div>
                   

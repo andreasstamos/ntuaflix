@@ -59,6 +59,9 @@ export default function Login() {
             <div className='alternative-link'>
                 <p>Don't have an account yet? Sign up <Link to='/auth/register'>here</Link>.</p>
             </div>
+            <div className='alternative-link'>
+                <p>Forgot your password? Reset it <Link to='/auth/forgot-password'>here</Link>.</p>
+            </div>
         </form>
     </div>
   )

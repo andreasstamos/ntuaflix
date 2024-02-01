@@ -17,7 +17,7 @@ export default function Hero() {
 
             <div class="hero-content">
 
-                <p class="hero-subtitle">NtuaFlix</p>
+                <p class="hero-subtitle">Ntua<mark>Flix</mark></p>
 
                 <h1 class="h1 hero-title">
                     Unlimited <strong>Movies</strong>, <br/> TVs Shows, & More.

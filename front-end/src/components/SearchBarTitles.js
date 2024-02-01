@@ -41,7 +41,7 @@ export default function SearchBarTitles({value, handleChangeValue}) {
         renderOption={(props, option) => (
             <li {...props} className='searchbar-option'><Link to={`/movie/${option.titleID}`} className='a-transition non-underlined'>{option.original_title}</Link><img className='searchbar-img' src={option.titlePoster}/></li>
           )}
-        renderInput={(params) => <TextField {...params} label="Αναζήτηση..." size='small' />}
+        renderInput={(params) => <TextField {...params} label="Search..." size='small' />}
         />
 )
 

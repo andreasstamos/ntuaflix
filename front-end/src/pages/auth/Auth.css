@@ -81,7 +81,8 @@
     color: var(--error);
 }
 .form-success {
-    margin-block: 5px
+    margin-block: 5px;
+    color: var(--success);
 }
 .alternative-link p a {
     text-decoration: none;
