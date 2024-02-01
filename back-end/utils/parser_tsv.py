@@ -18,7 +18,7 @@ def get_or_create(session, model, **kwargs):
 async def parse_title_basics(afp, session):
     async for row in aiocsv.AsyncDictReader(afp, delimiter='\t'):
         title = Title(
-            tconst=row['tconst'],
+            tconst=row['tconst'].strip(),
             title_type=row['titleType'],
             primary_title=row['primaryTitle'],
             original_title=row['originalTitle'],
@@ -46,11 +46,11 @@ async def parse_title_ratings(afp, session):
 async def parse_name_basics(afp, session):
     async for row in aiocsv.AsyncDictReader(afp, delimiter='\t'):
         person = Person(
-            nconst=row['nconst'],
+            nconst=row['nconst'].strip(),
             primary_name=row['primaryName'],
             birth_year=int(row['birthYear']) if row['birthYear'] != NULL_TOKEN else None,
             death_year=int(row['deathYear']) if row['deathYear'] != NULL_TOKEN else None,
-            image_url=row['img_url_asset'] if row['img_url_asset'] != NULL_TOKEN else None
+            image_url=row['img_url_asset'].replace('{width_variable}', 'original') if row['img_url_asset'] != NULL_TOKEN else None
         )
         session.add(person)
 
@@ -68,13 +68,13 @@ async def parse_name_basics(afp, session):
 async def parse_title_principals(afp, session):
     async for row in aiocsv.AsyncDictReader(afp, delimiter='\t'):
         principal = Principals(
-            tconst=row['tconst'],
+            tconst=row['tconst'].strip(),
             ordering=int(row['ordering']),
             nconst=row['nconst'],
             category=get_or_create(session, Profession, name=row['category']),
             job=get_or_create(session, Profession, name=row['job']) if row['job'] != NULL_TOKEN else None,
             characters=row['characters'],
-            image_url=row['img_url_asset']
+            image_url=row['img_url_asset'].replace('{width_variable}', 'original') if row['img_url_asset'] else None
         )
         session.add(principal)
     session.commit()
@@ -82,7 +82,7 @@ async def parse_title_principals(afp, session):
 async def parse_title_akas(afp, session):
     async for row in aiocsv.AsyncDictReader(afp, delimiter='\t'):
         title_alias = TitleAlias(
-            tconst=row['titleId'],
+            tconst=row['titleId'].strip(),
             title_name=row['title'],
             ordering=int(row['ordering']),
             region=row['region'] if row['region'] != NULL_TOKEN else None,
