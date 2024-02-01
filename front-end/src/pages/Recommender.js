@@ -3,7 +3,7 @@ import './Recommender.css'
 import axiosInstance from '../api/api';
 import Loader from '../components/Loader';
 import MovieCard from '../components/MovieCard';
-
+import { Link, useParams } from 'react-router-dom';
 
 export default function Recommender() {
 
@@ -23,7 +23,7 @@ export default function Recommender() {
         recommendMovie();
     }, [])
 
-
+   
   return (
     <div className='movie-page-container' style={{background: `linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url(https://i.redd.it/ugg6a3ka5qi91.jpg)`}}>
         <div className='movie-container'>
