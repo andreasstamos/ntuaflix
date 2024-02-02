@@ -9,6 +9,7 @@ import OppenheimerImage from '../assets/images/oppenheimer.jpg'
 import './Index.css'
 import axiosInstance from '../api/api'
 import Preloader from '../components/Preloader'
+import { Link } from 'react-router-dom'
 
 export default function Index() {
 
@@ -94,32 +95,15 @@ export default function Index() {
     }
     
   if(loading) return <Preloader />
+
   return (
     <>
         <Hero />
-        {/* <div>
-            <div className='section-title-container section-index'>
-                <h2 className='h2 title-with-line'>Upcoming Movies</h2>
-                <a href="#" className='view-more-link'>View More</a>
-            </div>
-            <div className='cards-container' id='cardContainer'>
-                <MovieCard MovieImage={MandalorianImage}/>
-                <MovieCard MovieImage={TopGunImage}/>
-                <MovieCard MovieImage={InterstellarImage}/>
-                <MovieCard MovieImage={BatmanImage}/>
-                <MovieCard MovieImage={OppenheimerImage}/>
-                <MovieCard MovieImage={BatmanImage}/>
-                <MovieCard MovieImage={OppenheimerImage}/>
-                <MovieCard MovieImage={BatmanImage}/>
-                <MovieCard MovieImage={InterstellarImage}/>
-                <MovieCard MovieImage={MandalorianImage}/>
-            </div>
-        </div> */}
-        {data && data.map((genre) => {
-           return <div>
+
+        {data && data.map((genre) => { return genre.movies.length > 0 && <div>
            <div className='section-title-container section-index'>
                <h2 className='h2 title-with-line'>{genre.genre}</h2>
-               <a href="#" className='view-more-link'>View More</a>
+               <Link to={`/movies?genre=${genre.genre_id}`} className='view-more-link'>View More</Link>
            </div>
            <div className='cards-container' id={`${genre.genre}-container`}>
                {genre.movies.map((movie) => {

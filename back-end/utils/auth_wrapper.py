@@ -7,8 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from database import get_db
 from functools import wraps
-from typing import Annotated
-
+from typing import Annotated, Optional
 from .oauth2_custom import OAuth2PasswordCustomHeader 
 
 oauth2_scheme = OAuth2PasswordCustomHeader(tokenUrl="token", header_name="X-OBSERVATORY-AUTH")
@@ -69,3 +68,15 @@ def admin_required(func):
     return admin_wrapper
  
  
+#   is_adult validation
+
+def get_user_is_adult(token: Optional[str] = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    is_adult = False
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+        is_adult: bool = payload.get("is_adult", False)
+    except JWTError as e:
+        pass
+    return is_adult
+
+is_adult_dependency = Annotated[bool, Depends(get_user_is_adult)]

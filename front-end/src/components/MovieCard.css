@@ -78,8 +78,8 @@
     -webkit-transition: 0.5s;
     transition: 0.5s;
   }
-  .card .info h1 {
-    margin: 0px;
+  .card .info h3 {
+    margin-block: 5px;
   }
   .card .info h3 {
     display: flex;
@@ -89,7 +89,7 @@
   .card .info p {
     letter-spacing: 1px;
     font-size: 10px;
-    margin-top: 8px;
+    margin-block: 8px;
     display: -webkit-box;
     -webkit-line-clamp: 5;
     -webkit-box-orient:vertical;

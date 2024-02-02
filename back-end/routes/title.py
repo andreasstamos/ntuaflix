@@ -7,7 +7,7 @@ from typing import Union, List
 from pydantic import BaseModel
 from models import Title, Genre
 from schemas import TitleObject, TqueryObject, GqueryObject
-from utils import CSVResponse, FormatType
+from utils import CSVResponse, FormatType, is_adult_dependency
 from math import ceil
 
 router = APIRouter()
@@ -52,19 +52,26 @@ TITLES_PER_PAGE = 15
 TITLES_PER_PAGE_SEARCH = 8
 @router.get('/search-titles-autocomplete')
 async def search_titles_autocomplete(
+                    is_adult: is_adult_dependency,
                     search_title: str,
                     db: Session = Depends(get_db)) -> list[TitleObject]:
-    titles = db.query(Title).filter(Title.original_title.ilike(f"%{search_title}%")).limit(TITLES_PER_PAGE_SEARCH)
-    return titles
+    titles = db.query(Title).filter(Title.original_title.ilike(f"%{search_title}%"))
+    if not is_adult:
+        titles = titles.filter_by(is_adult=False)
+    return titles.limit(TITLES_PER_PAGE_SEARCH)
 
 @router.get("/get-movies", response_model=GetMoviesResponse)
-async def get_movies(page: int or None = 1, 
+async def get_movies(is_adult: is_adult_dependency,
+                     page: int or None = 1, 
                      qgenre: Union[int, None] = Query(None, alias="qgenre"), 
                      db: Session = Depends(get_db)):    
     titles = db.query(Title)
-
+    
     if qgenre:
         titles = titles.filter(Title.genres.any(id=qgenre))
+    
+    if not is_adult:
+        titles = titles.filter(Title.is_adult == False)
 
     total_titles = titles.count()
     total_pages = ceil(total_titles / TITLES_PER_PAGE)
@@ -77,16 +84,18 @@ async def get_genres(db:Session =  Depends(get_db)):
     genres = db.query(Genre).all()
     return genres
 
-# basically returns a random movie and optimized for postgresql... 
-
 @router.get("/recommend-movie")
-async def recommend_movie(db: Session = Depends(get_db)) -> TitleObject:
-    count_query = db.query(func.count(Title.tconst)).filter(Title.is_adult == False)
+async def recommend_movie(is_adult: is_adult_dependency, db: Session = Depends(get_db)) -> TitleObject:
+    count_query = db.query(func.count(Title.tconst))
+    if not is_adult:
+        count_query = db.query(func.count(Title.tconst)).filter_by(is_adult = False)
+    
     total_count = count_query.scalar()
     random_index = func.floor(func.random() * total_count)
-    random_title_query = db.query(Title)\
-                        .filter(Title.is_adult == False)\
-                        .offset(random_index)\
-                        .limit(1)
-    random_title = random_title_query.first()
+    random_title_query = db.query(Title)
+
+    if not is_adult:
+        random_title_query = random_title_query.filter_by(is_adult = False)
+
+    random_title = random_title_query.offset(random_index).limit(1).first()
     return random_title

@@ -2,6 +2,8 @@ from typing import Optional
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from fastapi import Request
+from fastapi.exceptions import HTTPException
+from fastapi import status
 
 class OAuth2PasswordCustomHeader(OAuth2PasswordBearer):
     """Adapter from 'Authentication: Bearer' header to custom header variable"""

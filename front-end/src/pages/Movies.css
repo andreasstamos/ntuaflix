@@ -71,6 +71,13 @@
     width: 250px;
 }
 
+.no-movie-found {
+    margin: 1.5rem auto;
+}
+.no-movie-found h3 {
+    font-size: clamp(1.4rem, 2vw, 5rem);
+}
+
 @media screen and (max-width: 930px) {
     .filters {
         flex-direction: column!important;

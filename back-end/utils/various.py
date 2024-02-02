@@ -3,6 +3,8 @@ from fastapi import Response
 import io
 import csv
 import flatten_dict
+from datetime import datetime
+
 
 class CSVResponse(Response):
     media_type = "text/csv"
@@ -26,3 +28,9 @@ class FormatType(str, Enum):
     json = 'json'
     csv = 'csv'
 
+
+def check_is_adult(dob: str):
+    ADULT_AGE = 18
+    current_date = datetime.now()
+    age = current_date.year - dob.year - ((current_date.month, current_date.day) < (dob.month, dob.day))
+    return age >= ADULT_AGE
