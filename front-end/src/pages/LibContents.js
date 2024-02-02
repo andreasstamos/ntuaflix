@@ -40,7 +40,7 @@ export default function LibContents() {
           try {
             const response = await axiosInstance.get(`/watchlists/${user.user_id}/${library_name}`, {
               headers: {
-                Authorization: `Bearer ${authTokens}`,
+                'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
               },
             });
     
@@ -67,7 +67,7 @@ export default function LibContents() {
         try {
           const response = await axiosInstance.delete(`/watchlists/${user.user_id}/${library_name}`, {
             headers: {
-              Authorization: `Bearer ${authTokens}`,
+              'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
             },
           });
           if (response.status === 200) {

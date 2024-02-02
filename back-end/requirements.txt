@@ -18,6 +18,7 @@ exceptiongroup==1.2.0
 fastapi==0.108.0
 fastapi-mail==1.4.1
 flatten-dict==0.4.2
+frozendict==2.4.0
 greenlet==3.0.3
 h11==0.14.0
 httptools==0.6.1

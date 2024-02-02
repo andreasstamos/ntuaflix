@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../api/api';
+import { useNavigate } from "react-router-dom";
+
 
 export default function Register() {
 
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -14,21 +17,12 @@ export default function Register() {
     const [dob, setDob] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const [loading, setLoading] = useState(false);
 
 
     async function submit(e) {
         e.preventDefault();
         setError(null);
         setSuccess(null);
-
-        // if (password !== passwordConfirm) {
-            // setError("Passwords do not match.");
-            // return;
-        // }
-
-        setLoading(true);
-
 
         const payload = {
             username: username,
@@ -44,7 +38,7 @@ export default function Register() {
 
         try {
             const response = await axiosInstance.post('/register', payload);
-            console.log(response);
+            navigate('/auth/login', {replace:true})
         }
         catch (error) {
             setError(error?.response?.data?.detail)
