@@ -1,0 +1,188 @@
+/* Watchlist.css */
+
+.watchlist-background {
+  background: url('../assets/images/watch.png') center/contain no-repeat fixed;
+  min-height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  background-position: center;
+  background-size: 50%; 
+  background-repeat: no-repeat;
+  left: 0;
+}
+
+.watchlists-navbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #1DB954;
+    padding: 180px 0px; 
+    text-align: center; 
+    flex-wrap: wrap;
+  }
+  
+  .watchlists-navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 30px 40px;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: none;
+    flex-direction: column; 
+    align-items: center; 
+  }
+  
+  
+  .watchlists-navbar a:hover {
+    border-bottom: 2px solid white;
+  } 
+
+  .watchlists-navbar a span {
+    font-size: 12px; 
+    font-style: italic; 
+    opacity: 0.6;
+}
+
+  .arrow-indicator {
+    color: white;
+    font-size: 18px;
+    margin-left: 5px; /* Adjust spacing between options and arrow */
+    cursor: pointer; /* Add pointer cursor to indicate it's clickable */
+  }
+
+  .arrow-indicator :hover{
+    border-bottom: 2px solid white;
+  }
+
+  .watchlist-title {
+    font-size: 60px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #8E24AA, #9C27B0, #673AB7, #3F51B5, #2196F3);
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 60px; 
+    padding: 100px 20px;
+  }
+
+  /*
+  @media only screen and (max-width: 768px) {
+    .watchlists-navbar {
+      padding: 16px 10px; 
+    }
+  
+    .watchlists-navbar a {
+      font-size: 20px;
+    }
+  
+    .arrow-indicator {
+      font-size: 16px; 
+    }
+  
+    .watchlist-title {
+      font-size: 20px; 
+      padding: 20px 10px; 
+    }
+    .addButton {
+      padding: 10px 15px; 
+      font-size: 12px; 
+    }
+  } */
+
+  /* Add this to your existing CSS */
+
+/*
+.create-input input {
+  position: fixed;
+  top: 91%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  padding: 25px 18px;
+  background-color: rgba(142, 36, 170, 0.1);
+  color: #8E24AA;
+  border: 2px solid #8E24AA;
+  border-radius: 50px;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+*/
+
+.addButton {
+  position: fixed;
+  top: 91%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 25px 18px;
+  background-color: transparent;
+  color: #8E24AA; 
+  border: 2px solid #8E24AA; 
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 18px; 
+  font-weight: bold; 
+
+}
+
+.addButton:hover {
+  background-color: #8E24AA; 
+  color: white; 
+}
+
+.addButton:active {
+  background-color: #673AB7; 
+  border-color: #673AB7; 
+}
+
+.create-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(11, 11, 203);
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.create-input {
+  margin-bottom: 10px;
+  padding: 15px 15px;
+  background-color: white; /* White background color */
+  color: #673AB7;
+  border: none; 
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.create-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.create-button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-color: #673AB7;
+  border-radius: 30px;
+  cursor: pointer;
+  background-color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #673AB7;
+}
+
+.create-button:hover {
+  background-color:  #673AB7;
+  color: white;
+}
+
+.create-button:active {
+  background-color: #673AB7;
+  border-color: #673AB7;
+}
+
