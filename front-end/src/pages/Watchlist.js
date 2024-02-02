@@ -72,6 +72,7 @@ export default function Watchlist() {
         {watchlists.map((watchlist) => (
         <Link to={`/libcontents/${watchlist.library_name}`} key={watchlist.library_name}>
           {watchlist.library_name}
+          <br></br>
           <span> <CgClapperBoard/>{watchlist.items} items</span>
         </Link>
       ))}

@@ -16,8 +16,6 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    background-color: #1DB954;
-    padding: 180px 0px; 
     text-align: center; 
     flex-wrap: wrap;
   }
@@ -25,7 +23,7 @@
   .watchlists-navbar a {
     color: white;
     text-decoration: none;
-    padding: 30px 40px;
+    padding: 20px 40px;
     font-size: 24px;
     font-weight: bold;
     text-transform: none;
@@ -61,7 +59,7 @@
     background: linear-gradient(45deg, #8E24AA, #9C27B0, #673AB7, #3F51B5, #2196F3);
     background-clip: text;
     color: transparent;
-    margin-bottom: 60px; 
+    margin-bottom: 10px; 
     padding: 100px 20px;
   }
 
