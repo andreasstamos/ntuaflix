@@ -15,7 +15,8 @@ import Watchlist from './pages/Watchlist';
 import Recommender from './pages/Recommender';
 import Person from './pages/Person';
 import ForgotPassword from './pages/auth/ForgotPassword';
-import ResetPassword from './pages/auth/ResetPassword';
+import ResetPassword from './pages/auth/ResetPassword';import LibContents from './pages/LibContents';
+
 
 function App() {
   
@@ -33,9 +34,10 @@ function App() {
 
             <Route path='/preloader/' exact element={<Preloader />} />
             <Route path='/admin/' exact element={<Admin />} />
-            <Route path='/watchlist/' exact element={<Watchlist />} />
+            <Route path='/watchlist/'  element={<Watchlist />} />
             <Route path='/recommend/' exact element={<Recommender />} />
 
+            <Route path='/libcontents/:library_name/' exact element={<LibContents />} />
 
             <Route path='/auth' exact element={<Auth/>}>
               <Route path='login/' element={<Login/>} />

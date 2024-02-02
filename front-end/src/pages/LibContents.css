@@ -1,0 +1,63 @@
+.watchlist-title {
+    font-size: 60px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #8E24AA, #9C27B0, #673AB7, #3F51B5, #2196F3);
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px; 
+    padding: 100px 20px;
+    max-width: 1100px;
+  }
+
+.add-movie {
+    position: fixed;
+    top: 17.5%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    padding: 20px 15px;
+    background-color: transparent;
+    color: #8E24AA; /* Purple color */
+    border: 2px solid #8E24AA; /* Purple border */
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px; 
+    font-weight: bold; 
+}
+
+  
+  .add-movie:hover {
+    background-color: #8E24AA; /* Purple background on hover */
+    color: white; /* White text on hover */
+  }
+  
+  .add-movie:active {
+    background-color: #673AB7; /* Darker purple on click */
+    border-color: #673AB7; /* Darker purple border on click */
+  }
+
+  .remove-lib {
+    position: fixed;
+    top: 90%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    padding: 20px 15px;
+    background-color: transparent;
+    color: red;
+    border: 2px solid red;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px; 
+    font-weight: bold; 
+  }
+
+  .remove-lib:hover {
+    background-color: red;
+    color: white; /* White text on hover */
+  }
+  
+  .remove-lib:active {
+    background-color: #673AB7; /* Darker purple on click */
+    border-color: #673AB7; /* Darker purple border on click */
+  }

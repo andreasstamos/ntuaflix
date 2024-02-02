@@ -11,7 +11,7 @@ from models import *
 from database import get_db
 from utils import FormatType, CSVResponse
 from utils import parse_title_basics, parse_title_ratings, parse_title_principals,\
-        parse_title_crew, parse_title_akas, parse_name_basics, parse_title_episode
+        parse_title_crew, parse_title_akas, parse_name_basics, parse_title_episode, resetall
 from schemas import HealthCheckObject, ResetAllObject, UploadFileObject
 
 router = APIRouter()
@@ -41,9 +41,7 @@ async def reset_all(
         db: db_dependency,
         format: FormatType = FormatType.json) -> ResetAllObject:
     """Resets database to initial state."""
-    for table in reversed(Base.metadata.sorted_tables):
-        db.execute(table.delete())
-    db.commit()
+    resetall(db)
     #TODO: what about failure? why would it fail in a manner that is not a bug, so that we would want the user to know?
     ret = {"status": "OK"}
     if format == FormatType.csv: return CSVResponse([ResetAllObject.model_validate(ret)])
