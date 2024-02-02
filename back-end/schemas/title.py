@@ -1,5 +1,5 @@
 from typing import Optional, Annotated
-from pydantic import BaseModel, Field, validator, root_validator, StringConstraints
+from pydantic import BaseModel, Field, field_validator, model_validator, StringConstraints
 
 from .basic import ORMModel, QueryModel
 
@@ -15,7 +15,8 @@ class Principal(ORMModel):
     primaryName: str
     category_name: str = Field(..., serialization_alias="category")
 
-    @root_validator(pre=True)
+    @model_validator(mode='before')
+    @classmethod
     def get_fields(cls, data):
         data.primaryName = data.person.primary_name
         data.category_name = data.category.name
@@ -37,12 +38,14 @@ class TitleObject(ORMModel):
     principals: list[Principal]
     rating: Rating
 
-    @root_validator(pre=True)
+    @model_validator(mode='before')
+    @classmethod
     def get_ratings(cls, values):
         values.rating = Rating(avRating=values.average_rating and f"{values.average_rating:.1f}", nVotes=values.num_votes and str(values.num_votes))
         return values
     
-    @validator('start_year', 'end_year', pre=True)
+    @field_validator('start_year', 'end_year')
+    @classmethod
     def int_to_str(cls, value: int) -> str:
         return str(value)
 
@@ -56,7 +59,8 @@ class GqueryObject(QueryModel):
     yrFrom: Optional[Annotated[str, StringConstraints(pattern=r'^[0-9]*$')]] = None
     yrTo: Optional[Annotated[str, StringConstraints(pattern=r'^[0-9]*$')]] = None
 
-    @root_validator(pre=True)
+    @model_validator(mode='before')
+    @classmethod
     def check_both_or_none(cls, values):
         if "yrFrom" in values and values["yrFrom"] is not None and ("yrTo" not in values or values["yrTo"] is None):
             raise ValueError("Both yrFrom and yrTo must be set or neither.")

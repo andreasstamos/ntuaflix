@@ -1,5 +1,5 @@
 from typing import Optional, Annotated
-from pydantic import Field, validator, root_validator, StringConstraints
+from pydantic import Field, field_validator, StringConstraints
 from .title import TitleObject
 from .basic import ORMModel, QueryModel
 
@@ -7,7 +7,8 @@ class NameTitle(ORMModel):
     tconst: str = Field(..., alias="titleID")
     category: str
 
-    @validator('category', pre=True)
+    @field_validator('category')
+    @classmethod
     def get_category_name(cls, value):
         return value.name
 
@@ -22,11 +23,13 @@ class NameObject(ORMModel):
 
     titles_as_principal: list[NameTitle]
 
-    @validator('primary_professions', pre=True)
+    @field_validator('primary_professions')
+    @classmethod
     def concat_professions(cls, value) -> str:
         return ','.join([profession.name for profession in value])
 
-    @validator('birth_year', 'death_year', pre=True)
+    @field_validator('birth_year', 'death_year')
+    @classmethod
     def int_to_str(cls, value: Optional[int]) -> Optional[str]:
         return str(value) if value is not None else None
 

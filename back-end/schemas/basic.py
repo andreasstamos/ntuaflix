@@ -1,15 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from datetime import date
 
 class ORMModel(BaseModel):
-    class Config:
-        from_attributes = True
-        populate_by_name = True
+    model_config = ConfigDict(
+            from_attributes = True,
+            populate_by_name = True
+            )
 
 class QueryModel(BaseModel):
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(
+            extra = "forbid"
+            )
 
 
 class UserObject(BaseModel):
