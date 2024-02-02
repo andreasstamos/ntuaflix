@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from datetime import datetime, timedelta
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import  Session
 from fastapi.responses import JSONResponse
 from jose import jwt, JWTError
