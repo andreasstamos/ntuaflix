@@ -44,7 +44,7 @@ class TitleObject(ORMModel):
         values.rating = Rating(avRating=values.average_rating and f"{values.average_rating:.1f}", nVotes=values.num_votes and str(values.num_votes))
         return values
     
-    @field_validator('start_year', 'end_year')
+    @field_validator('start_year', 'end_year', mode="before")
     @classmethod
     def int_to_str(cls, value: int) -> str:
         return str(value)
