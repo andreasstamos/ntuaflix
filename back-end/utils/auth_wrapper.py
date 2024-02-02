@@ -1,4 +1,3 @@
-from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -10,7 +9,9 @@ from database import get_db
 from functools import wraps
 from typing import Annotated
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+from .oauth2_custom import OAuth2PasswordCustomHeader 
+
+oauth2_scheme = OAuth2PasswordCustomHeader(tokenUrl="token", header_name="X-OBSERVATORY-AUTH")
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 secret_key = os.getenv("SECRET_KEY")

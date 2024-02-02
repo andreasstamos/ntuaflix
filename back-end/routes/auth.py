@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from datetime import datetime, timedelta
 from sqlalchemy.orm import  Session
-from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -10,17 +9,17 @@ from models import User
 from database import get_db
 from datetime import date
 from sqlalchemy import exc
+import os
 
 # Authentication Router
 
 router = APIRouter()
 
-SECRET_KEY = "469155679be5db1afdb6613292c4c7805dfa71d2be7fde22d5abb522d6f23ef2"
-ALGORITHM = "HS256"
-FORGET_PWD_SECRET_KEY = "658955679be4fr3afdb6613292c4c7805dfa71d2be7fde2297abb535d6f23ef2"
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+FORGET_PWD_SECRET_KEY = os.getenv("FORGET_PWD_SECRET_KEY")
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 def verify_password(plain_password, hashed_password):
@@ -70,21 +69,8 @@ class UserRegisterRequirements(BaseModel):
     password: constr(min_length=4)
     password_confirm: constr(min_length=4)
 
-    class Config:
-        json_schema_extra = {
-            "payload": {
-                "username": "Konstantinos Pikoulas",
-                "first_name": "Konstantinos",
-                "last_name": "Pikoulas",
-                "email": "kostas.pik@example.com",
-                "dob": "2002-01-01",
-                "password": "secretpassword",
-                "password_confirm": "secretpassword",
-            }
-        }
-
 @router.post('/register')
-async def register(payload: UserRegisterRequirements = Body(..., embed=True), db:Session = Depends(get_db)):
+async def register(payload: UserRegisterRequirements, db:Session = Depends(get_db)):
     if (payload.password != payload.password_confirm):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

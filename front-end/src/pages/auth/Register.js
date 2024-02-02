@@ -43,7 +43,7 @@ export default function Register() {
         setPasswordConfirm('');
 
         try {
-            const response = await axiosInstance.post('/register', {payload});
+            const response = await axiosInstance.post('/register', payload);
             console.log(response);
         }
         catch (error) {
