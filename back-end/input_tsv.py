@@ -15,14 +15,14 @@ async def main():
     async with aiofiles.open('truncated_data/truncated_title.ratings.tsv', 'r', encoding='utf-8') as afp:
         await parse_title_ratings(afp, db)
 
-    async with aiofiles.open('truncated_data/truncated_title.crew.tsv', 'r', encoding='utf-8') as afp:
-        await parse_title_crew(afp, db)
-
     async with aiofiles.open('truncated_data/truncated_title.akas.tsv', 'r', encoding='utf-8') as afp:
         await parse_title_akas(afp, db)
 
     async with aiofiles.open('truncated_data/truncated_name.basics.tsv', 'r', encoding='utf-8') as afp:
         await parse_name_basics(afp, db)
+
+    async with aiofiles.open('truncated_data/truncated_title.crew.tsv', 'r', encoding='utf-8') as afp:
+        await parse_title_crew(afp, db)
 
     async with aiofiles.open('truncated_data/truncated_title.episode.tsv', 'r', encoding='utf-8') as afp:
         await parse_title_episode(afp, db)

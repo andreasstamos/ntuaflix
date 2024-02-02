@@ -42,6 +42,9 @@ async def reset_all(
         format: FormatType = FormatType.json) -> ResetAllObject:
     """Resets database to initial state."""
     for table in reversed(Base.metadata.sorted_tables):
+        if table.name == "users":
+            db.query(User).filter(not User.is_admin).delete() # not deleting admins
+            continue
         db.execute(table.delete())
     db.commit()
     #TODO: what about failure? why would it fail in a manner that is not a bug, so that we would want the user to know?
