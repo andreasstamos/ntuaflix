@@ -45,6 +45,7 @@ def create_app():
     app.include_router(watchlist_router, prefix='/ntuaflix_api', tags=['watchlists'])
     app.include_router(review_router, prefix='/ntuaflix_api', tags=['reviews'])
 
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins='*',

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from datetime import datetime, timedelta
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import  Session
 from fastapi.responses import JSONResponse
 from jose import jwt, JWTError
@@ -15,11 +16,9 @@ import os
 
 router = APIRouter()
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-FORGET_PWD_SECRET_KEY = os.getenv("FORGET_PWD_SECRET_KEY")
-
-
+SECRET_KEY = "469155679be5db1afdb6613292c4c7805dfa71d2be7fde22d5abb522d6f23ef2"
+ALGORITHM = "HS256"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 def verify_password(plain_password, hashed_password):

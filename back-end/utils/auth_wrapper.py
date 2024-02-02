@@ -31,7 +31,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-
     return user_id
         
 
@@ -40,6 +39,8 @@ token_dependency = Annotated[int ,Depends(get_current_user)]
 def authorize_user(func):
     @wraps(func)
     async def wrapper(*args, user_id: int, session_id: token_dependency, **kwargs):
+        if user_id == None: 
+            raise credentials_exception
         if user_id != session_id:
             raise HTTPException(status_code=403, detail="Permission denied: Cross user validation failed")
         return await func(*args, user_id=user_id, session_id=session_id, **kwargs)
