@@ -4,10 +4,14 @@ import asyncio
 from database import get_db
 
 from utils import parse_title_basics, parse_title_ratings, parse_title_principals,\
-        parse_title_crew, parse_title_akas, parse_name_basics, parse_title_episode
+        parse_title_crew, parse_title_akas, parse_name_basics, parse_title_episode, resetall
+
+import cProfile
 
 async def main():
     db = next(get_db())
+
+    resetall(db)
 
     async with aiofiles.open('truncated_data/truncated_title.basics.tsv', 'r', encoding='utf-8') as afp:
         await parse_title_basics(afp, db)
