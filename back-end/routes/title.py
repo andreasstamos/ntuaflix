@@ -9,6 +9,8 @@ from models import Title, Genre
 from schemas import TitleObject, TqueryObject, GqueryObject
 from utils import CSVResponse, FormatType, is_adult_dependency
 from math import ceil
+import time 
+import random
 
 router = APIRouter()
 
@@ -84,18 +86,36 @@ async def get_genres(db:Session =  Depends(get_db)):
     genres = db.query(Genre).all()
     return genres
 
+'''
 @router.get("/recommend-movie")
-async def recommend_movie(is_adult: is_adult_dependency, db: Session = Depends(get_db)) -> TitleObject:
-    count_query = db.query(func.count(Title.tconst))
-    if not is_adult:
-        count_query = db.query(func.count(Title.tconst)).filter_by(is_adult = False)
-    
+async def recommend_movie(db: Session = Depends(get_db)) -> TitleObject:
+    count_query = db.query(func.count(Title.tconst)).filter(Title.is_adult == False)
     total_count = count_query.scalar()
     random_index = func.floor(func.random() * total_count)
-    random_title_query = db.query(Title)
+    random_title_query = db.query(Title)\
+                        .filter(Title.is_adult == False)\
+                        .offset(random_index)\
+                        .limit(1)
+    random_title = random_title_query.first()
+    return random_title
+'''
 
-    if not is_adult:
-        random_title_query = random_title_query.filter_by(is_adult = False)
 
-    random_title = random_title_query.offset(random_index).limit(1).first()
+
+@router.get("/recommend-movie")
+async def recommend_movie(db: Session = Depends(get_db)) -> TitleObject:
+    count_query = db.query(func.count(Title.tconst)).filter(Title.is_adult == False)
+    total_count = count_query.scalar()
+    
+    # Generate a random index based on the total count
+    random.seed(time.time())
+    random_index = random.randint(0, total_count - 1)
+    
+    # Fetch a random title using OFFSET and LIMIT
+    random_title_query = db.query(Title)\
+                        .filter(Title.is_adult == False)\
+                        .offset(random_index)\
+                        .limit(1)
+    
+    random_title = random_title_query.first()
     return random_title
