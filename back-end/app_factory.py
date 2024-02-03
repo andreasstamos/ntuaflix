@@ -8,6 +8,7 @@ from routes.title import router as title_router
 from routes.person import router as person_router
 from routes.watchlists import router as watchlist_router
 from routes.reviews import router as review_router
+from routes.statistics import router as statistics_router
 
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
@@ -44,6 +45,8 @@ def create_app():
     
     app.include_router(watchlist_router, prefix='/ntuaflix_api', tags=['watchlists'])
     app.include_router(review_router, prefix='/ntuaflix_api', tags=['reviews'])
+
+    app.include_router(statistics_router, prefix='/ntuaflix_api', tags=['statistics'])
 
     app.add_middleware(
         CORSMiddleware,
