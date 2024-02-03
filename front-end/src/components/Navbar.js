@@ -1,11 +1,9 @@
 import React, {useEffect} from 'react'
 import './Navbar.css'
 import { NavLink } from 'react-router-dom'
-import NtuaflixLogo from '../assets/images/pyrforos.svg'
 import { matchPath, } from 'react-router-dom'
 import {useLocation} from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AuthContext from '../context/AuthContext'
 import { useContext } from 'react'
 

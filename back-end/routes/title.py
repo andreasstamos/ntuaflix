@@ -65,7 +65,7 @@ async def get_movies(is_adult: is_adult_dependency,
                      page: int or None = 1, 
                      qgenre: Union[int, None] = Query(None, alias="qgenre"), 
                      db: Session = Depends(get_db)):    
-    titles = db.query(Title)
+    titles = db.query(Title).order_by(Title.image_url)
     
     if qgenre:
         titles = titles.filter(Title.genres.any(id=qgenre))

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import InterstellarImage from '../assets/images/poster-2.jpg'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import './Movie.css'
 import axiosInstance from '../api/api';

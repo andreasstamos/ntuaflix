@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
 import { Link } from 'react-router-dom';
-import { CgClapperBoard, CgPlayListAdd } from "react-icons/cg";
+import { CgClapperBoard } from "react-icons/cg";
 
 
 export default function Watchlist() {
