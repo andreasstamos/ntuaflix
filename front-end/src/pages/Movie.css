@@ -38,6 +38,7 @@
     font-weight: 700;
     background-color: var(--citrine);
     font-size: 14px;
+    text-transform: uppercase;
 }
 .movie-container .movie-poster {
     max-height: 60vh;

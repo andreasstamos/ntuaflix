@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Admin from './pages/admin/Admin';
 import './App.css';
 import Index from './pages/Index';
@@ -7,7 +7,6 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Navbar from './components/Navbar';
 import Movie from './pages/Movie';
-import NotRegistered from './pages/NotRegistered';
 import Preloader from './components/Preloader';
 import Movies from './pages/Movies';
 import { AuthProvider } from './context/AuthContext';

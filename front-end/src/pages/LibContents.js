@@ -1,22 +1,13 @@
 import React from 'react'
-import './LibContents.css'
 import AuthContext from '../context/AuthContext'
 import { useContext, useEffect, useState, useMemo } from 'react'
 import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
 import { useParams } from 'react-router-dom';
 import { CgPlayListAdd, CgTrash} from "react-icons/cg";
-
 import LibContent from '../components/LibContent';
+import './LibContents.css'
 
-
-/* tester
-const movies  = [
-  {title: 'Movie1'},
-  {title: 'Movie2'},
-  {title: 'Movie3'}
-];
-*/
 
 export default function LibContents() {
 

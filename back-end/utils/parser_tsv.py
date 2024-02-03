@@ -47,7 +47,6 @@ async def parse_title_basics(afp, session):
                     title.genres.append(genre_getter(name=genre_name))
         session.commit()
 
-
 async def parse_title_ratings(afp, session):
     with session.no_autoflush:
         async for row in aiocsv.AsyncDictReader(afp, delimiter='\t'):

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import './Movies.css'
 import MovieCard from '../components/MovieCard'
 import Preloader from '../components/Preloader'
 import axiosInstance from '../api/api'
@@ -10,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import AuthContext from '../context/AuthContext'
 import { useContext } from 'react'
 import NoMovieImage from '../assets/no-movie-found.svg'
+import './Movies.css'
 
 
 export default function Movies() {

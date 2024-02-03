@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import './Recommender.css'
 import axiosInstance from '../api/api';
 import Loader from '../components/Loader';
 import MovieCard from '../components/MovieCard';
 import AuthContext from '../context/AuthContext'
 import { useContext } from 'react'
+import './Recommender.css'
 
 export default function Recommender() {
     const {authTokens} = useContext(AuthContext);

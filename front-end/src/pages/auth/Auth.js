@@ -1,9 +1,8 @@
 import React from 'react'
 import './Auth.css'
-import { BrowserRouter as Router, Route, Routes, Outlet, Navigate } from 'react-router-dom'
+import {Outlet, Navigate } from 'react-router-dom'
 import {matchPath} from 'react-router-dom'
 import {useLocation} from 'react-router-dom'
-
 
 
 function Auth() {

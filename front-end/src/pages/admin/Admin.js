@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axiosInstance from '../../api/api'
+import Preloader from '../../components/Preloader';
 
 
 export default function Admin() {
@@ -18,10 +19,8 @@ export default function Admin() {
         admin();
     }, [])
 
-  if (loading) return (
-    <div>loading...</div>
-  )
-  
+
+  if (loading) return <Preloader />
   return (
     <div>{message}</div>
   )

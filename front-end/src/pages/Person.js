@@ -28,8 +28,8 @@ export default function Person() {
         <div className='movie-container'>
             <div className='movie-column'>
                     <div className='movie-row'>
-                        
-                        <p className='movie-genres'>{personData?.profession && personData?.profession.split(',').join(', ')}</p>
+                    
+                        <p className='movie-genres'>{personData?.profession.map(obj => obj.name).join(', ')}</p>
 
                         <h1 className='title-with-line'>{personData?.primary_name}</h1>
                       
