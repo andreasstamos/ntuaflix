@@ -15,8 +15,10 @@ import Watchlist from './pages/Watchlist';
 import Recommender from './pages/Recommender';
 import Person from './pages/Person';
 import ForgotPassword from './pages/auth/ForgotPassword';
-import ResetPassword from './pages/auth/ResetPassword';import LibContents from './pages/LibContents';
-
+import ResetPassword from './pages/auth/ResetPassword';
+import LibContents from './pages/LibContents';
+import Reviews from './pages/Reviews';
+import NewReview from './pages/MakeReview';
 
 function App() {
   
@@ -37,6 +39,8 @@ function App() {
             <Route path='/watchlist/'  element={<Watchlist />} />
             <Route path='/recommend/' exact element={<Recommender />} />
 
+            <Route path='/reviews/' exact element = {<Reviews />} />
+            <Route path='/makereview/' exact element = {<NewReview />} />
             <Route path='/libcontents/:library_name/' exact element={<LibContents />} />
 
             <Route path='/auth' exact element={<Auth/>}>
