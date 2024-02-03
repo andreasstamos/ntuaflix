@@ -11,12 +11,10 @@ from pytest_postgresql.janitor import DatabaseJanitor
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-
-
 import models
 import database
 
-test_dbms = factories.postgresql_proc(port=None, dbname="test_db")
+test_dbms = factories.postgresql_proc(port=None, dbname="test_db", user="ntuaflix")
 
 @pytest.fixture(scope="session")
 def db_sessionmaker(test_dbms):
@@ -25,7 +23,7 @@ def db_sessionmaker(test_dbms):
     pg_user = test_dbms.user
     pg_password = test_dbms.password
     pg_db = test_dbms.dbname
-
+    
     with DatabaseJanitor(
         pg_user, pg_host, pg_port, pg_db, test_dbms.version, pg_password
     ):
@@ -34,22 +32,11 @@ def db_sessionmaker(test_dbms):
         models.Base.metadata.create_all(engine)
         yield sessionmaker(bind=engine)
 
-@pytest.fixture(scope="function")
-def test_db(db_sessionmaker):
-    try:
-        db = db_sessionmaker()
-        yield db
-    finally:
-        db.close()
-
 @pytest.fixture(scope="session")
-def client_factory(db_sessionmaker):
+def client(db_sessionmaker):
     def override_get_db():
-        try:
-            db = db_sessionmaker()
-            yield db
-        finally:
-            db.close()
+        with db_sessionmaker() as test_db:
+            yield test_db
 
     def factory(relative_url = None, **kwargs):
         app = create_app()
@@ -67,8 +54,4 @@ def client_factory(db_sessionmaker):
         return res
 
     return factory
-
-@pytest.fixture(scope="session")
-def client(client_factory):
-    return client_factory()
 
