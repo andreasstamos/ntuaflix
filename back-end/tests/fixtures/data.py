@@ -26,7 +26,7 @@ import subprocess
 def upload_data(admin_client, db_sessionmaker, preload):
     if preload:
         with db_sessionmaker() as test_db:
-            sql_fn = pathlib.Path(__file__).parent.parent / "test.sql"
+            sql_fn = pathlib.Path(__file__).parent.parent / "testdata/test.sql"
             parsed = urllib.parse.urlparse(str(test_db.bind.url))
             cmd = ['psql', '-h', parsed.hostname, '-p', str(parsed.port),
                     '-d', parsed.path.lstrip('/'), '-U', parsed.username,
