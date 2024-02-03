@@ -6,6 +6,7 @@ from utils import FormatType, token_dependency
 import pandas as pd
 from fastapi.responses import StreamingResponse
 import io
+from starlette import status
 
 router = APIRouter()
 
@@ -14,7 +15,7 @@ router = APIRouter()
 # "Υπολογισμός προφιλ χρηστη με βαση τις ταινιες που αυτος εχει ηδη δει.
 # Πχ στο προφιλ αρεσουν 20% ταινιες δρασης, 15% θριλερ, 40% κωμωδίες κτλ."
 
-@router.get("/user_stats_watchlists", response_model=list[WatchlistStatistics])
+@router.get("/user_stats_watchlists", response_model=list[WatchlistStatistics], status_code=status.HTTP_200_OK)
 async def genres_per_watchlist(user_id: token_dependency,
                                format: FormatType = FormatType.json):
     
@@ -91,7 +92,7 @@ async def genres_per_watchlist(user_id: token_dependency,
     return WatchlistsStatistics_json
 
 
-@router.get('/top_genres_overall', response_model=OverallStatistics)
+@router.get('/top_genres_overall', response_model=OverallStatistics, status_code=status.HTTP_200_OK)
 async def genres_overall(user_id: token_dependency,
                                format: FormatType = FormatType.json):
     
