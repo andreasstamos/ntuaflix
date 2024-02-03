@@ -23,19 +23,19 @@ with open(pathlib.Path(__file__).parent / "testdata/titles_genre.json", "r") as 
 runner = CliRunner(mix_stderr=False)
 
 @pytest.mark.parametrize("title", random.sample(TITLES, 5))
-def test_title(title):
+def test_title(login, title):
     result = runner.invoke(app, ['title', '--titleID', title['titleID']])
     assert result.exit_code == 0, result.exit_code
     assert not result.stderr
     assert json_compare2(result.stdout, title)
 
-def test_searchtitle():
+def test_searchtitle(login):
     result = runner.invoke(app, ["searchtitle", '--titlepart', TITLE_SUBSTRING])
     assert result.exit_code == 0, result.exit_code
     assert not result.stderr
     assert json_compare2(result.stdout, TITLES)
 
-def test_bygenre():
+def test_bygenre(login):
     result = runner.invoke(app, ["bygenre",
         "--genre", TITLE_GENRE,
         "--min", TITLE_MINR,

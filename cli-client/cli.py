@@ -19,10 +19,11 @@ def login(
         response = requests.post(API_URL + "/login", params={'username': username, 'password': passw})
 
         if response.status_code == 200:
-            response = response.json()
-            if "token" in response:
+            if "token" in response.json():
                 store_config("api_key", response.json()["token"])
                 print(":white_check_mark: [bold green]You have been successfully authenticated.[/bold green]")
+            else:
+                print(":no_good: [bold red]Server responded in an irregular manner (no token in response JSON). Please contact system administrator.[/bold red]")
         elif response.status_code == 401:
             print(":stop_sign: [bold orange1]Unfortunately you were not authenticated (possibly due to wrong credentials). Please try again.[/bold orange1]")
         else:
@@ -84,7 +85,7 @@ def healthcheck(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Checks the health of the API. Requires authentication."""
-    response = handle_request("/admin/healthcheck", method="GET", params={'format': format})
+    response = handle_request("/admin/healthcheck", method="GET", api_key=api_key, params={'format': format})
     if response is not None:
         print_response(response, format=format, found_msg=":white_check_mark: [bold green]The following health status was received.[/bold green]")
 
@@ -94,7 +95,7 @@ def resetall(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Resets database to initial state. Requires authentication."""
-    response = handle_request("/admin/resetall", params={'format': format})
+    response = handle_request("/admin/resetall", api_key=api_key, params={'format': format})
     if response is not None:
         print_response(response, format=format, found_msg=":white_check_mark: [bold green]The server responded the following.[/bold green]")
 

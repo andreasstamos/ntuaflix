@@ -13,10 +13,14 @@ def json_process(item):
 def json_compare(a,b):
     return json_process(a) == json_process(b)
 
+def stdout_to_json(stdout):
+    stdout = stdout.split('\n')
+    stdout = ''.join(stdout[1:])
+    stdout = json.loads(stdout)
+
+    return stdout
+    
 def json_compare2(stdout,b):
     """Skips 1st line of stdout and compares with b"""
-    a = stdout.split('\n')
-    a = ''.join(a[1:])
-    a = json.loads(a)
-    return json_process(a) == json_process(b)
+    return json_process(stdout_to_json(stdout)) == json_process(b)
 

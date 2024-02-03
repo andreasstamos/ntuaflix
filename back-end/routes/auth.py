@@ -11,7 +11,7 @@ from datetime import date
 from sqlalchemy import exc
 import os
 from fastapi import BackgroundTasks
-from utils import check_is_adult
+from utils import check_is_adult, get_current_user
 
 # Authentication Router
 
@@ -39,15 +39,11 @@ def create_jwt_token(data: dict):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-class UserLoginRequirements(BaseModel):
-    username: str
-    password: str
-
 
 @router.post('/login')
-async def login(payload: UserLoginRequirements, db:Session = Depends(get_db)):
-    user = db.query(User).filter(User.username == payload.username).first()
-    if user and verify_password(payload.password, user.password):
+async def login(username: str, password: str, db:Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == username).first()
+    if user and verify_password(password, user.password):
         token_data = {
             'username': user.username,
             'role': 'admin' if user.is_admin else 'user',
@@ -62,7 +58,11 @@ async def login(payload: UserLoginRequirements, db:Session = Depends(get_db)):
             detail='Invalid Credentials',
             headers={'WWW-Authenticate': 'Bearer'}
         )
-    
+
+@router.post('/logout')
+async def logout(user_id: int = Depends(get_current_user)):
+    pass
+
 class UserRegisterRequirements(BaseModel):
     username: constr(min_length=4)
     first_name: constr(min_length=4)
