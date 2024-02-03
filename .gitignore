@@ -6,3 +6,5 @@ back-end/truncated_data/
 bin/
 lib/
 include/
+.coverage
+

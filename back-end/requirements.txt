@@ -5,6 +5,7 @@ anyio==4.2.0
 certifi==2024.2.2
 cffi==1.16.0
 click==8.1.7
+coverage==7.4.1
 cryptography==42.0.2
 dnspython==2.5.0
 ecdsa==0.18.0
@@ -39,6 +40,7 @@ pydantic-extra-types==2.5.0
 pydantic-settings==2.1.0
 pydantic_core==2.16.1
 pytest==8.0.0
+pytest-cov==4.1.0
 pytest-postgresql==5.1.0
 python-dotenv==1.0.1
 python-jose==3.3.0
