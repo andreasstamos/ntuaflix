@@ -1,6 +1,6 @@
 from typing import Optional, Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import and_, Delete, Update
+from sqlalchemy import and_, Delete, Update, exc
 from sqlalchemy.orm import Session
 from database import get_db
 from datetime import date
@@ -71,17 +71,28 @@ async def view_my_reviews(
 async def add_review(
     user_id: int,
     session_id: token_dependency,
-    title_id: str,
-    text: str,
+    movie_title: str,
+    text: str or None,
     stars: int,
     db: db_dependency):
-    db_movie = db.query(Title).filter(Title.tconst==title_id).first()
+    db_movie = db.query(Title).filter(Title.original_title==movie_title).first()
     if not db_movie:
         raise HTTPException(status_code=404, detail=f"Title not found")
     else:
-        db_review = Review(user_id=user_id,title_id=title_id,stars=stars,likes=0,dislikes=0,text=text)
-        db.add(db_review)
-        db.commit()
+        title_id = db_movie.tconst
+        try :
+            db_review = Review(user_id=user_id,title_id=title_id,stars=stars,likes=0,dislikes=0,text=text)
+            db.add(db_review)
+            db.commit()
+
+            return JSONResponse(content={"message": "Your Review was uploaded!"}, status_code=200)
+        except exc.IntegrityError as e:
+            db.rollback()
+            raise HTTPException(
+                status_code=500,
+                detail='Unable to upload review!')
+ 
+        
         
 @router.post("/myreviews/{user_id}/remove")  
 @authorize_user
