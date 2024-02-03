@@ -29,7 +29,6 @@ export default function Login() {
 
         try{
             const response = await axiosInstance.post(`/login?username=${username}&password=${password}`, payload);
-            console.log(response);
             saveTokens(response?.data?.token);
             navigate('/', {replace:true})
         }
