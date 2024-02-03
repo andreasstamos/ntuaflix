@@ -16,8 +16,6 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    background-color: #1DB954;
-    padding: 180px 0px; 
     text-align: center; 
     flex-wrap: wrap;
   }
@@ -25,7 +23,7 @@
   .watchlists-navbar a {
     color: white;
     text-decoration: none;
-    padding: 30px 40px;
+    padding: 20px 40px;
     font-size: 24px;
     font-weight: bold;
     text-transform: none;
@@ -61,7 +59,7 @@
     background: linear-gradient(45deg, #8E24AA, #9C27B0, #673AB7, #3F51B5, #2196F3);
     background-clip: text;
     color: transparent;
-    margin-bottom: 60px; 
+    margin-bottom: 10px; 
     padding: 100px 20px;
   }
 
@@ -114,8 +112,8 @@
   transform: translate(-50%, -50%);
   padding: 25px 18px;
   background-color: transparent;
-  color: #8E24AA; 
-  border: 2px solid #8E24AA; 
+  color: var(--purple); 
+  border: 2px solid var(--purple); 
   border-radius: 50px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -125,13 +123,13 @@
 }
 
 .addButton:hover {
-  background-color: #8E24AA; 
+  background-color: var(--purple); 
   color: white; 
 }
 
 .addButton:active {
-  background-color: #673AB7; 
-  border-color: #673AB7; 
+  background-color: var(--darker-purle); 
+  border-color: var(--darker-purle); 
 }
 
 .create-container {
@@ -151,7 +149,7 @@
   margin-bottom: 10px;
   padding: 15px 15px;
   background-color: white; /* White background color */
-  color: #673AB7;
+  color: var(--darker-purle);
   border: none; 
   border-radius: 20px;
   font-size: 14px;
@@ -168,21 +166,21 @@
   margin-right: 10px;
   padding: 10px 15px;
   font-size: 16px;
-  border-color: #673AB7;
+  border-color: var(--darker-purle);
   border-radius: 30px;
   cursor: pointer;
   background-color: white;
   transition: background-color 0.3s ease, color 0.3s ease;
-  color: #673AB7;
+  color: var(--darker-purle);
 }
 
 .create-button:hover {
-  background-color:  #673AB7;
+  background-color: var(--darker-purle);
   color: white;
 }
 
 .create-button:active {
-  background-color: #673AB7;
-  border-color: #673AB7;
+  background-color: var(--darker-purle);
+  border-color: var(--darker-purle);
 }
 

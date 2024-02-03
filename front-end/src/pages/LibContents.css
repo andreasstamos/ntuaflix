@@ -16,8 +16,8 @@
     transform: translate(-50%, -50%);
     padding: 20px 15px;
     background-color: transparent;
-    color: #8E24AA; /* Purple color */
-    border: 2px solid #8E24AA; /* Purple border */
+    color: var(--purple); /* Purple color */
+    border: 2px solid var(--purple); /* Purple border */
     border-radius: 50px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -27,13 +27,13 @@
 
   
   .add-movie:hover {
-    background-color: #8E24AA; /* Purple background on hover */
+    background-color: var(--purple); /* Purple background on hover */
     color: white; /* White text on hover */
   }
   
   .add-movie:active {
-    background-color: #673AB7; /* Darker purple on click */
-    border-color: #673AB7; /* Darker purple border on click */
+    background-color: var(--darker-purple); /* Darker purple on click */
+    border-color: var(--darker-purple); /* Darker purple border on click */
   }
 
   .remove-lib {
@@ -58,6 +58,6 @@
   }
   
   .remove-lib:active {
-    background-color: #673AB7; /* Darker purple on click */
-    border-color: #673AB7; /* Darker purple border on click */
+    background-color: var(--darker-purple); /* Darker purple on click */
+    border-color: var(--darker-purple); /* Darker purple border on click */
   }

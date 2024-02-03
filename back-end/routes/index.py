@@ -27,6 +27,7 @@ async def index(db: Session = Depends(get_db)):
             non_adult_movies = [movie for movie in genre_movies if not movie.is_adult][:20]
             movies.append({
                 'genre': genre.name,
+                'genre_id': genre.id,
                 'movies': non_adult_movies,
             })
 

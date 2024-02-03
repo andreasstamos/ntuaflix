@@ -10,6 +10,8 @@ from database import get_db
 from datetime import date
 from sqlalchemy import exc
 import os
+from fastapi import BackgroundTasks
+from utils import check_is_adult
 
 # Authentication Router
 
@@ -50,6 +52,7 @@ async def login(payload: UserLoginRequirements, db:Session = Depends(get_db)):
             'username': user.username,
             'role': 'admin' if user.is_admin else 'user',
             'user_id': user.id,
+            'is_adult': check_is_adult(user.dob)
         }
         token = create_jwt_token(token_data)
         return {'token': token}
@@ -106,6 +109,7 @@ def create_reset_password_token(email: str):
 @router.get('/forget-password')
 async def forget_password(
                 email: str,
+                background_tasks: BackgroundTasks,
                 db: Session = Depends(get_db)
             ):
         user = db.query(User).filter_by(email = email).first()
@@ -118,10 +122,12 @@ async def forget_password(
         # go to the address manually.
 
         forget_url_token = create_reset_password_token(email)
+        
+
         success_message = {
             'err': False,
             'msg': 'A password reset link was sent tou your email. Check your spam!',
-            'reset_password_token': forget_url_token,
+            'forget_url_token': forget_url_token,
         }
         return JSONResponse(status_code=status.HTTP_200_OK, 
                             content=success_message)

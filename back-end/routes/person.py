@@ -51,6 +51,7 @@ async def get_person_name(
         "primary_name": person.primary_name,
         "birth_year": person.birth_year,
         "death_year": person.death_year,
+        "profession": person.primary_professions,
         "titles_participated": [
             {
                 "title_id": title.title.tconst,

@@ -3,9 +3,11 @@ import './Recommender.css'
 import axiosInstance from '../api/api';
 import Loader from '../components/Loader';
 import MovieCard from '../components/MovieCard';
-import { Link, useParams } from 'react-router-dom';
+import AuthContext from '../context/AuthContext'
+import { useContext } from 'react'
 
 export default function Recommender() {
+    const {authTokens} = useContext(AuthContext);
 
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -13,7 +15,9 @@ export default function Recommender() {
 
     async function recommendMovie() {
         setLoading(true);
-        const response = await axiosInstance.get('/recommend-movie');
+        const response = await axiosInstance.get('/recommend-movie', {headers: {
+            'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
+        }});
         console.log(response?.data);
         setMovieData(response?.data);
         setLoading(false);

@@ -30,8 +30,13 @@
     padding-inline: max(5%, 0.7rem);
 }
 .movie-genres {
-    color: var(--citrine);
+    /* color: var(--citrine); */
+    color: #fff;
+    width: fit-content;
+    padding: 5px;
+    border-radius: 4px;
     font-weight: 700;
+    background-color: var(--citrine);
     font-size: 14px;
 }
 .movie-container .movie-poster {

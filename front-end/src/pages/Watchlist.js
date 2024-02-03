@@ -23,8 +23,8 @@ export default function Watchlist() {
       try {
         const response = await axiosInstance.post(`/watchlists/${user.user_id}/create?lib_name=${newLibName}`, null, {
            headers: {
-              Authorization: `Bearer ${authTokens}`,
-              'Content-Type': 'application/json', 
+              'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+              'Content-Type': 'application/json',
            },
         });
   
@@ -45,7 +45,7 @@ export default function Watchlist() {
         try {
           const response = await axiosInstance.get(`/watchlists/${user.user_id}`, {
             headers: {
-              Authorization: `Bearer ${authTokens}`,
+              'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
             },
           });          
 
@@ -72,6 +72,7 @@ export default function Watchlist() {
         {watchlists.map((watchlist) => (
         <Link to={`/libcontents/${watchlist.library_name}`} key={watchlist.library_name}>
           {watchlist.library_name}
+          <br></br>
           <span> <CgClapperBoard/>{watchlist.items} items</span>
         </Link>
       ))}
