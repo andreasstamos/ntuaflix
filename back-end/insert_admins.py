@@ -5,7 +5,9 @@ from fastapi import Depends,HTTPException,status
 from datetime import date
 from db_type import *
 from models import User  
+from passlib.context import CryptContext
 
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 usernames = ['admin_Pik', 'admin_andreas', 'admin_BigNick', 'stefadmin', 'friday_admin', 'mlazoy_as_admin']
 passwords = ['admin1', 'admin2', 'admin3', 'admin4', 'admin5', 'admin6']
@@ -17,7 +19,7 @@ for i, (username, password) in enumerate(zip(usernames, passwords), 1):
         'first_name': f'Admin{i}',
         'last_name': f'Last{i}',
         'email': f'{username}@example.com',
-        'password': password,
+        'password': pwd_context.hash(password),
         'dob': date(1990 + i, 1, 1),
         'is_admin': True
     }
