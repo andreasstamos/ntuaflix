@@ -45,17 +45,11 @@ npm install
 
 # NTUAFLIX
 
-**Table of Contents**
-
-[TOCM]
-
-[TOC]
-
-###Introduction
+### Introduction
 Access NTUAFLIX [here](http://ntuaflix.cloudns.be/ "here").
 <img src="https://raw.githubusercontent.com/ntua/softeng23-34/main/front-end/public/meta-image.png" style="border-radius:8px;"/>
 
-###Tech Stack
+### Tech Stack
 <div style="display:flex; justify-content: space-between;">
 <img src="https://cdn.worldvectorlogo.com/logos/fastapi.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="17%"/><img src="https://cdn.worldvectorlogo.com/logos/material-ui-1.svg" width="17%"/><img src="https://www.svgrepo.com/show/354115/nginx.svg" width="17%"/>
 </div>
