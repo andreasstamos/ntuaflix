@@ -86,7 +86,7 @@ export default function Statistics() {
                         <h1 className='title-in-line' style={{marginBottom: 10}}>Your Top Genres</h1> 
                         <div>
                             <p style={{marginBottom: 30}}>
-                                (based on the <b>{TopGenres.total_number}</b> titles accross all your watchlists)
+                                (based on the <b>{TopGenres.total_number}</b> titles across all your watchlists)
                             </p>
 
                             {TopGenres.items_per_genre.map(genre => {
