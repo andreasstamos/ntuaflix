@@ -14,7 +14,7 @@ export default function NewReview (props) {
     }
 
     const gotomyreviews = () => {
-        navigate(`/myreviews/${user.user_id}`);
+        navigate('/reviews/');
     }
 
     const {user} = useContext(AuthContext);
@@ -28,18 +28,15 @@ export default function NewReview (props) {
     async function make_review (e) {
         e.preventDefault();
         try {
-            const response = await axiosInstance.post(`/myreviews/${user.user_id}/add`, null,
-            {
-                params: {
-                    movie_title: title,
-                    text: review_text,
-                    stars: parseInt(rating),
-                },
-                headers: {
-                    'X-OBSERVATORY-AUTH': authTokens ? authTokens : 'None',
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response = await axiosInstance.post(
+                `/myreviews/${user.user_id}/add?movie_title=${title}&text=${review_text}&stars=${rating}`, null,
+                {
+                    headers: {
+                        'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
             console.log(response);
             if (response.status === 200) {
                 console.log(response.data.message);
@@ -65,7 +62,7 @@ export default function NewReview (props) {
       };
 
     return (
-        <body>
+        <div>
         <h1 className='review-header'>Make your review here!</h1>
         <div className='review-form-container'>
             <form className = "review-form" onSubmit = {make_review} >
@@ -100,6 +97,6 @@ export default function NewReview (props) {
       )}
         </div>
         <button className = 'link-btn' onClick={gotomovies}>Not sure? Browse Movies</button>
-        </body>
+        </div>
     )
 }
