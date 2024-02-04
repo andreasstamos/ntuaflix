@@ -1,0 +1,64 @@
+/* ReviewCard.css */
+
+.review-card {
+    border: 2px solid purple;
+    border-radius: 15px;
+    padding: 16px;
+    margin-bottom: 16px;
+    margin-left:20px;
+    background-color: rgba(255, 255, 255, 0.6); 
+    width:60%;
+    
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Make it circular */
+    margin-right: 12px;
+    overflow: hidden; /* Ensure the image stays within the circle */
+    background-image:url('../assets/images/user_avatar.jpg');
+    background-size: contain;
+}
+
+.user-name {
+    color: black;
+}
+
+.movie-title {
+    font-size: large;
+    font-weight: bold;
+    color: blueviolet;
+}
+
+.review-text {
+    margin-bottom: 12px;
+    color: #333; /* Set the text color to black (adjust as needed) */
+}
+
+.review-actions {
+    display: flex;
+    color:black;
+}
+
+.like-button,
+.dislike-button {
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+.date {
+    position:relative;
+    top: 1px;
+    left: 700px;
+    font-size: 12px;
+    color: black;
+}
+
+/* Add more styling as needed */

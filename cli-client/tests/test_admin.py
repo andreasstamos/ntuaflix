@@ -1,7 +1,7 @@
 from typer.testing import CliRunner
 import pytest
 import os
-from cli import app
+from ntuaflix_cli import app
 
 from .utils import stdout_to_json
 

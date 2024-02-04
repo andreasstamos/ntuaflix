@@ -1,6 +1,6 @@
 import pytest
 from typer.testing import CliRunner
-from cli import app
+from ntuaflix_cli import app
 
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "123456"

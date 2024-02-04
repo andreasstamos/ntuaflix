@@ -6,6 +6,12 @@ Template repository, used for NTUA/ECE Software Engineering, 2023-2024
 χρησιμοποιήσετε.  Στο τέλος, θα το αντικαταστήσετε με το `README.md` που
 θα περιγράφει το δικό σας project.
 
+## Prerequisites
+
+1. node, npm ...
+2. python, pip ...
+3. DBMS
+
 ## Quick Setup for Virtual Environment
 
 ```bash
@@ -22,10 +28,9 @@ source .venv/bin/activate
 pip install -r back-end/requirements.txt
 ```
 
-Alternative:
-
+### Additional for MySQL
 ```bash
-pip install sqlalchemy python-dotenv pymysql aiofiles fastapi flatten_dict aiocsv jose python-jose passlib python-multipart pydantic[email] uvicorn frozendict pandas
+pip install pymysql
 ```
 
 ## Quick setup for frontend
@@ -39,9 +44,10 @@ npm install
 1. Create `back-end/.env` file to configure your database credentials, check the `.env` template in `back-end/README.md`. 
 2. Create a database in your DBMS, for example `ntuaflix` and save the name in the `back-end/.env`. For the next steps your DBMS should be running (maybe on localhost).
 3. Run `back-end/models.py` to create tables of the schema.
-4. Run `back-end/input_tsv.py` to import data into the database from the tsv files.
-5. Run `back-end/main.py` to run the back-end code
-6. While `back-end/main.py` is running, run `npm start` in `front-end/` folder to start the front-end
+4. Place `tsv` files for data import into a folder `back-end/truncated_data`
+5. Run `back-end/input_tsv.py` to import data into the database from the tsv files.
+6. Run `back-end/main.py` to run the back-end code
+7. While `back-end/main.py` is running, run `npm start` in `front-end/` folder to start the front-end
 
 # NTUAFLIX
 

@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from utils import CSVResponse, FormatType
 from fastapi.responses import JSONResponse
 
-from models import Review, ReviewReactions, Title
+from models import Review, ReviewReactions, Title, User
 from schemas import TitleObject, TqueryObject, GqueryObject
 from utils import authorize_user, token_dependency
 
@@ -31,27 +31,46 @@ class ReviewObj(BaseModel):
 @router.get("/reviews")
 async def view_reviews(
     db: db_dependency,
-    from_user: int = Query(None, description="user_filter"),
-    for_title: str = Query(None, description="title_filter"),
+    from_user: str = None,
+    for_title: str = None,
     format: FormatType = FormatType.json):
     db_ans = []
-    if from_user:
-        search_user_reviews = db.query(Review).filter(Review.user_id==from_user).all()
-        if search_user_reviews: db_ans.append(search_user_reviews)
-    if for_title:
-        search_title_review = db.query(Review).filter(Review.title_id==for_title).all()
-        if search_title_review: db_ans.append(search_title_review)
-    if db_ans == []:
-        if (from_user and for_title):
-            raise HTTPException(status_code=400, detail=f"No reviews found by user {from_user} and title {for_title}") 
-        elif (from_user and not for_title):
-            raise HTTPException(status_code=400, detail=f"No reviews found by user {from_user}")  
-        elif (for_title and not from_user):
-            raise HTTPException(status_code=400, detail=f"No reviews found for title {for_title}")   
+    if from_user and not for_title:
+        user = db.query(User).filter(User.username==from_user).first()
+        if (user):
+            db_ans = db.query(Review).filter(Review.user_id==user.id).all()
         else:
-            raise HTTPException(status_code=400, detail=f"No reviews made yet!") 
+            raise HTTPException(status_code=400, detail=f" user {from_user} is not a valid user") 
+        if db_ans == []:
+            raise HTTPException(status_code=402, detail=f"No reviews found by user {from_user}")  
+        
+    if for_title and not from_user:
+        title = db.query(Title).filter(Title.original_title==for_title).first()
+        if (title):
+            db_ans = db.query(Review).filter(Review.title_id==title.tconst).all()
+        else:
+            raise HTTPException(status_code=400, detail=f" title {for_title} is not a valid title") 
+        if db_ans == []:
+            raise HTTPException(status_code=402, detail=f"No reviews found for title {for_title}") 
+        
+    if for_title and from_user:
+        user = db.query(User).filter(User.username==from_user).first()
+        title = db.query(Title).filter(Title.original_title==for_title).first()
+        if (user and title):
+            db_ans = db.query(Review).filter(and_(Review.title_id==title.tconst),Review.user_id==user.id).all()
+        else:
+            raise HTTPException(status_code=400, detail=f"Either user {from_user} or title {for_title} is invalid")
+        if db_ans == []:
+            raise HTTPException(status_code=402, detail=f"No reviews found from user {from_user} for title {for_title}")
+         
+    if (from_user is None and for_title is None):
+        db_ans = db.query(Review).all()
+        if db_ans == []:
+            raise HTTPException(status_code=402, detail=f"No reviews made yet!") 
+        
     if format==FormatType.csv: pass
-    return db_ans 
+   
+    return db_ans
 
 @router.get("/myreviews/{user_id}")
 @authorize_user
