@@ -6,10 +6,12 @@ import axiosInstance from '../api/api'
 import { useParams } from 'react-router-dom';
 import { CgPlayListAdd, CgTrash} from "react-icons/cg";
 import LibContent from '../components/LibContent';
+import { useLocation } from 'react-router-dom';
 import './LibContents.css'
 
 
 export default function LibContents() {
+  const { pathname } = useLocation();
 
     const {user} = useContext(AuthContext);
     const { authTokens } = useContext(AuthContext);
@@ -71,6 +73,10 @@ export default function LibContents() {
           }
           
         };
+
+        useEffect(() => {
+          window.scrollTo(0, 0);
+        }, [pathname]);
         
 
     if (!user) return <NotRegistered />

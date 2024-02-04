@@ -6,9 +6,10 @@ import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
 import { Link } from 'react-router-dom';
 import { CgClapperBoard } from "react-icons/cg";
-
+import { useLocation } from 'react-router-dom';
 
 export default function Watchlist() {
+  const { pathname } = useLocation();
 
     const {user} = useContext(AuthContext);
     const { authTokens } = useContext(AuthContext);
@@ -59,7 +60,9 @@ export default function Watchlist() {
       fetchWatchlists();
     }, [user?.user_id, authTokens, isCreating]);
 
-
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
   
     if (!user) return <NotRegistered />
 

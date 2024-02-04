@@ -138,6 +138,9 @@ nav#top-nav {
   nav .has-submenu i {
     font-size: 12px;
   }
+  nav .has-submenu.hidden {
+    display: none;
+  }
   /* nav .has-submenu > a::after {
     font-family: "Font Awesome 5 Free";
     font-size: 15px;
@@ -152,7 +155,8 @@ nav#top-nav {
   }
   nav .submenu-active {
     /* background-color: #111; */
-    background: rgba(0, 98, 155, 1);
+    /* background: rgba(0, 98, 155, 1); */
+    background: var(--citrine);
     border-radius: 3px;
   }
 
@@ -305,10 +309,9 @@ nav#top-nav {
       position: absolute;
       left: 0;
       /* top: 68px; */
-      min-width: 350px;
+      min-width: 250px;
       top:36px;
-      /* background: #111; */
-      background: rgba(0, 98, 155, 1);
+      background: var(--citrine);
     }
     nav .toggle {
       display: none;

@@ -4,7 +4,6 @@
     background-position: center;
     min-height: 750px;
     height: 105vh;
-    /* max-height: 1000px; */
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -91,7 +90,6 @@
     font-weight: var(--fw-700);
     text-transform: uppercase;
     letter-spacing: 1px;
-    /* display: flex; */
     align-items: center;
     gap: 10px;
     padding: 16px 30px;
@@ -112,6 +110,15 @@
   }
   .btn-w100 {
     width: 100%;
+  }
+  .btn-disabled {
+    background-color: var(--gainsboro);
+    cursor: default;
+    border-color: transparent;
+  }
+  .btn-disabled:hover {
+    background-color: var(--gainsboro);
+    color: #fff;
   }
 
 .h1,

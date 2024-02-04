@@ -4,8 +4,9 @@ import { useParams } from 'react-router-dom'
 import axiosInstance from '../api/api';
 import Preloader from '../components/Preloader';
 import MovieCard from '../components/MovieCard';
-
+import { useLocation } from 'react-router-dom';
 export default function Person() {
+  const { pathname } = useLocation();
 
   const {personID} = useParams();
   const [personData, setPersonData] = useState(null);
@@ -20,6 +21,10 @@ export default function Person() {
   useEffect( () => {
     fetchPerson();
   }, []) 
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   if (loading) return <Preloader />
   

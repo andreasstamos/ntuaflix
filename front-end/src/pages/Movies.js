@@ -13,6 +13,7 @@ import './Movies.css'
 
 
 export default function Movies() {
+  const { pathname } = useLocation();
 
   const {authTokens} = useContext(AuthContext);
 
@@ -71,6 +72,10 @@ export default function Movies() {
         callBoth();
 
     }, [page])
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
 
 
   if (loading) return <Preloader />
