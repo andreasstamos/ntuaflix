@@ -20,6 +20,7 @@ import Reviews from './pages/Reviews';
 import NewReview from './pages/MakeReview';
 import Profile from './pages/Profile';
 import Statistics from './pages/Statistics';
+import CopyrightNotice from './components/CopyrightNotice';
 
 function App() {
   
@@ -58,6 +59,7 @@ function App() {
 
           </Routes>
         </AuthProvider>
+        <CopyrightNotice />
     </Router>
   </div>
 
