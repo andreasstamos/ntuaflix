@@ -4,9 +4,10 @@ import './Movie.css'
 import axiosInstance from '../api/api';
 import Preloader from '../components/Preloader';
 import { Link, useParams } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
 
 export default function Movie() {
+    const { pathname } = useLocation();
 
     const {movieID} = useParams();
     const [movieData, setMovieData] = useState(null);
@@ -23,6 +24,10 @@ export default function Movie() {
     useEffect(() => {
         fetchMovieData();
     }, [])
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
 
   if (loading) return <Preloader/>
   return (

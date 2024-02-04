@@ -5,8 +5,10 @@ import './Statistics.css';
 import axiosInstance from '../api/api';
 import { Link } from 'react-router-dom';
 import Preloader from '../components/Preloader';
-
+import { useLocation } from 'react-router-dom';
 export default function Statistics() {
+    const { pathname } = useLocation();
+
     const {authTokens} = useContext(AuthContext);
 
     const [TopGenres, setTopGenres] = useState(null);
@@ -70,6 +72,10 @@ export default function Statistics() {
         fetchTopGenres();
         fetchWatchlistsStatistics();
     }, []);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
 
     if (!authTokens) return <NotRegistered />
     if (isLoading) return <Preloader /> 

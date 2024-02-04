@@ -6,7 +6,7 @@ import {useLocation} from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu';
 import AuthContext from '../context/AuthContext'
 import { useContext } from 'react'
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function Navbar() {
 
@@ -118,23 +118,22 @@ const {logoutUser, user} = useContext(AuthContext);
           <li className="logo"><NavLink className='not-color' to={`/`}><h1>Ntua<mark>flix</mark></h1></NavLink></li>
 
           <li className="item"><NavLink to={`/`}>Home</NavLink></li>
-          <li className="item"><NavLink to={`/profile`}>Profile</NavLink></li>
+          {/* <li className="item"><NavLink to={`/profile`}>Profile</NavLink></li> */}
           <li className="item"><NavLink to={`/movies`}>Movies</NavLink></li>
-          <li className="item"><NavLink to={`/watchlist/`}>WatchLists</NavLink></li>
-          <li className="item"><NavLink to={`/reviews/`}>Reviews</NavLink></li>
-          <li className="item"><NavLink to={`/statistics/`}>Statistics</NavLink></li>
+          {/* <li className="item"><NavLink to={`/watchlist/`}>WatchLists</NavLink></li>
+          <li className="item"><NavLink to={`/reviews/`}>Reviews</NavLink></li> */}
+          {/* <li className="item"><NavLink to={`/statistics/`}>Statistics</NavLink></li> */}
           <li className="item"><NavLink to={`/recommend/`}>Recommender</NavLink></li>
 
-          {/* <li className="item has-submenu">
-            <a tabIndex="0">Genres<ExpandMoreIcon/></a>
+          <li className={`item has-submenu ${!user && 'hidden'}`}>
+            <a tabIndex="0">Account Info<ExpandMoreIcon/></a>
             <ul className="submenu">
-              <li className="subitem"><NavLink to={`/chapter/computer-society`} className='subitem-link'>Computer Society</NavLink></li>
-              <li className="subitem"><NavLink to={`/chapter/robotics-automation-society`} className='subitem-link'>Robotics & Automation Society</NavLink></li>
-              <li className="subitem"><NavLink to={`/chapter/power-energy-society`} className='subitem-link'>Power & Energy Society</NavLink></li>
-              <li className="subitem"><NavLink to={`/chapter/engineering-in-medicine-biology-society`} className='subitem-link'>Engineering in Medicine & Biology Society</NavLink></li>
-              <li className="subitem"><NavLink to={`/chapter/communications-society`} className='subitem-link'>Communications Society</NavLink></li>
+              <li className="subitem"><NavLink to={`/account/profile`} className='subitem-link'>Profile</NavLink></li>
+              <li className="subitem"><NavLink to={`/account/statistics`} className='subitem-link'>Statistics</NavLink></li>
+              <li className="subitem"><NavLink to={`/watchlist`} className='subitem-link'>WatchLists</NavLink></li>
+              <li className="subitem"><NavLink to={`/reviews`} className='subitem-link'>Reviews</NavLink></li>
             </ul>
-          </li> */}
+          </li>
 
           
           {/* <li class="item has-submenu">

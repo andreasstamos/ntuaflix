@@ -6,8 +6,9 @@ import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
 import { Link } from 'react-router-dom';
 import ReviewCard from '../components/ReviewCard';
-
+import { useLocation } from 'react-router-dom';
 export default function Reviews() {
+  const { pathname } = useLocation();
 
     const { user } = useContext(AuthContext);
     const { authTokens } = useContext(AuthContext);
@@ -41,6 +42,10 @@ export default function Reviews() {
     
         fetchReviews();
       }, [user?.user_id, authTokens, userOnly]);
+
+      useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
 
     return (
         <div className='theme'>
