@@ -25,7 +25,7 @@ async def profile(
     format: FormatType = FormatType.json):
     """"Get user profile"""
     user_profile = db.query(User).filter(User.id == user_id).first()
-    print(user_profile)
+    print(f'User profile: {user_profile}')
     if user_profile==None:
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     else:
@@ -41,7 +41,7 @@ async def update_profile(
     format: FormatType = FormatType.json):
     """"Update user profile"""
     user_profile = db.query(User).filter(User.id == user_id).first()
-    print(user_profile)
+    print(f'User profile: {user_profile}')
     if user_profile==None:
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     else:

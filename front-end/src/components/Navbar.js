@@ -118,7 +118,7 @@ const {logoutUser, user} = useContext(AuthContext);
           <li className="logo"><NavLink className='not-color' to={`/`}><h1>Ntua<mark>flix</mark></h1></NavLink></li>
 
           <li className="item"><NavLink to={`/`}>Home</NavLink></li>
-          <li className="item"><NavLink to={`/auth/profile`}>Profile</NavLink></li>
+          <li className="item"><NavLink to={`/profile`}>Profile</NavLink></li>
           <li className="item"><NavLink to={`/movies`}>Movies</NavLink></li>
           <li className="item"><NavLink to={`/watchlist/`}>WatchLists</NavLink></li>
           <li className="item"><NavLink to={`/reviews/`}>Reviews</NavLink></li>
