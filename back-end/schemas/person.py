@@ -26,7 +26,7 @@ class NameObject(ORMModel):
     @field_validator('primary_professions', mode="before")
     @classmethod
     def concat_professions(cls, value) -> str:
-        return ','.join([profession.name for profession in value])
+        return ','.join(sorted([profession.name for profession in value]))
 
     @field_validator('birth_year', 'death_year', mode="before")
     @classmethod

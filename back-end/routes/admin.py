@@ -207,8 +207,7 @@ async def view_user_details(
     db: db_dependency, 
     username:str,
     format: FormatType = FormatType.json):
-    values = db.query(User).filter(User.username==username).all()
-    if (values==[]):
-        raise HTTPException(status_code=404, detail=f"User {username} doesn't exist!") 
+    values = db.query(User).filter(User.username==username).first()
+    #if user doesnt exist returns the json null
     if format==FormatType.csv: pass
     return values
