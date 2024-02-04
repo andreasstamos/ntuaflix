@@ -4,11 +4,11 @@
     padding: 10px;
     width: 60%; 
     margin:auto;
-    background-image: url('../assets/images/starsky.jpg');
+    background-image: url('../assets/images/starsky-optimized.jpeg');
     background-size: cover;
 }
 
-.review-form{
+.review-form {
     margin-top: 100px;
     margin-bottom: 160px;
     background: local;
@@ -37,7 +37,7 @@
     border-radius: 20px;
     width: 100%; 
     opacity: 0.5;
-    
+    font-weight: 700;
 }
 
 .review-form button {
@@ -47,6 +47,7 @@
     border-radius: 20px;
     cursor: pointer;
     color: white;
+    /* font-weight: 600; */
 }
 
 .review-form label[id="text"] {
@@ -62,8 +63,9 @@
     background: local;
     color: white;
     text-decoration: underline;
-    position: relative;
-    left: 45%;
+    /* position: relative; */
+    /* left: 45%; */
+    width: 100%;
     text-align: center;
     border: none;
 }
@@ -95,4 +97,23 @@
   
   .star.filled {
     color: #a14dc2;
+  }
+
+
+  @media screen and (max-width: 865px) {
+    .review-form-container {
+        width: 90%;
+    }
+    .review-form {
+        width: 80%;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .review-form-container {
+        padding: 0.7rem;
+    }
+    .review-form {
+        width: 98%;
+    }
   }

@@ -29,7 +29,7 @@ export default function Recommender() {
 
    
   return (
-    <div className='movie-page-container' style={{background: `linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url(https://i.redd.it/ugg6a3ka5qi91.jpg)`}}>
+    <div className='movie-page-container recommender-bg'>
         <div className='movie-container'>
             <div className='recommend-container'>
                 <h1 className='title-with-line'>Get a Recommendation</h1>

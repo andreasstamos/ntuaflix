@@ -34,7 +34,7 @@ export default function ResetPassword() {
   return (
     <div className='form-wrapper'>
     <form onSubmit={submit}>
-    <h1>Reset Password</h1>
+    <h1 className='title-with-line'>Reset Password</h1>
 
         <div className='form-input'>
             <input type='password' placeholder='New Password' required value={password} onChange={(e) => setPassword(e.target.value)}/>

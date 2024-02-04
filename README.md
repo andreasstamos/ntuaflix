@@ -47,7 +47,7 @@ npm install
 
 ### Introduction
 Access NTUAFLIX [here](http://ntuaflix.cloudns.be/ "here").
-<img src="https://raw.githubusercontent.com/ntua/softeng23-34/main/front-end/public/meta-image.png?token=GHSAT0AAAAAACNYD6LELDRNDVX37U76O25IZN66RPA" style="border-radius:8px;"/>
+<img src="https://raw.githubusercontent.com/ntua/softeng23-34/main/front-end/public/meta-image.png" style="border-radius:8px;"/>
 
 ### Tech Stack
 <div style="display:flex; justify-content: space-between;">
