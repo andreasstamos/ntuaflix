@@ -23,7 +23,7 @@ export default function LibContents() {
     }), [library_name]);
 
     const [movies, setMovies] = useState([]); 
-    const [status, setStatus]=useState();
+    const [status, setStatus]= useState();
 
     
     useEffect(() => {
@@ -83,8 +83,8 @@ export default function LibContents() {
                 <h2 className="watchlist-title">{response_dict[status]}</h2>
                 {status === 204 && 
                 <div>
-                <button className='add-movie'> <CgPlayListAdd />Add Movies</button>
-                <button className='remove-lib' onClick={removeWatchlist}><CgTrash/> Remove Watchlist</button>
+                <button className='btn btn-primary add-movie button-align-center'> <CgPlayListAdd />Add Movies</button>
+                <button className='btn btn-primary remove-lib button-align-center' onClick={removeWatchlist}><CgTrash/>Remove Watchlist</button>
                 </div>
                 }
             </div>
@@ -93,8 +93,8 @@ export default function LibContents() {
           (
             <div>
             <h1 className="watchlist-title">All movies in '{library_name}'</h1>
-            <button className='add-movie'> <CgPlayListAdd />Add Movies </button>
-            <button className='remove-lib' onClick={removeWatchlist}><CgTrash/></button>
+            <button className='btn btn-primary add-movie button-align-center'> <CgPlayListAdd />Add Movies </button>
+            <button className='btn btn-primary remove-lib button-align-center' onClick={removeWatchlist}><CgTrash/></button>
             <LibContent movies={movies} />
             </div>
           )}

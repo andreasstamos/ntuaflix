@@ -64,10 +64,9 @@ export default function Watchlist() {
     if (!user) return <NotRegistered />
 
     return (
-    <body>
     <div className='watchlist-background' >
         <h1 className='watchlist-title'>My Watchlists</h1>
-        <nav className='watchlists-navbar'>
+        <div className='watchlists-navbar'>
 
         {watchlists.map((watchlist) => (
         <Link to={`/libcontents/${watchlist.library_name}`} key={watchlist.library_name}>
@@ -76,7 +75,7 @@ export default function Watchlist() {
           <span> <CgClapperBoard/>{watchlist.items} items</span>
         </Link>
       ))}
-      </nav>
+      </div>
       
 
       {isCreating ? (
@@ -90,9 +89,8 @@ export default function Watchlist() {
         </form>  
       </div>
       ) : (
-      <button className = 'addButton' type ="submit" onClick={() => setIsCreating(true)} >+ Create New Watchlist</button>
+      <button className = 'addButton btn btn-primary' type ="submit" onClick={() => setIsCreating(true)} >+ Create New Watchlist</button>
       )}
     </div> 
-  </body>
   )
 }

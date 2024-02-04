@@ -1,3 +1,6 @@
+.recommender-bg {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url(../assets/images/recommender-background.jpeg)!important;
+}
 .recommend-container {
     width: 100%;
 }
@@ -7,6 +10,7 @@
     align-items: center;
     flex-direction: column;
     row-gap: 2rem;
+    margin-top:2rem;
 }
 .loading-wrapper {
     display: flex;

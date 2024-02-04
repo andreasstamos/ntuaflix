@@ -27,7 +27,7 @@ export default function ForgotPassword() {
   return (
     <div className='form-wrapper'>
         <form onSubmit={submit}>
-        <h1>Forgot Password</h1>
+        <h1 className='title-with-line'>Forgot Password</h1>
         <div className='alternative-link'>
                 <p>
                     Looks like you forgot your password. A link will be sent to your email. Please check your spam!

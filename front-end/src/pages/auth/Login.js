@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <div className='form-wrapper'>
         <form onSubmit={submit}>
-        <h1>Sign in</h1>
+        <h1 className='title-with-line'>Sign in</h1>
 
             <div className='form-input'>
                 <input type='text' placeholder='Username' required value={username} onChange={(e) => setUsername(e.target.value)}/>

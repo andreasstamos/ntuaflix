@@ -146,6 +146,8 @@
   position: absolute;
   bottom: 70px;
 }
+
+
 @media screen and (max-width: 800px) {
   .hero {
     background-position: 75% 50%;
@@ -155,5 +157,11 @@
 @media screen and (max-width: 535px) {
   .hero {
     padding: 50px;
+  }
+}
+
+@media screen and (max-height: 720px) {
+  .hero .pyrforos-image {
+    display: none;
   }
 }

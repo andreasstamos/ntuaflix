@@ -49,7 +49,7 @@ export default function Register() {
   return (
     <div className='form-wrapper'>
         <form onSubmit={submit}>
-        <h1>Sign up</h1>
+        <h1 className='title-with-line'>Sign up</h1>
 
             <div className='form-input'>
                 <input type='text' placeholder='Username' required value={username} onChange={(e) => setUsername(e.target.value)}/>
