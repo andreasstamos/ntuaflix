@@ -19,6 +19,7 @@ import LibContents from './pages/LibContents';
 import Reviews from './pages/Reviews';
 import NewReview from './pages/MakeReview';
 import Profile from './pages/Profile';
+import Statistics from './pages/Statistics';
 
 function App() {
   
@@ -43,6 +44,8 @@ function App() {
             <Route path='/reviews/' exact element = {<Reviews />} />
             <Route path='/makereview/' exact element = {<NewReview />} />
             <Route path='/libcontents/:library_name/' exact element={<LibContents />} />
+
+            <Route path='/statistics/' exact element = {<Statistics />} />
 
             <Route path='/auth' exact element={<Auth/>}>
               <Route path='login/' element={<Login/>} />
