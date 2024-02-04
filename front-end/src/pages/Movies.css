@@ -37,6 +37,8 @@
 .filters nav.MuiPagination-root .MuiPaginationItem-colorSecondary {
     background-color: #fff;
 }
+
+/*
 .MuiPaginationItem-text	 {
     color: #fff!important;
 }
@@ -44,16 +46,17 @@
     background-color: #fff;
 }
 .MuiTextField-root label {
-    /* color: var(--citrine); */
+    / * color: var(--citrine); * /
 }
 .MuiTextField-root label.Mui-focused {
-    /* color: var(--citrine)!important; */
-    /* font-weight: 700; */
+    / * color: var(--citrine)!important; * /
+    / * font-weight: 700; * /
 }
 .MuiTextField-root fieldset {
-    /* border-color: var(--citrine)!important; */
-    /* box-shadow: 2px 2px 2px 1px var(--citrine); */
+    / * border-color: var(--citrine)!important; * /
+    / * box-shadow: 2px 2px 2px 1px var(--citrine); * /
 }
+*/
 
 .movies-container {
     margin-block:2rem;

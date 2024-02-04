@@ -22,46 +22,58 @@ import Profile from './pages/Profile';
 import Statistics from './pages/Statistics';
 import CopyrightNotice from './components/CopyrightNotice';
 
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
+
 function App() {
   
   return (
-    <div className="App">
-      <Router>
-        <AuthProvider>
-          <Navbar/>
+    <ThemeProvider theme={darkTheme}><CssBaseline />
+      <div className="App">
+        <Router>
+          <AuthProvider>
+            <Navbar/>
 
-          <Routes>
-            <Route path='/' exact element={<Index />} />
-            <Route path='/movie/:movieID/' exact element={<Movie />} />
-            <Route path='/person/:personID/' exact element={<Person />} />
-            <Route path='/movies/' exact element={<Movies />} />
+            <Routes>
+              <Route path='/' exact element={<Index />} />
+              <Route path='/movie/:movieID/' exact element={<Movie />} />
+              <Route path='/person/:personID/' exact element={<Person />} />
+              <Route path='/movies/' exact element={<Movies />} />
 
-            <Route path='/preloader/' exact element={<Preloader />} />
-            <Route path='/admin/' exact element={<Admin />} />
-            <Route path='/watchlist/'  element={<Watchlist />} />
-            <Route path='/recommend/' exact element={<Recommender />} />
+              <Route path='/preloader/' exact element={<Preloader />} />
+              <Route path='/admin/' exact element={<Admin />} />
+              <Route path='/watchlist/'  element={<Watchlist />} />
+              <Route path='/recommend/' exact element={<Recommender />} />
 
-            <Route path='/reviews/' exact element = {<Reviews />} />
-            <Route path='/makereview/' exact element = {<NewReview />} />
-            <Route path='/libcontents/:library_name/' exact element={<LibContents />} />
+              <Route path='/reviews/' exact element = {<Reviews />} />
+              <Route path='/makereview/' exact element = {<NewReview />} />
+              <Route path='/libcontents/:library_name/' exact element={<LibContents />} />
 
-            <Route path='/account/profile' element={<Profile/>} />
-            <Route path='/account/statistics/' exact element = {<Statistics />} />
-
-
-            <Route path='/auth' exact element={<Auth/>}>
-              <Route path='login/' element={<Login/>} />
-              <Route path='register/' element={<Register/>} />
-              <Route path='forgot-password/' element={<ForgotPassword />} />
-              <Route path='reset-password/:secretToken/' element={<ResetPassword />} />
-            </Route>
+              <Route path='/account/profile' element={<Profile/>} />
+              <Route path='/account/statistics/' exact element = {<Statistics />} />
 
 
-          </Routes>
-        </AuthProvider>
-        <CopyrightNotice />
-    </Router>
-  </div>
+              <Route path='/auth' exact element={<Auth/>}>
+                <Route path='login/' element={<Login/>} />
+                <Route path='register/' element={<Register/>} />
+                <Route path='forgot-password/' element={<ForgotPassword />} />
+                <Route path='reset-password/:secretToken/' element={<ResetPassword />} />
+              </Route>
+
+
+            </Routes>
+          </AuthProvider>
+          <CopyrightNotice />
+        </Router>
+      </div>
+    </ThemeProvider>
 
   );
 }
