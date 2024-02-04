@@ -1,13 +1,21 @@
-import React, { useState , useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import axiosInstance from '../api/api';
 import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import './auth/Auth.css'
+import React from 'react'
+
+import  AuthContext  from '../context/AuthContext'
+
+
 
 
 export default function Profile() {
   const { pathname } = useLocation();
 
     const navigate = useNavigate();
+    // Assuming AuthContext provides a state named authTokens
+    const {authTokens} = useContext(AuthContext);
 
     const [userProfile, setUserProfile] = useState({
         username: '',
@@ -25,16 +33,22 @@ export default function Profile() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
+
+    const fetchUserProfile = async (userId) => {
+      try {
+        const response = await axiosInstance.get(`/user-profile/${userId}`, null, {
+          headers: {
+             'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+             'Content-Type': 'application/json'
+          },
+        });
+        setUserProfile(response.data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
     useEffect(() => {
-        const fetchUserProfile = async (userId) => {
-          try {
-            const response = await axiosInstance.get(`/user-profile/${userId}`);
-            setUserProfile(response.data);
-          } catch (error) {
-            console.error('Error fetching user profile:', error);
-          }
-        };
-    
         // Replace userId with the actual user ID (you need to get it from somewhere)
         fetchUserProfile(1); // userId = 1
       }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
@@ -56,7 +70,12 @@ export default function Profile() {
 
         try {
             const userId = 1; // Replace with the actual user ID
-            const response = await axiosInstance.post(`/update-profile/${userId}`, payload);
+            const response = await axiosInstance.post(`/update-profile/${userId}`, payload, null, { /// ................ CHANGEEEEE
+              headers: {
+                 'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+                 'Content-Type': 'application/json'
+              },
+            });
             navigate('/', {replace:true})
         }
         catch (error) {
@@ -70,14 +89,16 @@ export default function Profile() {
 
 
   return (
+    <div className='auth-page'>
     <div className='auth-container'>
-      <div className='form-wrapper'>
-          <form onSubmit={submit}>
-          <h1 className='title-with-line'>User Profile</h1>
 
-              <div className='form-input'>
-                  <input type='text' placeholder='Username' required value={username} onChange={(e) => setUsername(e.target.value)}/>
-              </div>
+    <div className='form-wrapper'>
+        <form onSubmit={submit}>
+        <h1>User Profile</h1>
+
+            <div className='form-input'>
+                <input type='text' placeholder='Username' readOnly value={username} onChange={(e) => setUsername(e.target.value)}/>
+            </div>
 
               <div className='form-input'>
                   <input type='text' placeholder='First name' required value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
@@ -96,13 +117,15 @@ export default function Profile() {
               </div>
 
 
-              <button type='submit' className='btn btn-primary btn-w100'>Update Profile</button>
-              
-              <p className='form-error'>{error}</p>
-              <p className='form-success'>{success}</p>
+            <button type='submit' className='btn btn-primary btn-w100'>Update Profile</button>
+            
+            <p className='form-error'>{error}</p>
+            <p className='form-success'>{success}</p>
 
-          </form>
-      </div>
+        </form>
+    </div>
+    
+    </div>
     </div>
   )
 }
