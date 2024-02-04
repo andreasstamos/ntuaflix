@@ -4,7 +4,7 @@ import axiosInstance from '../api/api';
 import { useNavigate } from "react-router-dom";
 import './auth/Auth.css'
 import React from 'react'
-
+import { useLocation } from 'react-router-dom';
 import  AuthContext  from '../context/AuthContext'
 
 
