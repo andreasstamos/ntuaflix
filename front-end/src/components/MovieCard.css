@@ -15,7 +15,6 @@
     /* white-space: nowrap; */
 
   }
-  
   .card {
     width: 250px;
     height: 380px;
@@ -129,4 +128,12 @@
   .card .info a.idea:hover {
     background: red;
     color: white;
+  }
+
+
+  @media screen and (max-width:720px) {
+    .card {
+      width: 200px;
+      height: 307px;
+    }
   }

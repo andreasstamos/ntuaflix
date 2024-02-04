@@ -8,6 +8,7 @@
     background-size: 100%; 
     background-repeat: no-repeat;
     left: 0;
+    background-size: cover;
 }
 
 .reviews-navbar {
@@ -30,7 +31,7 @@
     color: rgb(162, 16, 206);
   }
   
-  .reviews-navbar a:hover {
-    border-bottom: 2px solid rgb(162, 16, 206);
-  } 
+.reviews-navbar a:hover {
+  border-bottom: 2px solid rgb(162, 16, 206);
+} 
 

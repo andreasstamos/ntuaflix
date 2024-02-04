@@ -157,4 +157,3 @@ async def react(session_id: token_dependency, review_id: int, like: bool, db: db
                 db_review.likes-=1
                 db_review.dislikes+=1
             db.commit()
-

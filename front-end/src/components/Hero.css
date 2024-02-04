@@ -141,7 +141,7 @@
 
 .hero .pyrforos-image {
   margin-top: 50px;
-  width: 120px;
+  width: 100px;
   height: auto;
   position: absolute;
   bottom: 70px;
@@ -160,7 +160,7 @@
   }
 }
 
-@media screen and (max-height: 720px) {
+@media screen and (max-height: 770px) {
   .hero .pyrforos-image {
     display: none;
   }
