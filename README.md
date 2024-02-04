@@ -42,3 +42,20 @@ npm install
 4. Run `back-end/input_tsv.py` to import data into the database from the tsv files.
 5. Run `back-end/main.py` to run the back-end code
 6. While `back-end/main.py` is running, run `npm start` in `front-end/` folder to start the front-end
+
+# NTUAFLIX
+
+**Table of Contents**
+
+[TOCM]
+
+[TOC]
+
+###Introduction
+Access NTUAFLIX [here](http://ntuaflix.cloudns.be/ "here").
+<img src="https://raw.githubusercontent.com/ntua/softeng23-34/main/front-end/public/meta-image.png?token=GHSAT0AAAAAACNYD6LELDRNDVX37U76O25IZN66RPA" style="border-radius:8px;"/>
+
+###Tech Stack
+<div style="display:flex; justify-content: space-between;">
+<img src="https://cdn.worldvectorlogo.com/logos/fastapi.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="17%"/><img src="https://cdn.worldvectorlogo.com/logos/material-ui-1.svg" width="17%"/><img src="https://www.svgrepo.com/show/354115/nginx.svg" width="17%"/>
+</div>
