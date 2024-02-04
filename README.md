@@ -6,6 +6,12 @@ Template repository, used for NTUA/ECE Software Engineering, 2023-2024
 χρησιμοποιήσετε.  Στο τέλος, θα το αντικαταστήσετε με το `README.md` που
 θα περιγράφει το δικό σας project.
 
+## Prerequisites
+
+1. node, npm ...
+2. python, pip ...
+3. DBMS
+
 ## Quick Setup for Virtual Environment
 
 ```bash
@@ -22,13 +28,7 @@ source .venv/bin/activate
 pip install -r back-end/requirements.txt
 ```
 
-Alternative:
-
-```bash
-pip install sqlalchemy python-dotenv pymysql aiofiles fastapi flatten_dict aiocsv jose python-jose passlib python-multipart pydantic[email] uvicorn frozendict pandas
-```
-
-Additional for MySQL
+### Additional for MySQL
 ```bash
 pip install pymysql
 ```

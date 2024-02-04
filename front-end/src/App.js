@@ -18,7 +18,7 @@ import ResetPassword from './pages/auth/ResetPassword';
 import LibContents from './pages/LibContents';
 import Reviews from './pages/Reviews';
 import NewReview from './pages/MakeReview';
-import Profile from './pages/auth/Profile';
+import Profile from './pages/Profile';
 
 function App() {
   
@@ -38,6 +38,7 @@ function App() {
             <Route path='/admin/' exact element={<Admin />} />
             <Route path='/watchlist/'  element={<Watchlist />} />
             <Route path='/recommend/' exact element={<Recommender />} />
+            <Route path='/profile' element={<Profile/>} />
 
             <Route path='/reviews/' exact element = {<Reviews />} />
             <Route path='/makereview/' exact element = {<NewReview />} />
@@ -48,7 +49,7 @@ function App() {
               <Route path='register/' element={<Register/>} />
               <Route path='forgot-password/' element={<ForgotPassword />} />
               <Route path='reset-password/:secretToken/' element={<ResetPassword />} />
-              <Route path='profile/' element={<Profile/>} />
+              
             </Route>
 
 
