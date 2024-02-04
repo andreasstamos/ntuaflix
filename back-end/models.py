@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Mapped
 import os
 from dotenv import load_dotenv
-from datetime import date
+from datetime import datetime
 from db_type import *
 
 env_path = '.env'
@@ -154,7 +154,7 @@ class Review(Base):
     if DB_TYPE == 'mysql':
         text = Column(String(255), nullable=True)
     stars = Column(Integer,nullable=False)
-    date = Column(Date,default=date)
+    date = Column(Date,default=datetime.utcnow)
     likes = Column(Integer,nullable=True)
     dislikes = Column(Integer, nullable=True)
     user_id = Column(Integer,ForeignKey("users.id"))

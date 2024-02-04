@@ -21,6 +21,9 @@ DEBUG=1
 HOST=localhost
 PORT=8000 # should be the same as the port defined in front-end/src/api/api.js
 DB_TYPE=postgres  # optional if postgres, for MySQL, DB_TYPE=mysql
+SECRET_KEY=your_secret_key
+ALGORITHM=your_algorithm
+FORGET_PWD_SECRET_KEY=your_forget_pwd_secret_key
 ```
 
 ### MySQL helping scripts 
