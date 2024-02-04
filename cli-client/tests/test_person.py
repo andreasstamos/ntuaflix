@@ -3,7 +3,7 @@ import pytest
 import pathlib
 import json
 import random
-from cli import app
+from ntuaflix_cli import app
 from .utils import json_compare2
 
 random.seed(42)

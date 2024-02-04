@@ -3,8 +3,8 @@ import typer
 from rich import print
 import requests
 import urllib
-from utils import load_config, store_config, authenticated, handle_request, print_response, Format
-from config import *
+from .utils import load_config, store_config, authenticated, handle_request, print_response, Format
+from .config import *
 
 app = typer.Typer(help="ntuaFLIX CLI manager")
 

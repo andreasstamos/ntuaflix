@@ -8,7 +8,7 @@ import io
 import csv
 import requests
 
-from config import *
+from .config import *
 
 from enum import Enum
 

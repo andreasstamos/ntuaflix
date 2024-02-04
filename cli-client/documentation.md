@@ -5,7 +5,8 @@ ntuaFLIX CLI manager
 **Usage**:
 
 ```console
-$ [OPTIONS] COMMAND [ARGS]...
+$ ntuaflix-cli [OPTIONS] COMMAND [ARGS]...
+$ python3 -m ntuaflix_cli [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
