@@ -18,6 +18,7 @@ import ResetPassword from './pages/auth/ResetPassword';
 import LibContents from './pages/LibContents';
 import Reviews from './pages/Reviews';
 import NewReview from './pages/MakeReview';
+import Profile from './pages/auth/Profile';
 
 function App() {
   
@@ -47,7 +48,7 @@ function App() {
               <Route path='register/' element={<Register/>} />
               <Route path='forgot-password/' element={<ForgotPassword />} />
               <Route path='reset-password/:secretToken/' element={<ResetPassword />} />
-
+              <Route path='profile/' element={<Profile/>} />
             </Route>
 
 
