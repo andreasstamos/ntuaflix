@@ -45,8 +45,8 @@ async def update_profile(
     if user_profile==None:
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     else:
-        user_profile.first_name = user_profile.get("first_name", user_profile.first_name)
-        user_profile.last_name = user_profile.get("last_name", user_profile.last_name)
+        user_profile.first_name = payload.get("first_name", user_profile.first_name)
+        user_profile.last_name = payload.get("last_name", user_profile.last_name)
 
         db.add(user_profile)
         db.commit()
