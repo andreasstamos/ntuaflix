@@ -58,7 +58,7 @@ def adduser(
     """Adds user to system. Requires authentication."""
     response = handle_request(f"/admin/usermod/{urllib.parse.quote(username)}/{urllib.parse.quote(passw)}", api_key=api_key)
     if response is not None:
-        print(":white_check_mark: [bold green]User successfully created.[/bold green]")
+        print(":white_check_mark: [bold green]User successfully created/modified.[/bold green]")
     else:
         print(":cross_mark: [bold red]User creation failed for unknownr reason.[/bold red]")
 
@@ -70,11 +70,11 @@ def user(
         format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
         ):
     """Returns user details. Requires authentication."""
-    response = handle_request(f"/admin/usermod/{urllib.parse.quote(username)}", api_key=api_key)
+    response = handle_request(f"/admin/users/{urllib.parse.quote(username)}", api_key=api_key, method="GET")
     if response is not None:
         print_response(response,
                 format=format,
-                found_msg=":white_check_mark: [bold green]User found with with following details.[/bold green]",
+                found_msg=":white_check_mark: [bold green]User found with following details.[/bold green]",
                 empty_msg=":magnifying_glass_tilted_right: [bold bright_black]User not found.[/bold bright_black]"
                 )
 

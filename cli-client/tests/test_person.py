@@ -19,11 +19,12 @@ def test_title(login, person):
     result = runner.invoke(app, ['name', '--nameid', person['nameID']])
     assert result.exit_code == 0, result.exit_code
     assert not result.stderr
-    assert json_compare2(result.stdout, person)
+    assert json_compare2(result.stdout, person), (result.stdout, person)
 
 def test_searchname(login):
     result = runner.invoke(app, ["searchname", '--namepart', PERSON_SUBSTRING])
     assert result.exit_code == 0, result.exit_code
     assert not result.stderr
-    assert json_compare2(result.stdout, PEOPLE)
+    assert json_compare2(result.stdout, PEOPLE), result.stdout
+
 
