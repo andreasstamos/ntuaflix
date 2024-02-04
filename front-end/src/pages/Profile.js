@@ -6,6 +6,7 @@ import './auth/Auth.css'
 import React from 'react'
 
 import  AuthContext  from '../context/AuthContext'
+import Preloader from '../components/Preloader';
 
 
 
@@ -16,14 +17,14 @@ export default function Profile() {
     // Assuming AuthContext provides a state named authTokens
     const {authTokens} = useContext(AuthContext);
 
-    const [userProfile, setUserProfile] = useState({
+   /* const [userProfile, setUserProfile] = useState({
         username: '',
         email: '',
         first_name: '',
         last_name: '',
         dob: '',
       });
-
+*/
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -31,25 +32,32 @@ export default function Profile() {
     const [dob, setDob] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [loading, setLoading] = useState(true);
 
 
-    const fetchUserProfile = async (userId) => {
+    const fetchUserProfile = async () => {
       try {
-        const response = await axiosInstance.get(`/user-profile/${userId}`, null, {
+        const response = await axiosInstance.get(`/user-profile`, {
           headers: {
              'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
              'Content-Type': 'application/json'
           },
         });
-        setUserProfile(response.data);
+        //setUserProfile(response.data);
+        setUsername(response.data.username);
+        setEmail(response.data.email);
+        setFirstName(response.data.first_name);
+        setLastName(response.data.last_name);
+        setDob(response.data.dob);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching user profile:', error);
       }
     };
 
     useEffect(() => {
-        // Replace userId with the actual user ID (you need to get it from somewhere)
-        fetchUserProfile(1); // userId = 1
+        
+        fetchUserProfile(); 
       }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
     
 
@@ -68,21 +76,23 @@ export default function Profile() {
 
 
         try {
-            const userId = 1; // Replace with the actual user ID
-            const response = await axiosInstance.post(`/update-profile/${userId}`, payload, null, { /// ................ CHANGEEEEE
+            const response = await axiosInstance.post(`/update-profile`, payload, { 
               headers: {
                  'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
                  'Content-Type': 'application/json'
               },
             });
-            navigate('/', {replace:true})
+            setSuccess('Profile updated successfully');
+            //navigate('/', {replace:true})
         }
         catch (error) {
             setError(error?.response?.data?.detail)
         }
     }
 
-
+    if (loading) {
+      return <Preloader/>;
+    }
   return (
     <div className='auth-page'>
     <div className='auth-container'>
@@ -92,7 +102,7 @@ export default function Profile() {
         <h1>User Profile</h1>
 
             <div className='form-input'>
-                <input type='text' placeholder='Username' readOnly value={username} onChange={(e) => setUsername(e.target.value)}/>
+                <input type='text'  readOnly value={username} />
             </div>
 
             <div className='form-input'>

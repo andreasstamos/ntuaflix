@@ -16,30 +16,28 @@ router = APIRouter()
 
 db_dependency = Annotated[Session,Depends(get_db)]
 
-@router.get("/user-profile/{user_id}")
-@authorize_user
+@router.get("/user-profile")
 async def profile(
-    user_id: int,
-    session_id: token_dependency,
+    user_id: token_dependency,
     db: db_dependency,
     format: FormatType = FormatType.json):
     """"Get user profile"""
+    # exclude password
     user_profile = db.query(User).filter(User.id == user_id).first()
     print(f'User profile: {user_profile}')
     if user_profile==None:
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     else:
-        return user_profile
+        return { "username" : user_profile.username, "first_name" : user_profile.first_name, "last_name" : user_profile.last_name, "email" : user_profile.email, "dob" : user_profile.dob,}
 
-@router.get("/update-profile/{user_id}")
-@authorize_user
+@router.post("/update-profile")
 async def update_profile(
-    user_id: int,
-    session_id: token_dependency,
+    user_id: token_dependency,
+    payload : dict,
     db: db_dependency,
-    payload,
     format: FormatType = FormatType.json):
     """"Update user profile"""
+    print(f'Payload: {payload}')
     user_profile = db.query(User).filter(User.id == user_id).first()
     print(f'User profile: {user_profile}')
     if user_profile==None:
