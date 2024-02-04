@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import Preloader from '../components/Preloader';
 
 export default function Statistics() {
-    const {user} = useContext(AuthContext);
     const {authTokens} = useContext(AuthContext);
 
     const [TopGenres, setTopGenres] = useState(null);
