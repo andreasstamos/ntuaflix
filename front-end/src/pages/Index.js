@@ -3,10 +3,11 @@ import MovieCard from '../components/MovieCard'
 import Hero from '../components/Hero'
 import axiosInstance from '../api/api'
 import Preloader from '../components/Preloader'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import './Index.css'
 
 export default function Index() {
+  const { pathname } = useLocation();
 
 
     const [loading, setLoading] = useState(true);
@@ -29,13 +30,17 @@ export default function Index() {
       fetchMovieData();
     }, [])
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
     function initiateHorizontalScroll(genre) {
       try {
-      const cardContainer = document.getElementById(`${genre}-container`);
-      const cards = cardContainer.querySelectorAll('.card');
-      const cardWidth = cards[0].offsetWidth; // Width of a card plus margin
+        const cardContainer = document.getElementById(`${genre}-container`);
+        const cards = cardContainer.querySelectorAll('.card');
+        const cardWidth = cards[0].offsetWidth; // Width of a card plus margin
 
-      let scrollPosition = 0;
+        let scrollPosition = 0;
 
 
 

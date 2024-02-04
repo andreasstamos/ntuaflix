@@ -1,8 +1,16 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './NotRegistered.css'
 import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
+
 
 export default function NotRegistered() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <div className='not-registered-background'>
         <div className='not-registered-container'>

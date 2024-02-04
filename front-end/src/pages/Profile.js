@@ -4,13 +4,14 @@ import axiosInstance from '../api/api';
 import { useNavigate } from "react-router-dom";
 import './auth/Auth.css'
 import React from 'react'
-
+import { useLocation } from 'react-router-dom';
 import  AuthContext  from '../context/AuthContext'
 
 
 
 
 export default function Profile() {
+  const { pathname } = useLocation();
 
     const navigate = useNavigate();
     // Assuming AuthContext provides a state named authTokens
@@ -82,6 +83,10 @@ export default function Profile() {
         }
     }
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
 
   return (
     <div className='auth-page'>
@@ -95,21 +100,21 @@ export default function Profile() {
                 <input type='text' placeholder='Username' readOnly value={username} onChange={(e) => setUsername(e.target.value)}/>
             </div>
 
-            <div className='form-input'>
-                <input type='text' placeholder='First name' required value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
-            </div>
+              <div className='form-input'>
+                  <input type='text' placeholder='First name' required value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+              </div>
 
-            <div className='form-input'>
-                <input type='text' placeholder='Last name' required value={lastName} onChange={(e) => setLastName(e.target.value)}/>
-            </div>
+              <div className='form-input'>
+                  <input type='text' placeholder='Last name' required value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+              </div>
 
-            <div className='form-input'>
-                <input type='email' placeholder='Email' required value={email} onChange={(e) => setEmail(e.target.value)}/>
-            </div>
-            
-            <div className='form-input'>
-                <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
-            </div>
+              <div className='form-input'>
+                  <input type='email' placeholder='Email' required value={email} onChange={(e) => setEmail(e.target.value)}/>
+              </div>
+              
+              <div className='form-input'>
+                  <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
+              </div>
 
 
             <button type='submit' className='btn btn-primary btn-w100'>Update Profile</button>

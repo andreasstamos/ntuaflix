@@ -5,8 +5,10 @@ import { useContext, useEffect, useState } from 'react'
 import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
 import { Link, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export default function NewReview (props) {
+    const { pathname } = useLocation();
 
     const navigate = useNavigate();
     const gotomovies = () => {
@@ -60,6 +62,10 @@ export default function NewReview (props) {
     const handleStarClick = (value) => {
         setRating(value);
       };
+
+      useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
 
     return (
         <div>

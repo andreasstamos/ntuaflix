@@ -4,9 +4,12 @@ import Loader from '../components/Loader';
 import MovieCard from '../components/MovieCard';
 import AuthContext from '../context/AuthContext'
 import { useContext } from 'react'
+import { useLocation } from 'react-router-dom';
 import './Recommender.css'
 
 export default function Recommender() {
+    const { pathname } = useLocation();
+
     const {authTokens} = useContext(AuthContext);
 
     const [movieData, setMovieData] = useState(null);
@@ -26,6 +29,10 @@ export default function Recommender() {
     useEffect(() => {
         recommendMovie();
     }, [])
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
 
    
   return (
