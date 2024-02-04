@@ -1,4 +1,4 @@
 #!/bin/sh
 
-python3 -m ntuaflix_cli
+python3 -m ntuaflix_cli "$@"
 
