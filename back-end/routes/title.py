@@ -86,16 +86,17 @@ async def get_genres(db:Session =  Depends(get_db)):
 
 @router.get("/recommend-movie")
 async def recommend_movie(is_adult: is_adult_dependency, db: Session = Depends(get_db)) -> TitleObject:
-    count_query = db.query(func.count(Title.tconst))
+    count_query = db.query(func.count(Title.tconst)).filter(Title.image_url != None)
     if not is_adult:
-        count_query = db.query(func.count(Title.tconst)).filter_by(is_adult = False)
+        count_query = count_query.filter_by(is_adult = False)
     
     total_count = count_query.scalar()
     random_index = func.floor(func.random() * total_count)
-    random_title_query = db.query(Title)
+    random_title_query = db.query(Title).filter(Title.image_url != None)
 
     if not is_adult:
-        random_title_query = random_title_query.filter_by(is_adult = False)
+        random_title_query = random_title_query.filter_by(is_adult = False) 
 
     random_title = random_title_query.offset(random_index).limit(1).first()
+
     return random_title
