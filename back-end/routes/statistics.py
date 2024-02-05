@@ -31,7 +31,7 @@ async def genres_per_watchlist(user_id: token_dependency,
                 inner join watchlists on watchlists.id = watchlist_content.watchlist_id
                 where watchlists.user_id = {user_id}
                 group by genre.id, watchlists.id
-                )
+                ) as subquery
             inner join watchlists on watchlists.id = w_id
             order by watchlists.library_name asc, title_count desc, genre_name asc;
         """
@@ -172,16 +172,16 @@ async def num_of_watchlists_containing_title(titleID: str,
     if title is None: raise HTTPException(status_code=404, detail="Not Found")
 
     watchlist = (db.query(func.count(WatchlistContent.title_id))
-                .filter(WatchlistContent.title_id == titleID).first())
+                .filter(WatchlistContent.title_id == titleID).scalar())
     
     users = (db.query(func.count(distinct(Watchlist.user_id)))
              .join(WatchlistContent, WatchlistContent.watchlist_id == Watchlist.id)
-             .filter(WatchlistContent.title_id == titleID).first())
+             .filter(WatchlistContent.title_id == titleID).scalar())
 
     result_watchlists = 0
     result_users = 0
-    if watchlist: result_watchlists = watchlist[0]
-    if users: result_users = users[0]
+    if watchlist: result_watchlists = watchlist
+    if users: result_users = users
 
     if format == FormatType.csv:
         df = pd.DataFrame({'tconst': titleID,
