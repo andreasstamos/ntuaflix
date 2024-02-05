@@ -1,12 +1,15 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
 from schemas import WatchlistStatistics, OverallStatistics
-from sqlalchemy import text
-from database import engine
+from sqlalchemy import distinct, text
+from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import func
+from database import engine, get_db
 from utils import FormatType, token_dependency
 import pandas as pd
 from fastapi.responses import StreamingResponse
 import io
 from starlette import status
+from models import WatchlistContent, Title, Watchlist
 
 router = APIRouter()
 
@@ -154,3 +157,45 @@ async def genres_overall(user_id: token_dependency,
     }
 
     return OverallStatistics_json
+
+
+# This endpoint returns the number of user watchlists
+# containing a specific title
+
+@router.get('/number_watchlists_title/{titleID}', status_code=200)
+async def num_of_watchlists_containing_title(titleID: str,
+                                                format: FormatType = FormatType.json,
+                                                db: Session = Depends(get_db)):
+    
+    title = db.query(Title).get(titleID)
+
+    if title is None: raise HTTPException(status_code=404, detail="Not Found")
+
+    watchlist = (db.query(func.count(WatchlistContent.title_id))
+                .filter(WatchlistContent.title_id == titleID).first())
+    
+    users = (db.query(func.count(distinct(Watchlist.user_id)))
+             .join(WatchlistContent, WatchlistContent.watchlist_id == Watchlist.id)
+             .filter(WatchlistContent.title_id == titleID).first())
+
+    result_watchlists = 0
+    result_users = 0
+    if watchlist: result_watchlists = watchlist[0]
+    if users: result_users = users[0]
+
+    if format == FormatType.csv:
+        df = pd.DataFrame({'tconst': titleID,
+                           'Original Title': title.original_title,
+                           'Number of Watchlists Containing Title': result_watchlists,
+                           'Number of Users who have added the Title to their Watchlists': result_users},
+                           index=[titleID])
+        stream = io.StringIO()
+        df.to_csv(stream, index=False, encoding='utf-8')
+        response = StreamingResponse(iter([stream.getvalue()]),
+                                     media_type="text/csv"
+                                     )
+        response.headers["Content-Disposition"] = "attachment; filename=num_of_watchlists_containing_title.csv"
+
+        return response
+
+    return {"tconst": titleID, "num_of_watchlists" : result_watchlists, "num_of_users": result_users}
