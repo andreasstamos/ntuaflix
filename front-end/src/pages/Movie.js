@@ -32,7 +32,7 @@ export default function Movie() {
   if (loading) return <Preloader/>
   return (
     <div className='movie-page-container' style={{background: `linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url(${movieData.titlePoster})`}}>
-        <div className='movie-container'>
+        <div className='movie-container mt-12'>
             
             <div className='movie-column'>
                 <div className='movie-row'>
@@ -69,7 +69,7 @@ export default function Movie() {
         </div>
 
         
-        <div className='movie-container'>
+        <div className='movie-container mt-12'>
             <div className='movie-column'>
                         <div className='movie-row'>
                             

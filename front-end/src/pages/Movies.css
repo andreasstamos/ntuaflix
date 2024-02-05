@@ -1,6 +1,7 @@
 .page-container {
     margin-top:8rem;
     position: relative;
+    min-height: 60vh;
 }
 .filters {
     width: 95%!important;
