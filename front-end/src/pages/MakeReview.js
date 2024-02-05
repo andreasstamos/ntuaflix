@@ -68,7 +68,7 @@ export default function NewReview (props) {
       }, [pathname]);
 
     return (
-        <div>
+        <div className='page-container'>
         <h1 className='review-header'>Make your review here!</h1>
         <div className='review-form-container'>
             <form className = "review-form" onSubmit = {make_review} >

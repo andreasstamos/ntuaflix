@@ -4,16 +4,16 @@
     /* background-image:url("../assets/images/poster-2.jpg"); */
     min-height: 100vh;
     width: 100%;
-    /* position: absolute; */
+    position: absolute;
     top: 0;
     background-size: cover!important;
     /* background-position: 50% 10%; */
     background-repeat: no-repeat!important;
     left: 0;
-    display: flex;
+    /* display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column; */
 }
 .movie-container {
     width: max(70%, 350px);
@@ -30,7 +30,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     z-index: 1000;
     margin: 0 auto;
-    /* margin-top: 12rem; */
+    margin-top: 12rem;
     padding-inline: max(5%, 0.7rem);
 }
 .movie-genres {
@@ -120,5 +120,11 @@
     }
     .movie-metas {
         width: 100%!important;
+    }
+}
+
+@media screen and (max-width: 659px) {
+    .movie-container {
+        margin-top:8rem;
     }
 }
