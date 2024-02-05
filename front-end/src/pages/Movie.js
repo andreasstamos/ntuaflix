@@ -12,6 +12,7 @@ export default function Movie() {
     const {movieID} = useParams();
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const[watchlistsStats, setWatchlistsStats] = useState(true);
 
 
     async function fetchMovieData() {
@@ -21,8 +22,15 @@ export default function Movie() {
         setLoading(false);
     }
 
+    async function fetchWatchlistsStats() {
+        const response = await axiosInstance.get(`/number_watchlists_title/${movieID}`);
+        
+        setWatchlistsStats(response?.data);
+    }
+
     useEffect(() => {
         fetchMovieData();
+        fetchWatchlistsStats();
     }, [])
 
     useEffect(() => {
@@ -52,6 +60,13 @@ export default function Movie() {
                         <p>When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.</p>
                     </div> */}
                     
+                    <div style={{marginTop: 15, marginBottom: 15}}>
+                        {watchlistsStats && Boolean(watchlistsStats.num_of_watchlists) && Boolean(watchlistsStats.num_of_users)
+                            ? <p>Added by {watchlistsStats.num_of_users} users to&nbsp;
+                                {watchlistsStats.num_of_watchlists} different watchlists!</p>
+                            : <p>Be the first to add the title to your watchlist!</p>}
+                    </div>
+
                     <div className='movie-actions'>
                         <button className='btn btn-primary'>Add to WatchList</button>
                     </div>
