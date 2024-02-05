@@ -25,7 +25,7 @@ Just run:
 ```bash
 docker compose up --build
 ````
-The frontend will be served on port 5000.
+The frontend will be served on port 5000 and the API on port 8000.
 
 ## Manual setup
 

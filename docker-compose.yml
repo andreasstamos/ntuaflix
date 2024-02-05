@@ -34,7 +34,7 @@ services:
       additional_contexts:
         - frontend_src=./front-end
     ports:
-      - "9876:6000"
+      - "8000:6000"
       - "5000:7000"
     depends_on:
       - backend
