@@ -12,7 +12,7 @@ export default function Movie() {
     const {movieID} = useParams();
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const[watchlistsStats, setWatchlistsStats] = useState(true);
+    const[watchlistsStats, setWatchlistsStats] = useState(null);
 
 
     async function fetchMovieData() {
