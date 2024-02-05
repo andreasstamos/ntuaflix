@@ -128,5 +128,11 @@ a.non-underlined {
   text-decoration: none;
 }
 .mt-12 {
-  margin: 12rem !important;
+  margin-top: 12rem !important;
+}
+
+@media screen and (max-width: 700px) {
+  .mt-12 {
+    margin-top:8rem!important;
+  }
 }
