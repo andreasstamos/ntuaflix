@@ -30,7 +30,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     z-index: 1000;
     margin: 0 auto;
-    margin-top: 12rem;
+    /* margin-top: 12rem; */
     padding-inline: max(5%, 0.7rem);
 }
 .movie-genres {

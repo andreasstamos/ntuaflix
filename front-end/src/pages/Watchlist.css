@@ -54,7 +54,8 @@
   }
 
   .watchlist-title {
-    font-size: 60px;
+    /* font-size: 60px; */
+    font-size: clamp(2.5rem, 3vw, 7rem);
     font-weight: bold;
     background: linear-gradient(45deg, #8E24AA, #9C27B0, #673AB7, #3F51B5, #2196F3);
     background-clip: text;

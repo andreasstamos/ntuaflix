@@ -6,6 +6,17 @@ Template repository, used for NTUA/ECE Software Engineering, 2023-2024
 χρησιμοποιήσετε.  Στο τέλος, θα το αντικαταστήσετε με το `README.md` που
 θα περιγράφει το δικό σας project.
 
+# NTUAFLIX
+
+### Introduction
+Access NTUAFLIX [here](http://ntuaflix.cloudns.be/ "here").
+<img src="/front-end/public/meta-image.png" style="border-radius:8px;"/>
+
+### Tech Stack
+<div style="display:flex; justify-content: space-between;">
+<img src="https://cdn.worldvectorlogo.com/logos/fastapi.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="17%"/><img src="https://cdn.worldvectorlogo.com/logos/material-ui-1.svg" width="17%"/><img src="https://www.svgrepo.com/show/354115/nginx.svg" width="17%"/>
+</div>
+
 ## Prerequisites
 
 1. node, npm ...
@@ -48,14 +59,3 @@ npm install
 5. Run `back-end/input_tsv.py` to import data into the database from the tsv files.
 6. Run `back-end/main.py` to run the back-end code
 7. While `back-end/main.py` is running, run `npm start` in `front-end/` folder to start the front-end
-
-# NTUAFLIX
-
-### Introduction
-Access NTUAFLIX [here](http://ntuaflix.cloudns.be/ "here").
-<img src="/front-end/public/meta-image.png" style="border-radius:8px;"/>
-
-### Tech Stack
-<div style="display:flex; justify-content: space-between;">
-<img src="https://cdn.worldvectorlogo.com/logos/fastapi.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="17%"/><img src="https://cdn.worldvectorlogo.com/logos/material-ui-1.svg" width="17%"/><img src="https://www.svgrepo.com/show/354115/nginx.svg" width="17%"/>
-</div>

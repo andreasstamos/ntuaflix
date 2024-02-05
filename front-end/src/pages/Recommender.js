@@ -37,7 +37,7 @@ export default function Recommender() {
    
   return (
     <div className='movie-page-container recommender-bg'>
-        <div className='movie-container'>
+        <div className='movie-container mt-12'>
             <div className='recommend-container'>
                 <h1 className='title-with-line'>Get a Recommendation</h1>
                 {loading && <div className='loading-wrapper'><Loader/></div>}

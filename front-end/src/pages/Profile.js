@@ -103,7 +103,7 @@ export default function Profile() {
 
     <div className='form-wrapper'>
         <form onSubmit={submit}>
-        <h1>User Profile</h1>
+        <h1 className='title-with-line'>User Profile</h1>
 
             <div className='form-input'>
                 <input type='text'  readOnly value={username} />
