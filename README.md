@@ -50,6 +50,7 @@ npm install
 7. While `back-end/main.py` is running, run `npm start` in `front-end/` folder to start the front-end
 
 # NTUAFLIX
+[![Tests](https://github.com/ntua/softeng23-34/actions/workflows/test.yml/badge.svg)](https://github.com/ntua/softeng23-34/actions/workflows/test.yml)
 
 ### Introduction
 Access NTUAFLIX [here](http://ntuaflix.cloudns.be/ "here").
