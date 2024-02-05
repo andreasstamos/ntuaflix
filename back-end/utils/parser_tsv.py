@@ -95,8 +95,8 @@ async def parse_title_principals(afp, session):
                 nconst=row['nconst'],
                 category=category_getter(name=row['category']),
                 job=profession_getter(name=row['job']) if row['job'] != NULL_TOKEN else None,
-                characters=row['characters'],
-                image_url=row['img_url_asset'].replace('{width_variable}', 'original') if row['img_url_asset'] else None
+                characters=row['characters'] if row['characters'] != NULL_TOKEN else None,
+                image_url=row['img_url_asset'].replace('{width_variable}', 'original') if row['img_url_asset'] != NULL_TOKEN else None
             )
             session.add(principal)
         session.commit()
