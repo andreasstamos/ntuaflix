@@ -1,31 +1,15 @@
-# Import necessary libraries
 from typing import List
 from sqlalchemy import create_engine, Sequence,Column, Integer, String, Date, Boolean, ForeignKey, Float, CHAR, REAL, Index, Table
 from sqlalchemy import UniqueConstraint, CheckConstraint, DDL, event
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Mapped
 import os
-from dotenv import load_dotenv
 from datetime import datetime
-from db_type import *
 
-env_path = '.env'
-load_dotenv(dotenv_path=env_path)
-
-DB_USERSNAME = str(os.getenv('DB_USERNAME'))
-DB_PASSWORD = str(os.getenv('DB_PASSWORD'))
-DB_HOST = str(os.getenv('DB_HOST'))
-DB_DATABASE = str(os.getenv('DB_DATABASE'))
-
-DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)
-
-
-# Create a SQLAlchemy engine
-engine = create_engine(DATABASE_URL)
+DB_TYPE = os.getenv('DB_TYPE')
 
 # Create a declarative base class
 Base = declarative_base()
-
 
 # Define the User class
 class User(Base):
@@ -339,29 +323,3 @@ Index('idx_category_id_principals', Principals.category_id)
 Index('idx_job_id_principals', Principals.job_id)
 
 
-# # Create the table in the database
-Base.metadata.create_all(engine)
-
-# # Create a session to interact with the database
-# Session = sessionmaker(bind=engine)
-# session = Session()
-
-# # Example: Adding a user to the database with date of birth and password
-# new_user = User (
-    # username='user',
-    # first_name='user_firstname',
-    # last_name='user_lastname',
-    # email='user@example.com',
-    # dob=date(2002, 2, 2),  # Replace with the actual date of birth
-    # password='secure_password'  # Replace with the actual password
-# )
-
-# session.add(new_user)
-# session.commit()
-
-# # Querying the database
-# user_query = session.query(User).filter_by(username='user').first()
-# print(user_query.username, user_query.email, user_query.dob, user_query.password)
-
-# # Remember to close the session when done
-# session.close()
