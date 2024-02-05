@@ -9,7 +9,7 @@ Template repository, used for NTUA/ECE Software Engineering, 2023-2024
 # NTUAFLIX
 
 ### Introduction
-Access NTUAFLIX [here](http://ntuaflix.cloudns.be/ "here").
+Access NTUAFLIX [here](https://ntuaflix.ddnsfree.com/ "here").
 <img src="/front-end/public/meta-image.png" style="border-radius:8px;"/>
 
 ### Tech Stack
