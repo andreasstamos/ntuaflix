@@ -28,11 +28,12 @@ def upload_data(admin_client, db_sessionmaker, preload):
         with db_sessionmaker() as test_db:
             sql_fn = pathlib.Path(__file__).parent.parent / "testdata/test.sql"
             parsed = urllib.parse.urlparse(str(test_db.bind.url))
-            cmd = ['psql', '-h', parsed.hostname, '-p', str(parsed.port),
+            cmd = ['psql', '-h', parsed.hostname, *(['-p', str(parsed.port)] if parsed.port is not None else []),
                     '-d', parsed.path.lstrip('/'), '-U', parsed.username,
                     '-f', str(sql_fn)]
             env = {}
-            env['PGPASSWORD'] = parsed.password
+            print(parsed.password)
+            if os.getenv('DB_PASSWORD') is not None: env['PGPASSWORD'] = os.getenv('DB_PASSWORD') #ONLY IF USING EXISTING DBMS
             subprocess.run(cmd, check=True, env=env) #, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     else:
         _upload_data_generic(admin_client, "titlebasics", "truncated_data/truncated_title.basics.tsv")
