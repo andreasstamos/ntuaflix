@@ -1,0 +1,21 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "deploy" ]
+
+jobs:
+  test_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install postgresql
+        run: apt install -y postgresql-16
+      - name: Install python requirements
+        run: |
+          cd front-end
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt
+      - name: Testing
+        run: pytest
+
