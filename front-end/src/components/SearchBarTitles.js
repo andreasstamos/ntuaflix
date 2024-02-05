@@ -12,7 +12,6 @@ export default function SearchBarTitles({value, handleChangeValue}) {
     const [options, setOptions] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     async function fetchTitles() {
         const response = await axiosInstance.get(`/search-titles-autocomplete?search_title=${inputValue}` , {headers: {

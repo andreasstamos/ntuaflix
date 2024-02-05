@@ -2,11 +2,12 @@ import React from 'react'
 import './Reviews.css'
 import AuthContext from '../context/AuthContext'
 import { useContext, useEffect, useState } from 'react'
-import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
 import { Link } from 'react-router-dom';
 import ReviewCard from '../components/ReviewCard';
 import { useLocation } from 'react-router-dom';
+
+
 export default function Reviews() {
   const { pathname } = useLocation();
 

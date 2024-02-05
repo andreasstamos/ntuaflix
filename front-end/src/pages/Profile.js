@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
 import axiosInstance from '../api/api';
 import { useNavigate } from "react-router-dom";
 import './auth/Auth.css'
