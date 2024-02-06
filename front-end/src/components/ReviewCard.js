@@ -9,13 +9,13 @@ import AuthContext from '../context/AuthContext'
 import { useContext, useEffect, useState } from 'react'
 
 
-export default function ReviewCard({id, username, title, stars, text, likes, dislikes, date}) {
+export default function ReviewCard({id, username, title, stars, text, likes, dislikes, date, fetchReviews}) {
 
     const { user } = useContext(AuthContext);
     const { authTokens } = useContext(AuthContext);
 
     const starIcons = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; ++i) {
         if (i < stars) {
             starIcons.push(<StarIcon key={i} />);
         } else {
@@ -23,8 +23,9 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
         }
     }
 
-    const [updatedLikes, setUpdatedLikes] = useState(likes);
-    const [updatedDislikes, setUpdatedDislikes] = useState(dislikes);
+    // const [updatedLikes, setUpdatedLikes] = useState(likes);
+    // const [updatedDislikes, setUpdatedDislikes] = useState(dislikes);
+
 
     const handleReaction = async(type) => {
         try {
@@ -34,14 +35,15 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
                 },
               });
               if (response.status===200){
-                console.log("successfully reacted");
-                if (type) {
-                    setUpdatedLikes(prevLikes => prevLikes + 1);
-                    setUpdatedDislikes(prevDislikes => prevDislikes - 1);
-                } else {
-                    setUpdatedDislikes(prevDislikes => prevDislikes + 1);
-                    setUpdatedLikes(prevLikes => prevLikes - 1);
-                }
+                // console.log("successfully reacted");
+                fetchReviews();
+                // if (type) {
+                    // setUpdatedLikes(prevLikes => prevLikes + 1);
+                    // setUpdatedDislikes(prevDislikes => prevDislikes - 1);
+                // } else {
+                    // setUpdatedDislikes(prevDislikes => prevDislikes + 1);
+                    // setUpdatedLikes(prevLikes => prevLikes - 1);
+                // }
             }
         }
         catch(error){
@@ -67,9 +69,11 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
             "{text}"
         </p>
         <div className="review-actions">
-            <span>Likes:{updatedLikes}  </span>
+            {/* <span>Likes:{updatedLikes}  </span> */}
+            <span>Likes:{likes}  </span>
             <button className="like-button"onClick={()=>handleReaction(true)}><AiFillLike /></button>
-            <span>Dislikes:{updatedDislikes}  </span>
+            {/* <span>Dislikes:{updatedDislikes}  </span> */}
+            <span>Dislikes:{dislikes}  </span>
             <button className="dislike-button"onClick={()=>handleReaction(false)}><AiFillDislike /></button>
         </div>
     </div>

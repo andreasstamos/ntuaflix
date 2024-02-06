@@ -17,30 +17,32 @@ export default function Reviews() {
     const [userOnly, setUserOnly] = useState(false);
     const [reviews, setReviews] = useState([]);
 
-    useEffect(() => {
-        const fetchReviews = async () => {
-        setReviews([])
-          try {
-            let endpoint = '/reviews';
-            if (userOnly) {
-              endpoint = `/myreviews/${user.user_id}`;
-            }
-    
-            const response = await axiosInstance.get(endpoint, {
-              headers: {
-                'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
-              },
-            });
-    
-            if (response.status === 200) {
-              setReviews(response?.data);
-              console.log(reviews);
-            }
-          } catch (error) {
-            console.error('Error fetching reviews:', error);
+
+    const fetchReviews = async () => {
+      setReviews([])
+        try {
+          let endpoint = '/reviews';
+          if (userOnly) {
+            endpoint = `/myreviews/${user.user_id}`;
           }
-        };
-    
+  
+          const response = await axiosInstance.get(endpoint, {
+            headers: {
+              'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+            },
+          });
+  
+          if (response.status === 200) {
+            setReviews(response?.data);
+            console.log(reviews);
+          }
+        } catch (error) {
+          console.error('Error fetching reviews:', error);
+        }
+      };
+
+
+    useEffect(() => {    
         fetchReviews();
       }, [user?.user_id, authTokens, userOnly]);
 
@@ -58,14 +60,17 @@ export default function Reviews() {
             <div>
             {reviews && reviews.map((review) => {
             return <ReviewCard
-            id = {review.id}
-            username={review.username} 
-            title={review.title} 
-            stars={review.stars} 
-            likes={review.likes}
-            dislikes = {review.dislikes}
-            text = {review.text}
-            date = {review.uploaded}/>
+              key={review.id}
+              id = {review.id}
+              username={review.username} 
+              title={review.title} 
+              stars={review.stars} 
+              likes={review.likes}
+              dislikes = {review.dislikes}
+              text = {review.text}
+              date = {review.uploaded}
+              fetchReviews = {fetchReviews} 
+            />
         })}
             </div>
         </div>
