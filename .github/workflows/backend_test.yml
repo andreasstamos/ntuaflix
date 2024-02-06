@@ -1,4 +1,5 @@
-name: Tests
+name: Backend Tests
+run-name: Backend Tests
 
 on:
   push:
@@ -22,10 +23,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - name: Debounce 5 minutes
+      - name: Debounce 1 minute
         uses: zachary95/github-action-debounce@main
         with:
-          wait: 300
+          wait: 60
       - name: Installing psql
         run: |
           apt-get update
