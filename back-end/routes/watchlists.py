@@ -110,14 +110,14 @@ async def add_contents(user_id: int, lib_name: str,  movie_tconst: str, session_
     db_link = WatchlistContent(title_id=movie_tconst, watchlist_id=watchlist_id)
     try:
         db.add(db_link)
+        db.commit()
+        db.refresh
+        return JSONResponse(content={"message": " movie added successfully!"}, status_code=200)
     except exc.IntegrityError as e:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail='Unable to add movie {movie_tconst} to watchlist!')
-    db.commit()
-    db.refresh
-    return JSONResponse(content={"message": " movie added successfully!"}, status_code=200)
+            detail='Unable to add movie {movie_tconst} to {lib_name}! Check if it already exists!')
  
         
 @router.delete("/watchlists/{user_id}/{lib_name}/remove") 

@@ -64,14 +64,13 @@ export default function Movie() {
     function handle_watchlists () {
         if (user){
             setShowWatchlists(true);
-            console.log({authTokens})
         }
         else{
             console.log("Authentication failed");
         }
     }
 
-    async function addMovieToWatchlist(watchlist) {
+    const  addMovieToWatchlist = async(watchlist) => {
 
             try {
             const response = axiosInstance.post(`/watchlists/${user.user_id}/${watchlist.library_name}/add?movie_tconst=${movieID}`, null,{

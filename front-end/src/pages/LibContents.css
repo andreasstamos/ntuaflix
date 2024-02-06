@@ -1,5 +1,6 @@
 .watchlist-container {
   margin-right: 100px;
+  margin-left: 20px;
   border: 2px solid #8E24AA; /* Purple border */
   border-radius: 20px;
   overflow: hidden; /* Ensure border-radius is applied to the table */

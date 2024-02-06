@@ -49,14 +49,30 @@
 
 .like-button,
 .dislike-button {
+    font-size:25px;
+    background: local;
     margin-right: 16px;
     cursor: pointer;
+    border:none;
 }
+.like-button:hover,
+.dislike-button:hover {
+    font-size: 35px;  /* Increase font size on hover */
+}
+
+.like-button:hover {
+    color: blueviolet;
+}
+
+.dislike-button:hover {
+    color: blueviolet;
+}
+
 
 .date {
     position:relative;
-    top: 1px;
-    left: 700px;
+    top: 10%;
+    left: 50%;
     font-size: 12px;
     color: black;
 }

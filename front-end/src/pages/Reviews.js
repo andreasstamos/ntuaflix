@@ -58,14 +58,14 @@ export default function Reviews() {
             <div>
             {reviews && reviews.map((review) => {
             return <ReviewCard
-            key={review.id} 
-            user_id={review.user_id} 
-            title_id={review.title_id} 
+            id = {review.id}
+            username={review.username} 
+            title={review.title} 
             stars={review.stars} 
             likes={review.likes}
             dislikes = {review.dislikes}
             text = {review.text}
-            date = {review.date}/>
+            date = {review.uploaded}/>
         })}
             </div>
         </div>

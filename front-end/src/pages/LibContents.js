@@ -124,12 +124,13 @@ export default function LibContents() {
               window.location.reload();
           }
           } catch (error){
-              console.log(error);
-          }
+              console.log(error.status);
+          } finally {
           setAdding(false);
           setAddingMovie([]);
           setTitle(''); 
           window.location.reload();
+          }
       }
 
     if (!user) return <NotRegistered />
