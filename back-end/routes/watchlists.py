@@ -52,7 +52,7 @@ async def view_watchlist_contents(
     else:  
         watchlist_id = db_watchlist.id
         contents = []
-        results = db.query(Title).join(WatchlistContent).filter(WatchlistContent.watchlist==watchlist_id).all()
+        results = db.query(Title).join(WatchlistContent).filter(WatchlistContent.watchlist_id==watchlist_id).all()
         for result in results:
             contents.append(result)   
         if format==FormatType.csv: pass
@@ -99,29 +99,38 @@ async def remove_watchlist(lib_name: str, user_id: int, session_id: token_depend
     db.commit()
     return JSONResponse(content={"message": " Watchlist removed successfully!"}, status_code=200)
  
-@router.post("/watchlists/{user_id}/{lib_name}")
+@router.post("/watchlists/{user_id}/{lib_name}/add")
 @authorize_user 
-async def add_contents(movies: list[TitleObject], lib_name: str, db: db_dependency, user_id: int, session_id: token_dependency):
+async def add_contents(user_id: int, lib_name: str,  movie_tconst: str, session_id: token_dependency, db: db_dependency):
     db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name == lib_name),Watchlist.user_id==user_id).first()
     watchlist_id = db_watchlist.id
-    db.refresh(db_watchlist)
-    for movie in movies:
-        db_link = WatchlistContent(title_id=movie.tconst, watchlist_id=watchlist_id)
+    db_movie = db.query(Title).filter(Title.tconst==movie_tconst).first()
+    if (not db_movie):
+        raise HTTPException(status_code=404, detail=f"This movie doesnt't exist")
+    db_link = WatchlistContent(title_id=movie_tconst, watchlist_id=watchlist_id)
+    try:
         db.add(db_link)
+    except exc.IntegrityError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail='Unable to add movie {movie_tconst} to watchlist!')
     db.commit()
-    
-@router.post("/watchlists/{user_id}/{lib_name}") 
+    db.refresh
+    return JSONResponse(content={"message": " movie added successfully!"}, status_code=200)
+ 
+        
+@router.delete("/watchlists/{user_id}/{lib_name}/remove") 
 @authorize_user 
-async def remove_contents(movies: list[TitleObject], lib_name: str, db: db_dependency, user_id: int, session_id: token_dependency):
+async def remove_contents(movie_tconst: str, lib_name: str, db: db_dependency, user_id: int, session_id: token_dependency):
     db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name == lib_name),Watchlist.user_id==user_id).first()
     watchlist_id = db_watchlist.id
-    db.refresh(db_watchlist)
-    #db.delete(WatchlistContent).where(and_(WatchlistContent.title_id==movie.tconst),WatchlistContent.watchlist_id==watchlist_id)
-    for movie in movies:
-        db_link = db.query(WatchlistContent).filter(and_(WatchlistContent.title_id==movie.tconst),WatchlistContent.watchlist_id==watchlist_id).first()
-        if db_link:
-            db.delete(db_link)
-        else:
-            raise HTTPException(status_code=400, detail=f"Title {movie.originalTitle} is not in this watchlist")
+
+    db_link = db.query(WatchlistContent).filter(and_(WatchlistContent.title_id==movie_tconst),WatchlistContent.watchlist_id==watchlist_id).first()
+    if db_link:
+        db.delete(db_link)
+    else:
+        raise HTTPException(status_code=400, detail=f"Movie {movie_tconst} is not in this watchlist")
     db.commit()
+    return JSONResponse(content={"message": " Watchlist removed successfully!"}, status_code=200)
     

@@ -53,6 +53,11 @@ class WatchlistContent(Base):
     title_id = Column(CHAR(9),ForeignKey("title.tconst"))
     watchlist_id = Column(Integer, ForeignKey("watchlists.id"))
     
+    if DB_TYPE != 'mysql': 
+        __table_args__ = (
+            UniqueConstraint(title_id,watchlist_id, name='movie_occurs_once'),
+        )
+    
 #create different index here  
 Index('watchlist_idx', WatchlistContent.watchlist_id)
 

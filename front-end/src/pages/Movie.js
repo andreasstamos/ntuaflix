@@ -1,19 +1,42 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import './Movie.css'
 import axiosInstance from '../api/api';
 import Preloader from '../components/Preloader';
 import { Link, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
+import { Select, MenuItem } from '@mui/material'
+
 
 export default function Movie() {
     const { pathname } = useLocation();
 
     const {movieID} = useParams();
+    const { user } = useContext(AuthContext);
+    const { authTokens } = useContext(AuthContext);
+
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
     const[watchlistsStats, setWatchlistsStats] = useState(null);
+    const [show_watchlists, setShowWatchlists] = useState(false);
+    const [watchlists, setWatchlists] = useState([]);
 
+    async function fetchUserWatchlists() {
+        if (user){
+            const response = await axiosInstance.get(`/watchlists/${user.user_id}`, {
+                headers: {
+                  'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
+                },
+              });   
+              setWatchlists(response?.data);
+              console.log(watchlists);  
+        }
+        else{
+            console.log('Not Authenticated');
+            setWatchlists(null);
+        }
+    }
 
     async function fetchMovieData() {
         const response = await axiosInstance.get(`/title/${movieID}`);
@@ -31,11 +54,41 @@ export default function Movie() {
     useEffect(() => {
         fetchMovieData();
         fetchWatchlistsStats();
+        fetchUserWatchlists();
     }, [])
 
     useEffect(() => {
         window.scrollTo(0, 0);
       }, [pathname]);
+
+    function handle_watchlists () {
+        if (user){
+            setShowWatchlists(true);
+            console.log({authTokens})
+        }
+        else{
+            console.log("Authentication failed");
+        }
+    }
+
+    async function addMovieToWatchlist(watchlist) {
+
+            try {
+            const response = axiosInstance.post(`/watchlists/${user.user_id}/${watchlist.library_name}/add?movie_tconst=${movieID}`, null,{
+                headers: {
+                'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
+                },
+            }); 
+            console.log(response.status);
+            if (response.status==200){
+                console.log("Movie added successfully");
+            }
+            } catch (error){
+                console.log(error);
+            }
+            setShowWatchlists(false);
+        
+    };
 
   if (loading) return <Preloader/>
   return (
@@ -68,8 +121,24 @@ export default function Movie() {
                     </div>
 
                     <div className='movie-actions'>
-                        <button className='btn btn-primary'>Add to WatchList</button>
+                        {show_watchlists ? (
+                        <div className='dropdown'>
+                            <div className='dropdown-content'>
+                                                          
+                            {watchlists && watchlists.map(watchlist => {
+                                return <MenuItem value={watchlist.id} >
+                                    <div onClick={() => addMovieToWatchlist(watchlist)}>{watchlist.library_name}</div>
+                                   </MenuItem>
+                            })}
+
+                            </div>
+                            <button className='cancel-btn' onClick = {()=>setShowWatchlists(false)}>Cancel</button>
+                        </div>
+                        ): (
+                            <button className='btn btn-primary' onClick ={handle_watchlists}>Add to WatchList</button>
+                        )}
                     </div>
+        
                 </div>
 
                 {/* <div className='movie-metas'>

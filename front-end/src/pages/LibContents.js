@@ -4,14 +4,13 @@ import { useContext, useEffect, useState, useMemo } from 'react'
 import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
 import { useParams } from 'react-router-dom';
-import { CgPlayListAdd, CgTrash} from "react-icons/cg";
-import LibContent from '../components/LibContent';
-import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import { CgPlayListAdd, CgTrash, CgYoutube , CgPlayListRemove, CgSearch} from "react-icons/cg";
 import './LibContents.css'
 
 
+
 export default function LibContents() {
-  const { pathname } = useLocation();
 
     const {user} = useContext(AuthContext);
     const { authTokens } = useContext(AuthContext);
@@ -25,7 +24,10 @@ export default function LibContents() {
     }), [library_name]);
 
     const [movies, setMovies] = useState([]); 
-    const [status, setStatus]= useState();
+    const [status, setStatus]= useState(null);
+    const [adding, setAdding]=useState(false);
+    const [title, setTitle]=useState('');
+    const [addingMovie, setAddingMovie]=useState(null);
 
     
     useEffect(() => {
@@ -38,22 +40,22 @@ export default function LibContents() {
             });
     
             if (response.status === 200) {
-              setMovies(response.data);
+              setMovies(response?.data);
             }
             else {
                 setStatus(response.status);
             }
           } catch (error) {
             if (error.response && error.response.status in response_dict) {
-                // Handle 404 error specifically
                 setStatus(error.response.status);
             }
             console.error(`Error fetching contents for ${library_name}:`, error);
           }
+          console.log(movies);
         };
     
         fetchLibContents();
-      }, [library_name, user?.user_id, authTokens, response_dict]);
+      }, [user?.user_id, authTokens,library_name]);
       
 
       const removeWatchlist = async () => {
@@ -69,40 +71,149 @@ export default function LibContents() {
           }
         }
           catch (error){
-            console.error(error,status);
+            console.error(error.status);
           }
           
         };
 
-        useEffect(() => {
-          window.scrollTo(0, 0);
-        }, [pathname]);
-        
+        const removeMovie = async (movie) => {
+          try{
+            const response = await axiosInstance.delete(`/watchlists/${user.user_id}/${library_name}/remove?movie_tconst=${movie.titleID}`, {
+              headers: {
+                'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+              },
+            });
+            if (response.status === 200){
+              console.log("Movie remoced successfully");
+              window.location.reload();
+            }
+          }catch (error){
+            console.log(error.status);
+          }
+        };
+
+        const fetchMovie = async (e) =>{
+          e.preventDefault();
+          try {
+          const response = await axiosInstance.get(`/search-titles-autocomplete?search_title=${title}`, {
+            headers: {
+              'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
+              },
+          
+          });
+          if (response.status===200){
+            setAddingMovie(response?.data);
+            console.log(addingMovie, title, response);
+          }
+        }catch(error){
+          console.log(error.status);
+        }
+        setTitle('');
+        }
+      
+      const add_movie = async (movie_id) => {
+        try {
+          const response = axiosInstance.post(`/watchlists/${user.user_id}/${library_name}/add?movie_tconst=${movie_id}`, null,{
+              headers: {
+              'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
+              },
+          }); 
+          console.log(response.status);
+          if (response.status==200){
+              console.log("Movie added successfully");
+              window.location.reload();
+          }
+          } catch (error){
+              console.log(error);
+          }
+          setAdding(false);
+          setAddingMovie([]);
+          setTitle(''); 
+          window.location.reload();
+      }
 
     if (!user) return <NotRegistered />
 
     return (
         <div>
 
-          {status ? (
+          {status && status !==204? (
                 <div>
                 <h2 className="watchlist-title">{response_dict[status]}</h2>
-                {status === 204 && 
-                <div>
-                <button className='btn btn-primary add-movie button-align-center'> <CgPlayListAdd />Add Movies</button>
-                <button className='btn btn-primary remove-lib button-align-center' onClick={removeWatchlist}><CgTrash/>Remove Watchlist</button>
-                </div>
-                }
+             
             </div>
           ) :
 
           (
             <div>
+              {status ===204 &&
+              <h2 className="watchlist-title">{response_dict[status]}</h2>
+              }
+              {!status && 
+              <div>
             <h1 className="watchlist-title">All movies in '{library_name}'</h1>
-            <button className='btn btn-primary add-movie button-align-center'> <CgPlayListAdd />Add Movies </button>
-            <button className='btn btn-primary remove-lib button-align-center' onClick={removeWatchlist}><CgTrash/></button>
-            <LibContent movies={movies} />
+              
+            
+            <div className="watchlist-container">
+          <table className="watchlist-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Movie Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            {movies && movies.map((movie, index) => (
+              <tr key={index} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
+                <td>{index + 1}</td>
+                <td>{movie.original_title}</td>
+                <td><img src = {movie.titlePoster} alt="Movie Poster" className="poster-prev"/></td>
+                <td><Link to={`/movie/${movie.titleID}`}><CgYoutube /></Link></td>
+                <td>
+                <button className="delete-button" onClick={()=>removeMovie(movie)}><CgPlayListRemove/></button>
+              </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+          </div>
+          </div>
+          }
+
+          <div>
+          <button className='btn btn-primary add-movie button-align-center' onClick ={()=>setAdding(true)}> 
+            <CgPlayListAdd />Add Movies 
+            </button>
+             <button className='btn btn-primary remove-lib button-align-center' 
+          onClick={removeWatchlist}><CgTrash/>Delete {library_name}
+          </button>
+         </div>
+        {adding && (
+         <div className='vertical-form-container'>
+          <form className='vertical-form' onSubmit={fetchMovie}>
+            <div>
+            <input value = {title} onChange = {(e) => setTitle(e.target.value)} 
+             type="text" placeholder="Enter Original Title" id="title" name="title" required/>
+             <button><CgSearch/></button>
+             </div>
+          </form>
+          </div>
+    
+
+        )} {addingMovie && (
+          
+          addingMovie.map((movie) => (
+            <div key={movie.titleID} className="image-container">
+            <img src={movie.titlePoster} alt="Fetched Image" />
+            <span>{movie.original_title}</span>
+            <button className='add-movie-btn' onClick={() => add_movie(movie.titleID)}>Add</button>
+          </div>
+          )
+          
+        ))} 
+         
             </div>
+            
           )}
 
           </div>
