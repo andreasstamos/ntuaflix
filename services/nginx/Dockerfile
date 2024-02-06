@@ -3,8 +3,10 @@ FROM node:lts-alpine as builder
 
 WORKDIR /usr/src/app
 
-COPY --from=frontend_src . .
+COPY --from=frontend_src ./package.json .
+COPY --from=frontend_src ./package-lock.json .
 RUN npm ci
+COPY --from=frontend_src . .
 RUN npm run build
 
 #final
