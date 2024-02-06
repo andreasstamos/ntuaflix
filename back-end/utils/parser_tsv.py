@@ -160,12 +160,9 @@ async def parse_title_episode(afp, session):
 
 def resetall(session):
     for table in reversed(Base.metadata.sorted_tables):
-        try:
-            if table.name == "users":
-                session.query(User).filter(not User.is_admin).delete() # not deleting admins
-                continue
-            session.execute(table.delete())
-        except:
-            print(f"Problem deleting table: {table.name} with resetall() function.")
+        if table.name == "users":
+            session.query(User).filter(not User.is_admin).delete() # not deleting admins
+            continue
+        session.execute(table.delete())
     session.commit()
 
