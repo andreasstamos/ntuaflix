@@ -4,6 +4,7 @@ import pathlib
 import json
 import random
 from ntuaflix_cli import app
+from .config import *
 from .utils import json_compare2
 
 random.seed(42)

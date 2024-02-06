@@ -1,9 +1,8 @@
 import pytest
 from typer.testing import CliRunner
 from ntuaflix_cli import app
+from .config import *
 
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "123456"
 
 runner = CliRunner(mix_stderr=False)
 

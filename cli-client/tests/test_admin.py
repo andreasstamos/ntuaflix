@@ -3,6 +3,7 @@ import pytest
 import os
 from ntuaflix_cli import app
 
+from .config import *
 from .utils import stdout_to_json
 
 runner = CliRunner(mix_stderr=False)
@@ -53,7 +54,7 @@ def test_upload(login, resetall):
     _upload_data_generic("newratings",      "truncated_data/truncated_title.ratings.tsv")
 
 def test_user(login):
-    result = runner.invoke(app, ["user", "--username", "admin"])
+    result = runner.invoke(app, ["user", "--username", ADMIN_USERNAME])
     assert result.exit_code == 0, result_exit_code
     assert not result.stderr, result.stderr
 
@@ -61,10 +62,10 @@ def test_user(login):
 
     result_json = stdout_to_json(result.stdout)
 
-    assert result_json["username"] == "admin"
+    assert result_json["username"] == ADMIN_USERNAME
 
 def test_adduser(login):
-    result = runner.invoke(app, ["adduser", "--username", "admin", "--passw", "654321"])
+    result = runner.invoke(app, ["adduser", "--username", ADMIN_USERNAME, "--passw", "654321"])
     assert result.exit_code == 0, result.exit_code
     assert not result.stderr, result.stderr
     assert "User successfully created/modified" in result.stdout, result.stdout
@@ -74,19 +75,19 @@ def test_adduser(login):
     assert not result.stderr, result.stderr
     assert "You have been successfully logged out" in result.stdout
 
-    result = runner.invoke(app, ["login", "--username", "admin", "--passw", "123456"])
+    result = runner.invoke(app, ["login", "--username", ADMIN_USERNAME, "--passw", ADMIN_PASSWORD])
     assert result.exit_code == 0, result_exit_code
     assert not result.stderr, result.stderr
     assert "Unfortunately you were not authenticated (possibly due to wrong credentials)" in result.stdout
 
-    result = runner.invoke(app, ["login", "--username", "admin", "--passw", "654321"])
+    result = runner.invoke(app, ["login", "--username", ADMIN_USERNAME, "--passw", "654321"])
     assert result.exit_code == 0, result_exit_code
     assert not result.stderr, result.stderr
     assert "You have been successfully authenticated" in result.stdout
 
     #CLEANUP
 
-    result = runner.invoke(app, ["adduser", "--username", "admin", "--passw", "123456"])
+    result = runner.invoke(app, ["adduser", "--username", ADMIN_USERNAME, "--passw", ADMIN_PASSWORD])
     assert result.exit_code == 0, result_exit_code
     assert not result.stderr, result.stderr
     assert "User successfully created/modified" in result.stdout, result.stdout
@@ -96,7 +97,7 @@ def test_adduser(login):
     assert not result.stderr, result.stderr
     assert "You have been successfully logged out" in result.stdout
 
-    result = runner.invoke(app, ["login", "--username", "admin", "--passw", "123456"])
+    result = runner.invoke(app, ["login", "--username", ADMIN_USERNAME, "--passw", ADMIN_PASSWORD])
     assert result.exit_code == 0, result_exit_code
     assert not result.stderr, result.stderr
     assert "You have been successfully authenticated" in result.stdout
