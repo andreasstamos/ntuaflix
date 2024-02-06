@@ -5,10 +5,22 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Mapped
 import os
 from datetime import datetime
+from db_type import *
 
-DB_TYPE = os.getenv('DB_TYPE')
+env_path = '.env'
+load_dotenv(dotenv_path=env_path)
 
-# Create a declarative base class
+DB_USERSNAME = str(os.getenv('DB_USERNAME'))
+DB_PASSWORD = str(os.getenv('DB_PASSWORD'))
+DB_HOST = str(os.getenv('DB_HOST'))
+DB_DATABASE = str(os.getenv('DB_DATABASE'))
+
+DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)
+
+
+# Create a SQLAlchemy engine
+engine = create_engine(DATABASE_URL)
+
 Base = declarative_base()
 
 # Define the User class
@@ -327,4 +339,4 @@ Index('idx_nconst_principals', Principals.nconst)
 Index('idx_category_id_principals', Principals.category_id)
 Index('idx_job_id_principals', Principals.job_id)
 
-
+Base.metadata.create_all(engine)
