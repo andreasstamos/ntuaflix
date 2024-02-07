@@ -3,6 +3,7 @@ from typing import Annotated, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import text, MetaData
 import codecs
+from datetime import date
 
 from utils import admin_required, role_dependency
 from passlib.context import CryptContext
@@ -197,7 +198,16 @@ async def user_credentials(
         user.password = pwd_context.hash(password) 
         db.commit()
     else:
-        raise HTTPException(status_code=404, detail=f"User {username} doesn't exist")
+        new_user = User(
+            username=username,
+            first_name='First Name',
+            last_name='Last Name',
+            password=pwd_context.hash(password),
+            dob=date.today(),
+            is_admin=False)
+        
+        db.add(new_user)
+        db.commit()
 
     
 @router.get("/users/{username}")

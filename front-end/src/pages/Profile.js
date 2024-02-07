@@ -6,6 +6,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom';
 import  AuthContext  from '../context/AuthContext'
 import Preloader from '../components/Preloader';
+import NotRegistered from './NotRegistered';
 
 
 
@@ -97,6 +98,8 @@ export default function Profile() {
     if (loading) {
       return <Preloader/>;
     }
+
+    if (!authTokens) return <NotRegistered />;
   return (
     <div className='auth-page'>
     <div className='auth-container'>

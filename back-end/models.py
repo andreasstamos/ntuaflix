@@ -31,7 +31,7 @@ class User(Base):
     username = Column(String(50), unique=True, index=True, nullable=False)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
-    email = Column(String(50), unique=True, nullable=False)
+    email = Column(String(50), unique=True, nullable=True)
     password = Column(String(500), nullable=False)
     dob = Column(Date, nullable=False)
     is_admin = Column(Boolean, default=False)

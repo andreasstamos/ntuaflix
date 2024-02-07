@@ -14,7 +14,6 @@ passwords = ['admin1', 'admin2', 'admin3', 'admin4', 'admin5', 'admin6']
 
 for i, (username, password) in enumerate(zip(usernames, passwords), 1):
     admin_data = {
-        'id': i,
         'username': username,
         'first_name': f'Admin{i}',
         'last_name': f'Last{i}',
