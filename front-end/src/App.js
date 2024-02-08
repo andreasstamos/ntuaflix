@@ -21,6 +21,8 @@ import NewReview from './pages/MakeReview';
 import Profile from './pages/Profile';
 import Statistics from './pages/Statistics';
 import CopyrightNotice from './components/CopyrightNotice';
+import WatchlistStats from './pages/WatchlistStats';
+import ReviewsStats from './pages/ReviewsStats';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -59,6 +61,8 @@ function App() {
 
               <Route path='/account/profile' element={<Profile/>} />
               <Route path='/account/statistics/' exact element = {<Statistics />} />
+              <Route path='/account/statistics/watchlists/' exact element = {<WatchlistStats />} />
+              <Route path='/account/statistics/reviews/' exact element = {<ReviewsStats />} />
 
 
               <Route path='/auth' exact element={<Auth/>}>

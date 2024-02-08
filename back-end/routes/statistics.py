@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from schemas import WatchlistStatistics, OverallStatistics
+from schemas import WatchlistStatistics, OverallStatistics, ReviewStatistics
 from sqlalchemy import distinct, text
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
@@ -9,7 +9,7 @@ import pandas as pd
 from fastapi.responses import StreamingResponse
 import io
 from starlette import status
-from models import WatchlistContent, Title, Watchlist
+from models import WatchlistContent, Title, Watchlist, Review
 
 router = APIRouter()
 
@@ -159,17 +159,18 @@ async def genres_overall(user_id: token_dependency,
     return OverallStatistics_json
 
 
-# This endpoint returns the number of user watchlists
+# This endpoint returns the number of users having added the
+# title to one of their watchlists and the number of watchlists
 # containing a specific title
 
-@router.get('/number_watchlists_title/{titleID}', status_code=200)
+@router.get('/number_watchlists_title/{titleID}', status_code=status.HTTP_200_OK)
 async def num_of_watchlists_containing_title(titleID: str,
                                                 format: FormatType = FormatType.json,
                                                 db: Session = Depends(get_db)):
     
     title = db.query(Title).get(titleID)
 
-    if title is None: raise HTTPException(status_code=404, detail="Not Found")
+    if title is None: return None
 
     watchlist = (db.query(func.count(WatchlistContent.title_id))
                 .filter(WatchlistContent.title_id == titleID).scalar())
@@ -199,3 +200,142 @@ async def num_of_watchlists_containing_title(titleID: str,
         return response
 
     return {"tconst": titleID, "num_of_watchlists" : result_watchlists, "num_of_users": result_users}
+
+
+# Some statistics based on the user's reviews
+
+@router.get('/user_stats_reviews', response_model=ReviewStatistics, status_code=status.HTTP_200_OK)
+async def reviews_statistics(user_id: token_dependency,
+                             format: FormatType = FormatType.json,
+                             db: Session = Depends(get_db)):
+
+    # Find the total number of reviews posted and the number of users who have posted them
+    result = db.query(func.count(Review.id), func.count(distinct(Review.user_id))).first()
+    num_total_reviews = 0
+    num_total_users = 0
+    if result is None: return None
+    num_total_reviews, num_total_users = result 
+    
+    # Find the average number of stars in all the reviews
+    result = db.query(func.avg(Review.stars)).scalar()
+    avg_stars_all = 0
+    if result:
+        avg_stars_all = round(result, 1)
+
+    # Find the total number of reviews the user has posted
+    result = (db.query(func.count(Review.id))
+               .filter(Review.user_id == user_id).scalar())
+    
+    if result is None: return None
+    user_num_reviews = result
+
+    # Find the average number of stars in all the reviews
+    # posted by the current user
+    result = (db.query(func.avg(Review.stars))
+               .group_by(Review.user_id)
+               .filter(Review.user_id == user_id).scalar())
+    
+    user_avg_stars_all = 0
+    if result: user_avg_stars_all = round(result, 1)
+    
+    # Find the titles the user has given the highest rating
+    result = (db.query(Review.title_id, Title.original_title, Review.date, Review.stars)
+               .join(Title, Title.tconst == Review.title_id)
+               .filter(Review.user_id == user_id)
+               .order_by(Review.stars.desc(), Review.date.asc(), Title.original_title.asc()))
+    
+    highest_ranking = 0
+    highest_ranked_titles = []
+    if result:
+        for row in result:
+            if highest_ranking == 0:
+                highest_ranking = row.stars
+            if row.stars == highest_ranking:
+                highest_ranked_titles.append({
+                    "date_posted": row.date,
+                    "tconst": row.title_id,
+                    "original_title": row.original_title
+                })
+            else: break
+
+    # Find the titles the user has given the lowest rating
+    result = (db.query(Review.title_id, Title.original_title, Review.date, Review.stars)
+               .join(Title, Title.tconst == Review.title_id)
+               .filter(Review.user_id == user_id)
+               .order_by(Review.stars.asc(), Review.date.asc(), Title.original_title.asc()))
+    
+    lowest_ranking = 0
+    lowest_ranked_titles = []
+    if result:
+        for row in result:
+            if lowest_ranking == 0:
+                lowest_ranking = row.stars
+            if row.stars == lowest_ranking:
+                lowest_ranked_titles.append({
+                    "date_posted": row.date,
+                    "tconst": row.title_id,
+                    "original_title": row.original_title
+                })
+            else: break
+
+    # Find the user's reviews that have received the most likes
+    result = (db.query(Review.likes, Review.stars, Review.title_id, Title.original_title, Review.date)
+               .join(Title, Title.tconst == Review.title_id)
+               .filter(Review.user_id == user_id)
+               .order_by(Review.likes.desc(), Review.date.asc(), Title.original_title.asc()))
+    
+    count_likes = 0
+    most_liked_reviews = []
+    if result:
+        for row in result:
+            if row.likes and row.likes == 0:
+                break
+            if count_likes == 0 and row.likes:
+                count_likes = row.likes
+            if row.likes and row.likes == count_likes:
+                most_liked_reviews.append({
+                    "date_posted": row.date,
+                    "stars": row.stars,
+                    "tconst": row.title_id,
+                    "original_title": row.original_title
+                })
+            else: break
+
+    # Find the user's reviews that have received the most dislikes
+    result = (db.query(Review.dislikes, Review.stars, Review.title_id, Title.original_title, Review.date)
+               .join(Title, Title.tconst == Review.title_id)
+               .filter(Review.user_id == user_id)
+               .order_by(Review.dislikes.desc(), Review.date.asc(), Title.original_title.asc()))
+    
+    count_dislikes = 0
+    most_disliked_reviews = []
+    if result:
+        for row in result:
+            if row.dislikes and row.dislikes == 0:
+                break
+            if count_dislikes == 0 and row.dislikes:
+                count_dislikes = row.dislikes
+            if row.dislikes and row.dislikes == count_dislikes:
+                most_disliked_reviews.append({
+                    "date_posted": row.date,
+                    "stars": row.stars,
+                    "tconst": row.title_id,
+                    "original_title": row.original_title
+                })
+            else: break
+    
+    return {
+                "num_total_reviews": num_total_reviews,
+                "num_total_users": num_total_users,
+                "average_stars": avg_stars_all,
+                "user_num_reviews": user_num_reviews,
+                "user_avg_stars": user_avg_stars_all,
+                "highest_ranking": highest_ranking,
+                "lowest_ranking": lowest_ranking,
+                "count_most_likes": count_likes,
+                "count_most_dislikes": count_dislikes,
+                "highest_ranked_titles": highest_ranked_titles,
+                "lowest_ranked_titles": lowest_ranked_titles,
+                "most_liked": most_liked_reviews,
+                "most_disliked": most_disliked_reviews
+            }
