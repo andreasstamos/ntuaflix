@@ -28,13 +28,13 @@ export default function Statistics() {
     return (
         <div className='page-container'>
             <div>
-                <h1 style={{marginBottom: 10, textAlign:'center', color: 'SlateBlue', fontSize: 60}}>
+                <h1 style={{marginBottom: 10, textAlign:'center', color: '#8d2481', fontSize: 65}}>
                     Statistics
                 </h1>
                 <div className='statistics-container'>
                         <div className='statistics-column'>
                             <div className='statistics-row'>
-                                <h2 style={{marginBottom: 10}}>Your Reviews Statistics</h2>
+                                <h2 style={{marginBottom: 10, color: '#c37892'}}>Your Reviews Statistics</h2>
                                 <Link to={`/account/statistics/reviews/`} className='view-more-link'>View More</Link>
                             </div>
                         </div>
@@ -42,7 +42,7 @@ export default function Statistics() {
                 <div className='statistics-container'>
                         <div className='statistics-column'>
                             <div className='statistics-row'>
-                                <h2 style={{marginBottom: 10}}>Your Watchlists Statistics</h2>
+                                <h2 style={{marginBottom: 10, color: '#c37892'}}>Your Watchlists Statistics</h2>
                                 <Link to={`/account/statistics/watchlists/`} className='view-more-link'>View More</Link>
                             </div>
                         </div>
