@@ -70,6 +70,7 @@ export default function Reviews() {
               text = {review.text}
               date = {review.uploaded}
               fetchReviews = {fetchReviews} 
+              myreviews={review.username === user.username}
             />
         })}
             </div>

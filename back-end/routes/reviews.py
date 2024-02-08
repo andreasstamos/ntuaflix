@@ -133,17 +133,18 @@ async def add_review(
  
         
         
-@router.post("/myreviews/{user_id}/remove")  
+@router.delete("/myreviews/{user_id}/remove")  
 @authorize_user
 async def remove_review(review_id: int, db: db_dependency, user_id: int, session_id: token_dependency):
-    db_review = db.query(Review).filter(Review.review_id==review_id).first()
+    db_review = db.query(Review).filter(Review.id==review_id).first()
     if not db_review:
         raise HTTPException(status_code=404, detail=f"Review {review_id} doesn't exist")
     else:
-        # remove related to likes and dislikes 
-        db.delete(ReviewReactions).where(ReviewReactions.review_id==review_id)
-        db.delete(Review).where(review_id==review_id)
+        db.query(ReviewReactions).filter(ReviewReactions.review_id == review_id).delete()
+        db.delete(db_review)
         db.commit()
+        return JSONResponse(content={"message": "Review deleted successfully!"}, status_code=200)
+        
         
 
 @router.post("/reviews/{review_id}/{user_id}")
@@ -161,10 +162,18 @@ async def react(user_id: int, review_id: int, like: bool, session_id: token_depe
         #trigger for insert --> no handling here!!
         db.commit()
         db.refresh
+        return JSONResponse(content={"message": "New Reaction added successfully!"}, status_code=200)
              
     else: 
         if db_reaction.type == like: 
-            raise HTTPException(status_code=400, detail=f"Reaction is up to date")
+            if (like):
+                db_review.likes-=1
+            else:
+                db_review.dislikes-=1
+            db.delete(db_reaction)
+            db.commit()
+            db.refresh
+            return JSONResponse(content={"message": "Reaction was removed successfully!"}, status_code=200)
         else : 
             #db_reaction.type=like
             if like: #increase likes, decrease dislikes in Reviews here
@@ -175,4 +184,5 @@ async def react(user_id: int, review_id: int, like: bool, session_id: token_depe
                 db_review.dislikes+=1
             db_reaction.type = like
         db.commit()
-    db.refresh
+        db.refresh
+        return JSONResponse(content={"message": "Reaction updated state successfully!"}, status_code=200)
