@@ -158,10 +158,7 @@ async def react(user_id: int, review_id: int, like: bool, session_id: token_depe
     if not db_reaction:
         user_reaction = ReviewReactions(user_id=user_id,review_id=review_id,type=like)
         db.add(user_reaction)
-        if like: #increase likes in Reviews here
-            db_review.likes+=1
-        else: #decrease likes in Reviews here
-            db_review.dislikes-=1
+        #trigger for insert --> no handling here!!
         db.commit()
         db.refresh
              

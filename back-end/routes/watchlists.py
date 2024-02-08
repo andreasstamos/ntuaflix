@@ -64,7 +64,7 @@ async def view_watchlist_contents(
 @authorize_user
 async def create_watchlist(lib_name: str, user_id: int, session_id: token_dependency, db: db_dependency, contents: list[TitleObject] = []):
     db_watchlist = Watchlist(library_name = lib_name, item_count = 0, user_id=user_id)
-    try :
+    try:
         db.add(db_watchlist)
         db.commit()
         db.refresh
@@ -81,6 +81,7 @@ async def create_watchlist(lib_name: str, user_id: int, session_id: token_depend
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail='Unable to create watchlist. Maybe {lib_name} already exists!')
+
 
 
         
