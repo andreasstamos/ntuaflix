@@ -149,7 +149,8 @@ export default function ReviewsStats() {
                     <div className='reviews_statistics-column'>
                         <div className='reviews_statistics-row'>
                             <h1 className='title-in-line' style={{marginBottom: 10}}>Your Reviews With the Most Likes</h1>
-                            {Boolean(Stats.count_likes) ? <table>
+                            {Boolean(Stats.count_most_likes) ?
+                            <table>
                                 <tr>
                                     <th>Likes</th>
                                     <th>Stars</th>
@@ -157,11 +158,11 @@ export default function ReviewsStats() {
                                     <th>Date Posted</th>
                                 </tr>
                                 {
-                                    Stats.most_liked_reviews.map(titles => {
+                                    Stats.most_liked.map(titles => {
                                         const date = formatDate(titles.date_posted);
                                         return <tr>
-                                            <td>{Stats.count_likes}</td>
-                                            <td>{titles.stars}</td>
+                                            <td>{Stats.count_most_likes}</td>
+                                            <td>{titles.stars}/5</td>
                                             <td><Link className='a-transition' to={`/movie/${titles.tconst}`}>
                                                 {titles.original_title}</Link>
                                             </td>
@@ -181,7 +182,8 @@ export default function ReviewsStats() {
                     <div className='reviews_statistics-column'>
                         <div className='reviews_statistics-row'>
                             <h1 className='title-in-line' style={{marginBottom: 10}}>Your Reviews With the Most Dislikes</h1>
-                            {Boolean(Stats.count_dislikes) ? <table>
+                            {Boolean(Stats.count_most_dislikes) ?
+                            <table>
                                 <tr>
                                     <th>Dislikes</th>
                                     <th>Stars</th>
@@ -189,11 +191,11 @@ export default function ReviewsStats() {
                                     <th>Date Posted</th>
                                 </tr>
                                 {
-                                    Stats.most_disliked_reviews.map(titles => {
+                                    Stats.most_disliked.map(titles => {
                                         const date = formatDate(titles.date_posted);
                                         return <tr>
-                                            <td>{Stats.count_dislikes}</td>
-                                            <td>{titles.stars}</td>
+                                            <td>{Stats.count_most_dislikes}</td>
+                                            <td>{titles.stars}/5</td>
                                             <td><Link className='a-transition' to={`/movie/${titles.tconst}`}>
                                                 {titles.original_title}</Link>
                                             </td>

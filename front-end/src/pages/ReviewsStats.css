@@ -23,15 +23,21 @@
     border-collapse: collapse;
     margin: 20px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: #000000;
 }
   
 th, td {
     padding: 20px;
     text-align: center;
+    border-color: #000000;
 }
   
 tr:nth-child(even) {
     background-color: #00000044;
+}
+
+tr:nth-child(odd) {
+    background-color: #55535344;
 }
   
 tr:hover {
@@ -40,5 +46,4 @@ tr:hover {
   
 th {
     background-color: #8d24aa81;
-    color: white;
 }
