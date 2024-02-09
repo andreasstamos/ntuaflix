@@ -44,8 +44,6 @@
     transform-style: preserve-3d;
 }
 
-
-
 .boxes .box:nth-child(1) {
     -webkit-transform: translate(100%, 0);
     transform: translate(100%, 0);
@@ -70,8 +68,6 @@
     -webkit-animation: box4 1s linear infinite;
     animation: box4 1s linear infinite;
 }
-
-
 
 .boxes .box > div {
     background: #5C8DF6;
