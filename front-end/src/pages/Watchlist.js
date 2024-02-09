@@ -87,12 +87,12 @@ export default function Watchlist() {
           <input type='text' className='create-input' placeholder='New Watchlist Title' required value={newLibName} onChange={(e) => setNewLibName(e.target.value)}/>
           <div className='create-buttons'>
             <button className = 'create-button' type ="submit">Create</button>
-            <button className = 'create-button' type ="button" onClick={() => setIsCreating(false)} >Cancel</button>
+            <button className = 'create-button' type ="button" onClick={() => setIsCreating(false)}>Cancel</button>
           </div>
         </form>  
       </div>
       ) : (
-      <button className = 'addButton btn btn-primary' type ="submit" onClick={() => setIsCreating(true)} >+ Create New Watchlist</button>
+      <button className = 'addButton btn btn-primary' type ="submit" onClick={() => setIsCreating(true)}>+ Create New Watchlist</button>
       )}
     </div> 
   )

@@ -25,25 +25,36 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-color: #000000;
 }
-  
-th, td {
+.reviews_statistics-container table {
+    margin-top:20px;
+}
+.reviews_statistics-container th, .reviews_statistics-container td {
     padding: 20px;
     text-align: center;
     border-color: #000000;
 }
   
-tr:nth-child(even) {
+.reviews_statistics-container tr:nth-child(even) {
     background-color: #00000044;
 }
 
-tr:nth-child(odd) {
+.reviews_statistics-container tr:nth-child(odd) {
     background-color: #55535344;
 }
   
-tr:hover {
-    background-color: #000000;
+.reviews_statistics-container tr:hover {
+    background-color: #000;
 }
   
-th {
+.reviews_statistics-container th {
     background-color: #8d24aa81;
+}
+
+@media screen and (max-width: 1012px) {
+    .reviews_statistics-container {
+        width: 100%;
+    }
+    .reviews_statistics-container th {
+        padding: 5px;
+    }
 }

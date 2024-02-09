@@ -114,7 +114,7 @@ export default function WatchlistStats() {
             </div>
           </div>
           <div>
-            <h1 style={{ marginLeft: 150, marginTop: 500, marginBottom: 100 }}>
+            <h1 className="statistic-genres-title">
               Take a closer look at all the genres appearing in each one of your
               watchlists:
             </h1>
@@ -126,13 +126,11 @@ export default function WatchlistStats() {
                       <h1 className="title-with-line statistic-watchlist-title">
                         <Link
                           className="a-transition"
-                          to={`/libcontents/${Watchlist.library_name}`}
-                        >
+                          to={`/libcontents/${Watchlist.library_name}`}>
                           {Watchlist.library_name}
                         </Link>
                         <span>#{index + 1}</span>
                       </h1>
-
                       <p style={{ marginBlock: 30 }}>
                         <small>There are {Watchlist.item_count} titles in this
                         watchlist</small>
@@ -143,7 +141,7 @@ export default function WatchlistStats() {
                                 return (
                                 <li>
                                     <p className="statistics-line">
-                                        {genre.genre_name}: <PercentageChart percentage={divide(
+                                        {genre.genre_name}:<PercentageChart percentage={divide(
                                         genre.title_count,
                                         Watchlist.item_count
                                         )} />
