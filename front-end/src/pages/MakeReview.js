@@ -69,7 +69,7 @@ export default function NewReview (props) {
 
     return (
         <div className='page-container'>
-        <h1 className='review-header stroke-link'>Make your review here!</h1>
+        <h1 className='review-header'>Make your review here!</h1>
         <div className='review-form-container'>
             <form className = "review-form" onSubmit = {make_review} >
             <label for="title">Movie Title</label>

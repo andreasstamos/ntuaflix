@@ -9,7 +9,7 @@ from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
-usernames = ['admin_Pik', 'admin_andreas', 'admin_BigNick', 'stefadmin', 'friday_admin', 'mlazoy_as_admin']
+usernames = ['admin_pik', 'admin_andreas', 'admin_bignick', 'stefadmin', 'friday_admin', 'mlazoy_as_admin']
 passwords = ['admin1', 'admin2', 'admin3', 'admin4', 'admin5', 'admin6']
 
 for i, (username, password) in enumerate(zip(usernames, passwords), 1):

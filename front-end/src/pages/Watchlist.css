@@ -1,15 +1,14 @@
 /* Watchlist.css */
 
 .watchlist-background {
-  background: url('../assets/images/watch.png') center/contain no-repeat fixed;
-  min-height: 100vh;
+  /* background: url('../assets/images/watch.png') center/contain no-repeat fixed; */
+   min-height: 100vh;
   width: 100%;
-  /* position: absolute; */
-  top: 0;
+  /*top: 0;
   background-position: center;
   background-size: 20%; 
   background-repeat: no-repeat;
-  left: 0;
+  left: 0; */
 }
 
 .watchlists-navbar {
@@ -18,10 +17,10 @@
     align-items: center;
     text-align: center; 
     flex-wrap: wrap;
-  }
+}
   
-  .watchlists-navbar a {
-    color: white;
+.watchlists-navbar a {
+    color: #fff;
     text-decoration: none;
     padding: 20px 40px;
     font-size: 24px;
@@ -29,11 +28,11 @@
     text-transform: none;
     flex-direction: column; 
     align-items: center; 
-  }
+}
   
   
   .watchlists-navbar a:hover {
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid #fff;
   } 
 
   .watchlists-navbar a span {
@@ -43,7 +42,7 @@
 }
 
   .arrow-indicator {
-    color: white;
+    color: #fff;
     font-size: 18px;
     margin-left: 5px; /* Adjust spacing between options and arrow */
     cursor: pointer; /* Add pointer cursor to indicate it's clickable */

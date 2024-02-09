@@ -110,11 +110,22 @@
     flex-direction: column;
     row-gap: 1rem;
 }
+.watchlist-dropdown {
+    border: 2px solid var(--citrine);
+    padding: 15px;
+    border-radius: 8px;
+
+}
 .cancel-btn {
+    margin-top:10px;
     border:none;
-    text-decoration: underline;
+    text-decoration: none;
     background: local;
     color: #fff;
+    cursor: pointer;
+}
+.select-watchlist-btn {
+    width: 100%;
 }
 
 

@@ -53,24 +53,24 @@ export default function Reviews() {
     return (
         <div className='theme'>
             <nav className='reviews-navbar'>
-                <Link to={'/reviews/'} className='stroke-link' onClick={ () =>  setUserOnly(false) }>All Reviews</Link>
-                <Link to={'/reviews/'} className='stroke-link' onClick={ () => setUserOnly(true)}>My Reviews</Link>
-                <Link to={'/makereview/'} className='stroke-link'>Make Review</Link>
+                <Link to={'/reviews/'} onClick={ () => setUserOnly(false) }>All Reviews</Link>
+                <Link to={'/reviews/'} onClick={ () => setUserOnly(true)}>My Reviews</Link>
+                <Link to={'/makereview/'}>Make Review</Link>
             </nav>
             <div>
-            {reviews && reviews.map((review) => {
-            return <ReviewCard
-              key={review.id}
-              id = {review.id}
-              username={review.username} 
-              title={review.title} 
-              stars={review.stars} 
-              likes={review.likes}
-              dislikes = {review.dislikes}
-              text = {review.text}
-              date = {review.uploaded}
-              fetchReviews = {fetchReviews} 
-            />
+              {reviews && reviews.map((review) => {
+              return <ReviewCard
+                key={review.id}
+                id = {review.id}
+                username={review.username}
+                title={review.title}
+                stars={review.stars}
+                likes={review.likes}
+                dislikes = {review.dislikes}
+                text = {review.text}
+                date = {review.uploaded}
+                fetchReviews = {fetchReviews}
+              />
         })}
             </div>
         </div>

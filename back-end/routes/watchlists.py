@@ -105,7 +105,7 @@ async def add_contents(user_id: int, lib_name: str,  movie_tconst: str, session_
     db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name == lib_name),Watchlist.user_id==user_id).first()
     watchlist_id = db_watchlist.id
     db_movie = db.query(Title).filter(Title.tconst==movie_tconst).first()
-    if (not db_movie):
+    if not db_movie:
         raise HTTPException(status_code=404, detail=f"This movie doesnt't exist")
     db_link = WatchlistContent(title_id=movie_tconst, watchlist_id=watchlist_id)
     try:
@@ -115,9 +115,13 @@ async def add_contents(user_id: int, lib_name: str,  movie_tconst: str, session_
         return JSONResponse(content={"message": " movie added successfully!"}, status_code=200)
     except exc.IntegrityError as e:
         db.rollback()
+        error_msg = {
+            'error': True,
+            'msg': 'This movies is already in the watchlist.' # probably :)
+        }
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail='Unable to add movie {movie_tconst} to {lib_name}! Check if it already exists!')
+            detail=error_msg)
  
         
 @router.delete("/watchlists/{user_id}/{lib_name}/remove") 

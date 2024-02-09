@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 
 export const AuthProvider = ({children}) => {    
+
     const [authTokens, setAuthTokens] = useState( () => localStorage.getItem('authTokens') ? localStorage.getItem('authTokens') : null);
     const [user, setUser] = useState( () => localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null);
 
@@ -19,6 +20,7 @@ export const AuthProvider = ({children}) => {
         setAuthTokens(null);
         setUser(null);
         localStorage.removeItem('authTokens');
+        window.location.href = '/';
     }
 
 

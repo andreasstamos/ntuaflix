@@ -24,6 +24,7 @@ import CopyrightNotice from './components/CopyrightNotice';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import UserProtectedRoute from './utils/UserProtectedRoute';
 
 
 const darkTheme = createTheme({
@@ -53,12 +54,12 @@ function App() {
               <Route path='/watchlist/'  element={<Watchlist />} />
               <Route path='/recommend/' exact element={<Recommender />} />
 
-              <Route path='/reviews/' exact element = {<Reviews />} />
-              <Route path='/makereview/' exact element = {<NewReview />} />
-              <Route path='/libcontents/:library_name/' exact element={<LibContents />} />
 
-              <Route path='/account/profile' element={<Profile/>} />
-              <Route path='/account/statistics/' exact element = {<Statistics />} />
+              <Route path='/reviews/' exact element = {<UserProtectedRoute><Reviews /></UserProtectedRoute>} />
+              <Route path='/makereview/' exact element = {<UserProtectedRoute><NewReview /></UserProtectedRoute>} />
+              <Route path='/libcontents/:library_name/' exact element={<UserProtectedRoute><LibContents /></UserProtectedRoute>} />
+              <Route path='/account/profile' element={<UserProtectedRoute><Profile/></UserProtectedRoute>} />
+              <Route path='/account/statistics/' exact element = {<UserProtectedRoute><Statistics /></UserProtectedRoute>} />
 
 
               <Route path='/auth' exact element={<Auth/>}>

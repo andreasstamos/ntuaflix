@@ -22,6 +22,10 @@ export default function Movie() {
     const [show_watchlists, setShowWatchlists] = useState(false);
     const [watchlists, setWatchlists] = useState([]);
 
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+
+
     async function fetchUserWatchlists() {
         if (user){
             const response = await axiosInstance.get(`/watchlists/${user.user_id}`, {
@@ -30,7 +34,6 @@ export default function Movie() {
                 },
               });   
               setWatchlists(response?.data);
-              console.log(watchlists);  
         }
         else{
             console.log('Not Authenticated');
@@ -66,28 +69,35 @@ export default function Movie() {
             setShowWatchlists(true);
         }
         else{
-            console.log("Authentication failed");
+           setError("You must have a NTUAFLIX account in order to have a watchlist!")
         }
     }
 
-    const  addMovieToWatchlist = async(watchlist) => {
-
+    const addMovieToWatchlist = async (watchlist) => {
+        setError(null);
+        setSuccess(null);
             try {
-            const response = axiosInstance.post(`/watchlists/${user.user_id}/${watchlist.library_name}/add?movie_tconst=${movieID}`, null,{
-                headers: {
-                'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
-                },
-            }); 
-            console.log(response.status);
-            if (response.status==200){
-                console.log("Movie added successfully");
-            }
-            } catch (error){
-                console.log(error);
+                const response = await axiosInstance.post(`/watchlists/${user.user_id}/${watchlist.library_name}/add?movie_tconst=${movieID}`, null,{
+                    headers: {
+                    'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`
+                    },
+                }); 
+                if (response.status == 200){
+                    // console.log("Movie added successfully");
+                    setSuccess("Movie added successfully!")
+                }
+            } catch (error) {
+                setError(error?.response?.data?.detail?.msg)
+                // console.log(error?.response?.data?.detail);
             }
             setShowWatchlists(false);
-        
-    };
+};
+
+function cancelBtn() {
+    setShowWatchlists(false);
+    setSuccess(null);
+    setError(null);
+}
 
   if (loading) return <Preloader/>
   return (
@@ -120,22 +130,25 @@ export default function Movie() {
                     </div>
 
                     <div className='movie-actions'>
-                        {show_watchlists ? (
-                        <div className='dropdown'>
+                { show_watchlists ? (
+                        <div className='watchlist-dropdown'>
                             <div className='dropdown-content'>
                                                           
                             {watchlists && watchlists.map(watchlist => {
                                 return <MenuItem value={watchlist.id} >
-                                    <div onClick={() => addMovieToWatchlist(watchlist)}>{watchlist.library_name}</div>
+                                    <div onClick={() => addMovieToWatchlist(watchlist)} className='select-watchlist-btn'>{watchlist.library_name}</div>
                                    </MenuItem>
                             })}
 
                             </div>
-                            <button className='cancel-btn' onClick = {()=>setShowWatchlists(false)}>Cancel</button>
+                            <button className='cancel-btn' onClick={cancelBtn}>Cancel</button>
+
                         </div>
                         ): (
                             <button className='btn btn-primary' onClick ={handle_watchlists}>Add to WatchList</button>
                         )}
+                            {error && <p className='form-error'>{error}</p>}
+                            {success && <p className='form-success'>{success}</p>}
                     </div>
         
                 </div>

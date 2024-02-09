@@ -68,7 +68,7 @@ export default function Watchlist() {
 
     return (
     <div className='watchlist-background' >
-        <h1 className='watchlist-title stroke-link'>My Watchlists</h1>
+        <h1 className='watchlist-title'>My Watchlists</h1>
         <div className='watchlists-navbar'>
 
         {watchlists.map((watchlist) => (

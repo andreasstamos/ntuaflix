@@ -1,6 +1,7 @@
 .watchlist-container {
-  margin-right: 100px;
-  margin-left: 20px;
+  /* margin-right: 100px; */
+  /* margin-left: 20px; */
+  margin: 0 auto;
   border: 2px solid #8E24AA; /* Purple border */
   border-radius: 20px;
   overflow: hidden; /* Ensure border-radius is applied to the table */
@@ -8,9 +9,9 @@
 }
 
 .watchlist-table {
-  margin-left: auto; /* Move the table to the right */
+  margin-left: auto;
   margin-right: auto;
-  width: 100%; /* Adjust the width of the table */
+  /* width: 100%; */
   border-collapse: collapse;
   text-align: center;
 }
@@ -59,18 +60,10 @@
   border-radius: 20%; 
 }
 
-.watchlist-container {
-  margin-right: 100px;
-  border: 2px solid #8E24AA; /* Purple border */
-  border-radius: 20px;
-  overflow: hidden; /* Ensure border-radius is applied to the table */
-  max-width: 1500px;
-}
-
 .watchlist-table {
-  margin-left: auto; /* Move the table to the right */
+  margin-left: auto;
   margin-right: auto;
-  width: 100%; /* Adjust the width of the table */
+  width: 100%;
   border-collapse: collapse;
   text-align: center;
 }
@@ -120,7 +113,8 @@
 }
 
 .watchlist-title {
-  font-size: 60px;
+  /* font-size: 60px; */
+  font-size: clamp(2rem, 2vw, 5rem);
   font-weight: bold;
   background: linear-gradient(45deg, #8E24AA, #9C27B0, #673AB7, #3F51B5, #2196F3);
   background-clip: text;
@@ -131,10 +125,10 @@
 }
 
 .add-movie {
-  position: relative; /* Change position to relative */
-  left: 10%; /* Adjust left position */
-  transform: translateX(-50%); /* Center horizontally */
-  margin-top: 20px; /* Add margin top to create space between the table and button */
+  /* position: relative;  */
+  /* left: 10%; */
+  /* transform: translateX(-50%); */
+  /* margin-top: 20px; */
   /* transform: translate(-50%, -50%); */
   /* padding: 20px 15px; */
   /* background-color: transparent; */
@@ -172,22 +166,23 @@
   transition: background-color 0.3s ease;
   /* font-size: 14px;  */
   /* font-weight: bold;  */
-  position: relative; /* Change position to relative */
-  left: 73%; /* Adjust left position */
+  /* position: relative;  */
+  /* left: 73%; */
   
-  transform: translateY(-90%);
+  /* transform: translateY(-90%); */
 
 }
 
 .remove-lib:hover {
   background-color: var(--error);
-  color: white; /* White text on hover */
+  color: #fff;
 }
 
 .remove-lib:active {
-  background-color: var(--darker-purple); /* Darker purple on click */
-  border-color: var(--darker-purple); /* Darker purple border on click */
+  background-color: var(--darker-purple);
+  border-color: var(--darker-purple);
 }
+
 .button-align-center {
   display: flex;
   flex-direction: row;
@@ -195,12 +190,20 @@
   align-items: center;
 }
 
-
+.watchlist-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90%;
+  margin: 1rem auto;
+  flex-wrap: wrap;
+  row-gap: 1rem;
+}
 
 .vertical-form-container {
-  position: relative;
-  left: 30%;
-  transform: translateY(-120%);
+  /* position: relative; */
+  /* left: 30%; */
+  /* transform: translateY(-120%); */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -236,20 +239,22 @@
 }
 
 .image-container {
-  margin-top: 20px;
+  margin-top: 50px;
+  margin-inline:auto;
   display: flex;
   flex-direction: column;
   align-items: left;
-  position: relative;
-  left: 35%; /* Adjusted left position */
-  top: 20%; /* Same top position as .vertical-form-container */
+  /* position: relative; */
+  /* left: 35%; */
+  /* top: 20%; */
   max-width:fit-content;
-  transform: translateY(-50%);
+  /* transform: translateY(-50%); */
 }
 
 .image-container img {
   max-width: 100%;
   height: auto;
+  margin-inline: auto;
   width: 130px; 
   height: 130px; 
   object-fit: cover; 
@@ -270,4 +275,9 @@
   border: 1px solid #8E24AA;
   padding: 10px;
   border-radius: 10px;
+}
+.movie-table {
+  text-align: left;
+  text-decoration: none;
+  color: #fff;
 }

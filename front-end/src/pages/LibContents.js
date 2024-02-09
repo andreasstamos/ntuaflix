@@ -25,9 +25,9 @@ export default function LibContents() {
 
     const [movies, setMovies] = useState([]); 
     const [status, setStatus]= useState(null);
-    const [adding, setAdding]=useState(false);
-    const [title, setTitle]=useState('');
-    const [addingMovie, setAddingMovie]=useState(null);
+    const [adding, setAdding] = useState(false);
+    const [title, setTitle] = useState('');
+    const [addingMovie, setAddingMovie] = useState(null);
 
     
     useEffect(() => {
@@ -136,10 +136,10 @@ export default function LibContents() {
     if (!user) return <NotRegistered />
 
     return (
-        <div>
+        <>
 
           {status && status !==204? (
-                <div>
+            <div>
                 <h2 className="watchlist-title">{response_dict[status]}</h2>
              
             </div>
@@ -154,7 +154,9 @@ export default function LibContents() {
               <div>
             <h1 className="watchlist-title">All movies in '{library_name}'</h1>
               
-            
+           
+
+         
             <div className="watchlist-container">
           <table className="watchlist-table">
           <thead>
@@ -167,9 +169,8 @@ export default function LibContents() {
             {movies && movies.map((movie, index) => (
               <tr key={index} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
                 <td>{index + 1}</td>
-                <td>{movie.original_title}</td>
+                <td><Link to={`/movie/${movie.titleID}`} className='movie-table'>{movie.original_title}</Link></td>
                 <td><img src = {movie.titlePoster} alt="Movie Poster" className="poster-prev"/></td>
-                <td><Link to={`/movie/${movie.titleID}`}><CgYoutube /></Link></td>
                 <td>
                 <button className="delete-button" onClick={()=>removeMovie(movie)}><CgPlayListRemove/></button>
               </td>
@@ -181,27 +182,40 @@ export default function LibContents() {
           </div>
           }
 
-          <div>
-          <button className='btn btn-primary add-movie button-align-center' onClick ={()=>setAdding(true)}> 
-            <CgPlayListAdd />Add Movies 
+          {/* <div className='watchlist-button-container'>
+            <button className='btn btn-primary add-movie button-align-center' onClick ={()=>setAdding(true)}> 
+              <CgPlayListAdd />Add Movies 
+              </button>
+              <button className='btn btn-primary remove-lib button-align-center' 
+            onClick={removeWatchlist}><CgTrash/>Delete {library_name}
             </button>
-             <button className='btn btn-primary remove-lib button-align-center' 
-          onClick={removeWatchlist}><CgTrash/>Delete {library_name}
-          </button>
-         </div>
-        {adding && (
+         </div> */}
+          <div className='watchlist-button-container'>
+              <button className='btn btn-primary add-movie button-align-center' onClick ={()=>setAdding(true)}> 
+                <CgPlayListAdd />Add Movies
+              </button>
+              {adding && (
          <div className='vertical-form-container'>
           <form className='vertical-form' onSubmit={fetchMovie}>
             <div>
-            <input value = {title} onChange = {(e) => setTitle(e.target.value)} 
+            <input value={title} onChange = {(e) => setTitle(e.target.value)} 
              type="text" placeholder="Enter Original Title" id="title" name="title" required/>
              <button><CgSearch/></button>
              </div>
           </form>
           </div>
+          
     
 
-        )} {addingMovie && (
+        )} 
+              <button className='btn btn-primary remove-lib button-align-center' onClick={removeWatchlist}>
+                  <CgTrash/>Delete {library_name}
+              </button>
+          </div>
+
+             
+
+            {addingMovie && (
           
           addingMovie.map((movie) => (
             <div key={movie.titleID} className="image-container">
@@ -212,12 +226,14 @@ export default function LibContents() {
           )
           
         ))} 
+
+
          
             </div>
             
           )}
 
-          </div>
+          </>
       );
       
 }

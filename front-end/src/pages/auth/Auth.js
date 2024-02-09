@@ -14,7 +14,6 @@ function Auth() {
 
   return (
     <div className='auth-page'>
-        
         <div className='auth-container'>
             {!match && <Navigate to='/auth/login/' replace />}
             <Outlet />
