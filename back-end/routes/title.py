@@ -28,7 +28,7 @@ async def search_title_name(
         query: TqueryObject,
         format: FormatType = FormatType.json,
         db: Session = Depends(get_db)) -> list[TitleObject]:
-    titles = db.query(Title).filter(Title.primary_title.contains(query.titlePart))
+    titles = db.query(Title).filter(Title.original_title.contains(query.titlePart))
     if format == FormatType.csv: return CSVResponse(map(TitleObject.model_validate, titles))
     return titles
 

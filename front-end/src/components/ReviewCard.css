@@ -68,6 +68,18 @@
     color: blueviolet;
 }
 
+.dlt-btn{
+    color:red;
+    border: none;
+    font-size: 25;
+    cursor: pointer;
+    font-weight: bold;
+    background: local;
+}
+.dlt-btn:hover{
+    color:black;
+    font-size: 35;
+}
 
 .date {
     position:relative;

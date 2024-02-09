@@ -17,7 +17,7 @@ DB_DATABASE = str(os.getenv('DB_DATABASE'))
 
 DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)
 
-
+#print(DATABASE_URL)
 # Create a SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
 
@@ -31,7 +31,7 @@ class User(Base):
     username = Column(String(50), unique=True, index=True, nullable=False)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
-    email = Column(String(50), unique=True, nullable=False)
+    email = Column(String(50), unique=True, nullable=True)
     password = Column(String(500), nullable=False)
     dob = Column(Date, nullable=False)
     is_admin = Column(Boolean, default=False)
@@ -39,7 +39,7 @@ class User(Base):
 class Watchlist(Base):
     __tablename__ = 'watchlists'
     
-    id = Column(Integer,primary_key=True, index=True)
+    id = Column(Integer,Sequence('watchlist_id_seq'),primary_key=True, index=True)
     library_name = Column(String, nullable=False, index=True)
     # DIFFERENT
     if DB_TYPE == 'mysql': 
@@ -61,7 +61,7 @@ if DB_TYPE == 'mysql':
 class WatchlistContent(Base):
     __tablename__ = 'watchlist_content'
     
-    id = Column(Integer, primary_key=True, index=False)
+    id = Column(Integer, Sequence('watchlist_content_id_seq'),primary_key=True, index=False)
     title_id = Column(CHAR(9),ForeignKey("title.tconst"))
     watchlist_id = Column(Integer, ForeignKey("watchlists.id"))
     
@@ -149,7 +149,7 @@ event.listen(
 class Review(Base):
     __tablename__ = 'reviews'
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, Sequence('review_id_seq'),primary_key=True, index=True)
     text = Column(String, nullable=True)
     # DIFFERENT
     if DB_TYPE == 'mysql':
@@ -168,12 +168,53 @@ class Review(Base):
 class ReviewReactions(Base):
     __tablename__ = 'reviews_reactions'
     
-    id = Column(Integer, primary_key=True, index=False)
+    id = Column(Integer, Sequence('review_reactions_id_seq'),primary_key=True, index=False)
     type = Column(Boolean, nullable=False) #like==1, dislike==0
     user_id = Column(Integer,ForeignKey("users.id"))
     review_id = Column(Integer, ForeignKey("reviews.id"))
 
 #create triggers for likes and dislikes in Review -> is this really needed?
+
+trigger_ddl_insert_like = DDL("""
+CREATE OR REPLACE FUNCTION increment_like_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE reviews
+    SET likes = likes + 1
+    WHERE id = NEW.review_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER increment_like_trigger
+AFTER INSERT ON reviews_reactions
+FOR EACH ROW
+WHEN (NEW.type = TRUE)
+EXECUTE FUNCTION increment_like_count();
+""")
+
+trigger_ddl_insert_dislike = DDL("""
+CREATE OR REPLACE FUNCTION increment_dislike_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE reviews
+    SET dislikes = dislikes + 1
+    WHERE id = NEW.review_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER increment_dislike_trigger
+AFTER INSERT ON reviews_reactions
+FOR EACH ROW
+WHEN (NEW.type = FALSE)
+EXECUTE FUNCTION increment_dislike_count();
+""")
+
+# Attach triggers 
+event.listen(ReviewReactions.__table__, 'after_create', trigger_ddl_insert_like)
+event.listen(ReviewReactions.__table__, 'after_create', trigger_ddl_insert_dislike)
+
 
 table_person_known_for_titles = Table(
         "person_known_for_titles",

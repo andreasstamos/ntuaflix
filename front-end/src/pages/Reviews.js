@@ -58,19 +58,20 @@ export default function Reviews() {
                 <Link to={'/makereview/'}>Make Review</Link>
             </nav>
             <div>
-              {reviews && reviews.map((review) => {
-              return <ReviewCard
-                key={review.id}
-                id = {review.id}
-                username={review.username}
-                title={review.title}
-                stars={review.stars}
-                likes={review.likes}
-                dislikes = {review.dislikes}
-                text = {review.text}
-                date = {review.uploaded}
-                fetchReviews = {fetchReviews}
-              />
+            {reviews && reviews.map((review) => {
+            return <ReviewCard
+              key={review.id}
+              id = {review.id}
+              username={review.username} 
+              title={review.title} 
+              stars={review.stars} 
+              likes={review.likes}
+              dislikes = {review.dislikes}
+              text = {review.text}
+              date = {review.uploaded}
+              fetchReviews = {fetchReviews} 
+              myreviews={review.username === user.username}
+            />
         })}
             </div>
         </div>

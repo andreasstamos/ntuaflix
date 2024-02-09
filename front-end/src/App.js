@@ -21,6 +21,8 @@ import NewReview from './pages/MakeReview';
 import Profile from './pages/Profile';
 import Statistics from './pages/Statistics';
 import CopyrightNotice from './components/CopyrightNotice';
+import WatchlistStats from './pages/WatchlistStats';
+import ReviewsStats from './pages/ReviewsStats';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -60,6 +62,8 @@ function App() {
               <Route path='/libcontents/:library_name/' exact element={<UserProtectedRoute><LibContents /></UserProtectedRoute>} />
               <Route path='/account/profile' element={<UserProtectedRoute><Profile/></UserProtectedRoute>} />
               <Route path='/account/statistics/' exact element = {<UserProtectedRoute><Statistics /></UserProtectedRoute>} />
+              <Route path='/account/statistics/watchlists/' exact element = {<UserProtectedRoute><WatchlistStats /></UserProtectedRoute>} />
+              <Route path='/account/statistics/reviews/' exact element = {<UserProtectedRoute><ReviewsStats /></UserProtectedRoute>} />
 
 
               <Route path='/auth' exact element={<Auth/>}>

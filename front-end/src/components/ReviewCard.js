@@ -9,10 +9,15 @@ import AuthContext from '../context/AuthContext'
 import { useContext, useEffect, useState } from 'react'
 
 
-export default function ReviewCard({id, username, title, stars, text, likes, dislikes, date, fetchReviews}) {
+export default function ReviewCard({id, username, title, stars, text, likes, dislikes, date, fetchReviews, myreviews}) {
 
     const { user } = useContext(AuthContext);
     const { authTokens } = useContext(AuthContext);
+
+    console.log(myreviews)
+
+    //const [liked, setLiked] = useState(false);
+    //const [disliked, setDisliked] = useState(false);
 
     const starIcons = [];
     for (let i = 0; i < 5; ++i) {
@@ -35,15 +40,24 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
                 },
               });
               if (response.status===200){
-                // console.log("successfully reacted");
                 fetchReviews();
-                // if (type) {
-                    // setUpdatedLikes(prevLikes => prevLikes + 1);
-                    // setUpdatedDislikes(prevDislikes => prevDislikes - 1);
-                // } else {
-                    // setUpdatedDislikes(prevDislikes => prevDislikes + 1);
-                    // setUpdatedLikes(prevLikes => prevLikes - 1);
-                // }
+            }
+        }
+        catch(error){
+            console.log(error);
+        } 
+    }
+
+    const deleteReview = async () => {
+        try {
+            const response = await axiosInstance.delete(`/myreviews/${user.user_id}/remove?review_id=${id}` ,{
+                headers: {
+                  'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+                },
+              });
+              if (response.status===200){
+                console.log("review deleted");
+                fetchReviews();
             }
         }
         catch(error){
@@ -69,13 +83,23 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
             "{text}"
         </p>
         <div className="review-actions">
-            {/* <span>Likes:{updatedLikes}  </span> */}
             <span>Likes:{likes}  </span>
-            <button className="like-button"onClick={()=>handleReaction(true)}><AiFillLike /></button>
-            {/* <span>Dislikes:{updatedDislikes}  </span> */}
+            <button className='like-button' //${liked ? 'liked' : ''}`}
+            onClick={() => {
+            //setLiked(!liked);
+            handleReaction(true);
+            }}><AiFillLike /></button>
+
             <span>Dislikes:{dislikes}  </span>
-            <button className="dislike-button"onClick={()=>handleReaction(false)}><AiFillDislike /></button>
+            <button className='dislike-button' //${disliked ? 'disliked' : ''}`}
+            onClick={() => {
+            //setDisliked(!disliked);
+            handleReaction(false);
+            }}><AiFillDislike /></button>
         </div>
+        {myreviews && 
+            <button className='dlt-btn' onClick={()=>deleteReview()}>delete</button>
+            }
     </div>
     )
 }

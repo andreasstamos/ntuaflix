@@ -1,11 +1,10 @@
 .statistics-container {
-    width: max(50%, 350px);
+    width: max(28%, 350px);
     /* background-color: #1d385c; */
     color: #fff;
-    min-height: 70vh;
+    min-height: 24vh;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     padding:50px;
     border-radius: 40px;
     border: 2px solid rgba(255, 255, 255, .2);
@@ -13,9 +12,11 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     z-index: 1000;
     margin: 0 auto;
-    margin-top: 10rem;
+    margin-top: 5rem;
     margin-bottom: 7rem;
     padding-inline: max(5%, 0.7rem);
+    align-items: center;
+    justify-content: center;
 }
 .statistics-column {
     width: 100%;
