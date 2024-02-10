@@ -26,6 +26,10 @@ class ReviewObj(BaseModel):
     likes: int
     dislikes: int
     uploaded: date
+    
+class UserReaction(BaseModel):
+    like: bool
+    dislike: bool
 
 def ReviewObj_mapping(model_reviews: List[Review], db:db_dependency) -> List[ReviewObj]:
     result = []
@@ -186,3 +190,13 @@ async def react(user_id: int, review_id: int, like: bool, session_id: token_depe
         db.commit()
         db.refresh
         return JSONResponse(content={"message": "Reaction updated state successfully!"}, status_code=200)
+
+@router.get("/reviews/reactions",response_model=UserReaction)
+@authorize_user
+async def liked_by_me(user_id: int, review_id: int, session_id: token_dependency, db:db_dependency):
+    reaction = db.query(ReviewReactions).filter(and_(ReviewReactions.user_id==user_id), (ReviewReactions.review_id==review_id)).first()
+    if reaction is None:
+        return UserReaction(like=False, dislike=False)
+    else :
+        return UserReaction(like=reaction.type, dislike=(not reaction.type))
+        

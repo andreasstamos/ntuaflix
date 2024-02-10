@@ -64,7 +64,16 @@
     color: blueviolet;
 }
 
+.like-button.liked {
+    color: blueviolet;
+}
+
+
 .dislike-button:hover {
+    color: blueviolet;
+}
+
+.dislike-button.disliked {
     color: blueviolet;
 }
 

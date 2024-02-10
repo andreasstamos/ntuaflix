@@ -16,8 +16,8 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
 
     console.log(myreviews)
 
-    //const [liked, setLiked] = useState(false);
-    //const [disliked, setDisliked] = useState(false);
+    const [liked, setLiked] = useState(false);
+    const [disliked, setDisliked] = useState(false);
 
     const starIcons = [];
     for (let i = 0; i < 5; ++i) {
@@ -40,6 +40,8 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
                 },
               });
               if (response.status===200){
+                setLiked(type);
+                setDisliked(type);
                 fetchReviews();
             }
         }
@@ -65,6 +67,23 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
         } 
     }
 
+useEffect(()=>{
+    const userReaction = async () => {
+        try{
+            const response = await axiosInstance.get(`/reviews/reactions?user_id=${user.user_id}&review_id=${id}`, {
+                headers: {
+                    'X-OBSERVATORY-AUTH': `${authTokens ? authTokens : 'None'}`,
+                  },
+            });
+            setLiked(response?.data.like);
+            setDisliked(response?.data.dislike);
+        } catch(error){
+            console.log(error);
+        }
+    }
+    userReaction();
+},[user, authTokens]);
+
 
     return (
         <div className='review-card'>
@@ -84,16 +103,16 @@ export default function ReviewCard({id, username, title, stars, text, likes, dis
         </p>
         <div className="review-actions">
             <span>Likes:{likes}  </span>
-            <button className='like-button' //${liked ? 'liked' : ''}`}
+            <button className={`like-button ${liked ? 'liked' : ''}`}
             onClick={() => {
-            //setLiked(!liked);
+            setLiked(!liked);
             handleReaction(true);
             }}><AiFillLike /></button>
 
             <span>Dislikes:{dislikes}  </span>
-            <button className='dislike-button' //${disliked ? 'disliked' : ''}`}
+            <button className={`dislike-button ${disliked ? 'disliked' : ''}`}
             onClick={() => {
-            //setDisliked(!disliked);
+            setDisliked(!disliked);
             handleReaction(false);
             }}><AiFillDislike /></button>
         </div>
