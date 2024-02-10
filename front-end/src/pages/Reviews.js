@@ -6,6 +6,7 @@ import axiosInstance from '../api/api'
 import { Link } from 'react-router-dom';
 import ReviewCard from '../components/ReviewCard';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios'
 
 
 export default function Reviews() {
@@ -16,6 +17,9 @@ export default function Reviews() {
 
     const [userOnly, setUserOnly] = useState(false);
     const [reviews, setReviews] = useState([]);
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredReviews, setFilteredReviews] = useState(reviews);
 
 
     const fetchReviews = async () => {
@@ -57,6 +61,19 @@ export default function Reviews() {
         window.scrollTo(0, 0);
       }, [pathname]);
 
+      useEffect(() => {
+        const filtered = reviews.filter(review =>
+          review.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          review.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredReviews(filtered);
+      }, [searchQuery, reviews]);
+
+      const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+        console.log(searchQuery);
+      };
+
     return (
         <div className='theme'>
             <nav className='reviews-navbar'>
@@ -64,8 +81,20 @@ export default function Reviews() {
                 <Link to={'/reviews/'} onClick={ () => setUserOnly(true)}>My Reviews</Link>
                 <Link to={'/makereview/'}>Make Review</Link>
             </nav>
+
+            {!userOnly &&
+            <div className='filter-reviews'>
+            <input
+              type="text"
+              placeholder="Search reviews by username / movie title..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            </div>
+            }
+
             <div>
-            {reviews && reviews.map((review) => {
+            {filteredReviews && filteredReviews.map((review) => {
             return <ReviewCard
               key={review.id}
               id = {review.id}
