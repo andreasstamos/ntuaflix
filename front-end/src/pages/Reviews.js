@@ -33,7 +33,14 @@ export default function Reviews() {
           });
   
           if (response.status === 200) {
-            setReviews(response?.data);
+            const sortedReviews = response.data.sort((a, b) => {
+              if (a.upload !== b.upload) {
+                return (a.upload) - (b.upload);
+              } else {
+                return a.id - b.id;
+              }
+            });
+            setReviews(sortedReviews);
             console.log(reviews);
           }
         } catch (error) {
