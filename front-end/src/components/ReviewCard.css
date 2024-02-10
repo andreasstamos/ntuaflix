@@ -89,4 +89,29 @@
     color: black;
 }
 
-/* Add more styling as needed */
+@media (max-width: 768px) {
+    .review-card {
+        width: 85%; /* Occupy full width of viewport on smaller screens */
+    }
+
+    .user-avatar {
+        width: 25px;
+        height: 25px;
+        margin-right: 8px;
+    }
+
+    .user-info {
+        margin-bottom: 8px;
+    }
+
+    .like-button,
+    .dislike-button,
+    .dlt-btn {
+        font-size: 20px; 
+    }
+
+    .date {
+        font-size: 10px; 
+        left:30%
+    }
+}

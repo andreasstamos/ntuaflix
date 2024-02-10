@@ -3,6 +3,7 @@
     width: 100%;
     /* position: absolute; */
     /* top: 0; */
+    background-attachment: fixed;
     background-position: center;
     background-size: 100%; 
     background-repeat: no-repeat;

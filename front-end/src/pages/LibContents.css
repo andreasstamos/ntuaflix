@@ -281,3 +281,38 @@
   text-decoration: none;
   color: #fff;
 }
+
+@media (max-width: 768px) {
+  .watchlist-container{
+    max-width: 90%;
+  }
+  .watchlist-table th,
+  .watchlist-table td {
+      padding: 16px; 
+  }
+
+  .delete-button {
+      font-size: 18px; 
+  }
+
+  .poster-prev {
+      width: 40px; 
+      height: 40px; 
+  }
+
+  .watchlist-title {
+      font-size: clamp(1rem, 3vw, 4rem); 
+      padding: 20px 20px; 
+      margin-top: 100px;
+  }
+
+  .add-movie {
+      font-size: 10px; 
+      padding: 6px 9px; 
+  }
+
+  .remove-lib {
+      font-size: 11px; 
+      padding: 6px 9px; 
+  }
+}
