@@ -16,7 +16,7 @@ export default function ReviewsStats() {
   const [isLoading, setIsLoading] = useState(true);
 
   function divide(x, y) {
-    return Math.floor(x / y).toFixed(1);
+    return (Math.round(10 * x / y)/10).toFixed(1);
   }
 
   function formatDate(date) {

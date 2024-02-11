@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from schemas import WatchlistStatistics, OverallStatistics, ReviewStatistics
 from sqlalchemy import distinct, text
 from sqlalchemy.orm import Session
@@ -170,7 +170,17 @@ async def num_of_watchlists_containing_title(titleID: str,
     
     title = db.query(Title).get(titleID)
 
-    if title is None: return None
+    if title is None:
+        if format == FormatType.csv:
+            df = pd.DataFrame()
+            stream = io.StringIO()
+            df.to_csv(stream, index=False, encoding='utf-8', header=None)
+            response = StreamingResponse(iter([stream.getvalue()]),
+                                     media_type="text/csv")
+            response.headers["Content-Disposition"] = "attachment; filename=num_of_watchlists_containing_title.csv"
+
+            return response
+        return None
 
     watchlist = (db.query(func.count(WatchlistContent.title_id))
                 .filter(WatchlistContent.title_id == titleID).scalar())
@@ -193,8 +203,7 @@ async def num_of_watchlists_containing_title(titleID: str,
         stream = io.StringIO()
         df.to_csv(stream, index=False, encoding='utf-8')
         response = StreamingResponse(iter([stream.getvalue()]),
-                                     media_type="text/csv"
-                                     )
+                                     media_type="text/csv")
         response.headers["Content-Disposition"] = "attachment; filename=num_of_watchlists_containing_title.csv"
 
         return response
@@ -213,12 +222,12 @@ async def reviews_statistics(user_id: token_dependency,
     result = db.query(func.count(Review.id), func.count(distinct(Review.user_id))).first()
     num_total_reviews = 0
     num_total_users = 0
-    if result is None: return None
-    num_total_reviews, num_total_users = result 
+    if result:
+        num_total_reviews, num_total_users = result 
     
     # Find the average number of stars in all the reviews
     result = db.query(func.avg(Review.stars)).scalar()
-    avg_stars_all = 0
+    avg_stars_all = None
     if result:
         avg_stars_all = round(result, 1)
 
@@ -226,8 +235,9 @@ async def reviews_statistics(user_id: token_dependency,
     result = (db.query(func.count(Review.id))
                .filter(Review.user_id == user_id).scalar())
     
-    if result is None: return None
-    user_num_reviews = result
+    user_num_reviews = 0
+    if result:
+        user_num_reviews = result
 
     # Find the average number of stars in all the reviews
     # posted by the current user
@@ -235,7 +245,7 @@ async def reviews_statistics(user_id: token_dependency,
                .group_by(Review.user_id)
                .filter(Review.user_id == user_id).scalar())
     
-    user_avg_stars_all = 0
+    user_avg_stars_all = None
     if result: user_avg_stars_all = round(result, 1)
     
     # Find the titles the user has given the highest rating
@@ -244,13 +254,13 @@ async def reviews_statistics(user_id: token_dependency,
                .filter(Review.user_id == user_id)
                .order_by(Review.stars.desc(), Review.date.asc(), Title.original_title.asc()))
     
-    highest_ranking = 0
+    highest_ranking = None
     highest_ranked_titles = []
     if result:
         for row in result:
-            if highest_ranking == 0:
+            if highest_ranking is None:
                 highest_ranking = row.stars
-            if row.stars == highest_ranking:
+            if highest_ranking and row.stars == highest_ranking:
                 highest_ranked_titles.append({
                     "date_posted": row.date,
                     "tconst": row.title_id,
@@ -264,13 +274,13 @@ async def reviews_statistics(user_id: token_dependency,
                .filter(Review.user_id == user_id)
                .order_by(Review.stars.asc(), Review.date.asc(), Title.original_title.asc()))
     
-    lowest_ranking = 0
+    lowest_ranking = None
     lowest_ranked_titles = []
     if result:
         for row in result:
-            if lowest_ranking == 0:
+            if lowest_ranking is None:
                 lowest_ranking = row.stars
-            if row.stars == lowest_ranking:
+            if lowest_ranking and row.stars == lowest_ranking:
                 lowest_ranked_titles.append({
                     "date_posted": row.date,
                     "tconst": row.title_id,
@@ -284,13 +294,13 @@ async def reviews_statistics(user_id: token_dependency,
                .filter(Review.user_id == user_id)
                .order_by(Review.likes.desc(), Review.date.asc(), Title.original_title.asc()))
     
-    count_likes = 0
+    count_likes = None
     most_liked_reviews = []
     if result:
         for row in result:
             if row.likes and row.likes == 0:
                 break
-            if count_likes == 0 and row.likes:
+            if count_likes is None and row.likes:
                 count_likes = row.likes
             if row.likes and row.likes == count_likes:
                 most_liked_reviews.append({
@@ -307,13 +317,13 @@ async def reviews_statistics(user_id: token_dependency,
                .filter(Review.user_id == user_id)
                .order_by(Review.dislikes.desc(), Review.date.asc(), Title.original_title.asc()))
     
-    count_dislikes = 0
+    count_dislikes = None
     most_disliked_reviews = []
     if result:
         for row in result:
             if row.dislikes and row.dislikes == 0:
                 break
-            if count_dislikes == 0 and row.dislikes:
+            if count_dislikes is None and row.dislikes:
                 count_dislikes = row.dislikes
             if row.dislikes and row.dislikes == count_dislikes:
                 most_disliked_reviews.append({
@@ -324,6 +334,54 @@ async def reviews_statistics(user_id: token_dependency,
                 })
             else: break
     
+    if format == FormatType.csv:
+        stream = io.StringIO()
+
+        general_stats_df = pd.DataFrame({'Total number of Reviews': num_total_reviews,
+                                         'Number of Users Who Have Posted Reviews': num_total_users,
+                                         'Average User Rating (out of 5)': avg_stars_all,
+                                         'The Number of The Reviews You Have Posted': user_num_reviews,
+                                         'Your Average Rating (out of 5)': user_avg_stars_all},
+                                         index=[num_total_reviews])
+        
+        general_stats_df.to_csv(stream, index=False, encoding='utf-8')
+        
+        if highest_ranked_titles:
+            highest_ranked_titles_df = (pd.DataFrame(highest_ranked_titles)
+                                    .rename(columns={'date_posted': 'Date Posted',
+                                                     'original_title': 'Your Highest Rated Titles'}))
+            highest_ranked_titles_df.insert(0, "Stars (out of 5)", highest_ranking, True)
+            highest_ranked_titles_df.to_csv(stream, index=False, encoding='utf-8')
+
+        if lowest_ranked_titles:
+            lowest_ranked_titles_df = (pd.DataFrame(lowest_ranked_titles)
+                                    .rename(columns={'date_posted': 'Date Posted',
+                                                     'original_title': 'Your Lowest Rated Titles'}))
+            lowest_ranked_titles_df.insert(0, "Stars (out of 5)", lowest_ranking, True)
+            lowest_ranked_titles_df.to_csv(stream, index=False, encoding='utf-8')
+
+        if most_liked_reviews:
+            most_liked_reviews_df = (pd.DataFrame(most_liked_reviews)
+                                 .rename(columns={'date_posted': 'Date Posted',
+                                                  'stars': 'Stars (out of 5)',
+                                                  'original_title': 'Titles You Reviewed And Received the Most Likes'}))
+            most_liked_reviews_df.insert(0, "Likes", count_likes, True)
+            most_liked_reviews_df.to_csv(stream, index=False, encoding='utf-8')
+
+        if most_disliked_reviews:
+            most_disliked_reviews_df = (pd.DataFrame(most_disliked_reviews)
+                                 .rename(columns={'date_posted': 'Date Posted',
+                                                  'stars': 'Stars (out of 5)',
+                                                  'original_title': 'Titles You Reviewed And Received the Most Disikes'}))
+            most_disliked_reviews_df.insert(0, "Dislikes", count_dislikes, True)
+            most_disliked_reviews_df.to_csv(stream, index=False, encoding='utf-8') 
+
+        response = StreamingResponse(iter([stream.getvalue()]),
+                                     media_type="text/csv")
+        response.headers["Content-Disposition"] = "attachment; filename=user_reviews_stats.csv"
+
+        return response
+
     return {
                 "num_total_reviews": num_total_reviews,
                 "num_total_users": num_total_users,

@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from typing import Optional
+from pydantic import BaseModel, Field
 from datetime import date
 
 class GenreStatistics(BaseModel):
@@ -28,13 +29,13 @@ class OverallStatistics(BaseModel):
 class ReviewStatistics(BaseModel):
     num_total_reviews: int
     num_total_users: int
-    average_stars: float
+    average_stars: Optional[float] = None
     user_num_reviews: int
-    user_avg_stars: float
-    highest_ranking: int
-    lowest_ranking: int
-    count_most_likes: int
-    count_most_dislikes: int
+    user_avg_stars: Optional[float] = None
+    highest_ranking: Optional[int] = None
+    lowest_ranking: Optional[int] = None
+    count_most_likes: Optional[int] = None
+    count_most_dislikes: Optional[int] = None
     highest_ranked_titles: list[TitleStattistics]
     lowest_ranked_titles: list[TitleStattistics]
     most_liked: list[ReactionStatistics]

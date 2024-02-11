@@ -18,7 +18,7 @@ export default function WatchlistStats() {
   const [isLoading, setIsLoading] = useState(true);
 
   function divide(x, y) {
-    return Math.floor((100 * x) / y);
+    return Math.round((100 * x) / y);
   }
 
   useEffect(() => {
