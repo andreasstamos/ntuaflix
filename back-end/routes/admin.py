@@ -225,10 +225,8 @@ async def view_user_details(
     if format==FormatType.csv:
         values_for_csv = None
         if values:
-            email = None
-            if values.email: email = values.email
             values_for_csv = [[values.id, values.username, values.first_name,
-                              values.last_name, email, values.password,
+                              values.last_name, values.email, values.password,
                               values.dob, values.is_admin]]
     
         df = pd.DataFrame(values_for_csv,
