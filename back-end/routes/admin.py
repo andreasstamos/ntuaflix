@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends, UploadFile, HTTPException
+from fastapi.responses import StreamingResponse
 from typing import Annotated, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import text, MetaData
 import codecs
 from datetime import date
+import pandas as pd
+import io
 
 from utils import admin_required, role_dependency
 from passlib.context import CryptContext
@@ -13,7 +16,7 @@ from database import get_db
 from utils import FormatType, CSVResponse
 from utils import parse_title_basics, parse_title_ratings, parse_title_principals,\
         parse_title_crew, parse_title_akas, parse_name_basics, parse_title_episode, resetall
-from schemas import HealthCheckObject, ResetAllObject, UploadFileObject
+from schemas import HealthCheckObject, ResetAllObject, UploadFileObject, UserDetails
 
 router = APIRouter()
 
@@ -209,8 +212,8 @@ async def user_credentials(
         db.add(new_user)
         db.commit()
 
-    
-@router.get("/users/{username}")
+
+@router.get("/users/{username}", response_model=Optional[UserDetails])
 @admin_required
 async def view_user_details(
     role: role_dependency, 
@@ -219,5 +222,29 @@ async def view_user_details(
     format: FormatType = FormatType.json):
     values = db.query(User).filter(User.username==username).first()
     #if user doesnt exist returns the json null
-    if format==FormatType.csv: pass
+    if format==FormatType.csv:
+        values_for_csv = None
+        if values:
+            email = None
+            if values.email: email = values.email
+            values_for_csv = [[values.id, values.username, values.first_name,
+                              values.last_name, email, values.password,
+                              values.dob, values.is_admin]]
+    
+        df = pd.DataFrame(values_for_csv,
+                            columns=["id", "username", "first_name",
+                                    "last_name", "email", "password",
+                                    "dob", "is_admin"],)
+
+        stream = io.StringIO()
+        if values:
+            df.to_csv(stream, index=False, encoding='utf-8')
+        else: df.to_csv(stream, index=False, encoding='utf-8', header=None)
+        response = StreamingResponse(iter([stream.getvalue()]),
+                                     media_type="text/csv"
+                                     )
+        response.headers["Content-Disposition"] = "attachment; filename=user_details.csv"
+
+        return response
+    
     return values

@@ -16,7 +16,9 @@ def login(
     """Logs in and stores token to local storage."""
     store_config("api_key", None)
     try:
-        response = requests.post(API_URL + "/login", params={'username': username, 'password': passw})
+        response = requests.post(API_URL + "/login",
+                                 data={'username': username, 'password': passw},
+                                 headers={'content-type': 'application/x-www-form-urlencoded'})
 
         if response.status_code == 200:
             if "token" in response.json():
@@ -67,10 +69,10 @@ def adduser(
 @authenticated
 def user(
         username:   Annotated[str, typer.Option(help="Username", show_default=False)],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Returns user details. Requires authentication."""
-    response = handle_request(f"/admin/users/{urllib.parse.quote(username)}", api_key=api_key, method="GET")
+    response = handle_request(f"/admin/users/{urllib.parse.quote(username)}", api_key=api_key, method="GET", params={'format': format})
     if response is not None:
         print_response(response,
                 format=format,
@@ -82,7 +84,7 @@ def user(
 @app.command()
 @authenticated
 def healthcheck(
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Checks the health of the API. Requires authentication."""
     response = handle_request("/admin/healthcheck", method="GET", api_key=api_key, params={'format': format})
@@ -92,7 +94,7 @@ def healthcheck(
 @app.command()
 @authenticated
 def resetall(
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Resets database to initial state. Requires authentication."""
     response = handle_request("/admin/resetall", api_key=api_key, params={'format': format})
@@ -104,7 +106,7 @@ def resetall(
 @authenticated
 def newtitles(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Uploads data for Titles. Requires authentication."""
     try:
@@ -121,7 +123,7 @@ def newtitles(
 @authenticated
 def newakas(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Uploads data for Aliases. Requires authentication."""
     try:
@@ -138,7 +140,7 @@ def newakas(
 @authenticated
 def newnames(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Uploads data for People. Requires authentication."""
     try:
@@ -155,7 +157,7 @@ def newnames(
 @authenticated
 def newcrew(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Uploads data for Crews. Requires authentication."""
     try:
@@ -172,7 +174,7 @@ def newcrew(
 @authenticated
 def newepisode(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Uploads data for Episodes. Requires authentication."""
     try:
@@ -189,7 +191,7 @@ def newepisode(
 @authenticated
 def newprincipals(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Uploads data for Title Principals. Requires authentication."""
     try:
@@ -206,7 +208,7 @@ def newprincipals(
 @authenticated
 def newratings(
         filename: Annotated[str, typer.Option(help=".tsv filename")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Uploads data for Title Ratings. Requires authentication."""
     try:
@@ -223,7 +225,7 @@ def newratings(
 @authenticated
 def title(
         titleID: Annotated[str, typer.Option("--titleID", help="ID of title (tconst)")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Searches for title details based on title ID. Requires authentication."""
     response = handle_request(f"/title/{urllib.parse.quote(titleID)}", method="GET", params={'format': format})
@@ -238,7 +240,7 @@ def title(
 @authenticated
 def searchtitle(
         titlepart: Annotated[str, typer.Option(help="Substring of primary title.")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Searches for titles that their primary title contains a given string. Requires authentication."""
     response = handle_request(f"/searchtitle", method="GET", params={'format': format}, json={"titlePart": titlepart})
@@ -256,7 +258,7 @@ def bygenre(
         _min: Annotated[float, typer.Option("--min", help="Minimum rating (must be between 0 and 10).")],
         _from: Annotated[Optional[int], typer.Option("--from", help="Start year must be after this year. If defined '--to' must also be defined.")] = None,
         to: Annotated[Optional[int], typer.Option(help="Start year must be before this year. If defined '--from' must also be defined.")] = None,
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Searches for Titles using criteria. Requires authentication."""
 
@@ -283,7 +285,7 @@ def bygenre(
 @authenticated
 def name(
         nameid: Annotated[str, typer.Option(help="ID of person (nconst)")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Searches for Person details based on name ID. Requires authentication."""
     response = handle_request(f"/name/{urllib.parse.quote(nameid)}", method="GET", params={'format': format})
@@ -299,7 +301,7 @@ def name(
 @authenticated
 def searchname(
         namepart: Annotated[str, typer.Option(help="Substring of name.")],
-        format: Annotated[Format, typer.Option(help="Format to query")] = f"{Format.json}"
+        format: Annotated[Format, typer.Option(help="Format to query")] = Format.json
         ):
     """Searches for People that their name contains a given string. Requires authentication."""
     response = handle_request(f"/searchname", method="GET", json={"namePart": namepart}, params={'format': format})

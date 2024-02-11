@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from typing import Annotated
+from fastapi import APIRouter, Body, Depends, HTTPException, status, Form
 from datetime import datetime, timedelta
 from sqlalchemy.orm import  Session
 from fastapi.responses import JSONResponse
@@ -11,7 +12,10 @@ from datetime import date
 from sqlalchemy import exc
 import os
 from fastapi import BackgroundTasks
-from utils import check_is_adult, get_current_user
+from utils import check_is_adult, get_current_user, FormatType
+import pandas as pd
+from fastapi.responses import StreamingResponse
+import io
 
 # Authentication Router
 
@@ -41,7 +45,10 @@ def get_password_hash(password):
 
 
 @router.post('/login')
-async def login(username: str, password: str, db:Session = Depends(get_db)):
+async def login(username: Annotated[str, Form()],
+                password: Annotated[str, Form()],
+                db:Session = Depends(get_db),
+                format: FormatType = FormatType.json):
     user = db.query(User).filter(User.username == username).first()
     if user and verify_password(password, user.password):
         token_data = {
@@ -51,6 +58,18 @@ async def login(username: str, password: str, db:Session = Depends(get_db)):
             'is_adult': check_is_adult(user.dob)
         }
         token = create_jwt_token(token_data)
+
+        if format == FormatType.csv:
+
+            df = pd.DataFrame({'token': token}, index=[token])
+            stream = io.StringIO()
+            df.to_csv(stream, index=False, encoding='utf-8')
+            response = StreamingResponse(iter([stream.getvalue()]),
+                                     media_type="text/csv")
+            response.headers["Content-Disposition"] = "attachment; filename=user_token.csv"
+
+            return response
+
         return {'token': token}
     else:
         raise HTTPException(

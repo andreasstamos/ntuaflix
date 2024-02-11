@@ -28,7 +28,9 @@ export default function Login() {
         setPassword('');
 
         try{
-            const response = await axiosInstance.post(`/login?username=${username}&password=${password}`, payload);
+            const response = await axiosInstance.post(`/login`, payload, {
+                headers: {'content-type': 'application/x-www-form-urlencoded'}});
+            
             saveTokens(response?.data?.token);
             navigate('/', {replace:true})
         }
