@@ -45,6 +45,8 @@ async def update_profile(
     else:
         user_profile.first_name = payload.get("first_name", user_profile.first_name)
         user_profile.last_name = payload.get("last_name", user_profile.last_name)
+        user_profile.email = payload.get("email", user_profile.email)
+        user_profile.dob = payload.get("dob", user_profile.dob)
 
         db.add(user_profile)
         db.commit()
