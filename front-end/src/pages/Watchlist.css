@@ -218,4 +218,9 @@
       padding: 6px 10px; 
       font-size: 11px; 
   }
+
+  .watchlist-icon {
+    width: 100px;
+    height:100px;
+  }
 }
