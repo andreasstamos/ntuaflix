@@ -6,9 +6,8 @@ import axiosInstance from '../api/api'
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import { CgPlayListAdd, CgTrash, CgYoutube , CgPlayListRemove, CgSearch} from "react-icons/cg";
-import './LibContents.css'
-
-
+import './LibContents.css' 
+import NoImageFound from '../assets/images/NoImagePrev.png'
 
 export default function LibContents() {
 
@@ -170,7 +169,8 @@ export default function LibContents() {
               <tr key={index} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
                 <td>{index + 1}</td>
                 <td><Link to={`/movie/${movie.titleID}`} className='movie-table'>{movie.original_title}</Link></td>
-                <td><img src = {movie.titlePoster} alt="Movie Poster" className="poster-prev"/></td>
+                <td><img src={movie.titlePoster ? movie.titlePoster : NoImageFound}
+                 alt="Movie Poster" className="poster-prev"/></td>
                 <td>
                 <button className="delete-button" onClick={()=>removeMovie(movie)}><CgPlayListRemove/></button>
               </td>
@@ -219,7 +219,7 @@ export default function LibContents() {
           
           addingMovie.map((movie) => (
             <div key={movie.titleID} className="image-container">
-            <img src={movie.titlePoster} alt="Fetched Image" />
+            <img src={movie.titlePoster ? movie.titlePoster : NoImageFound} alt="Fetched Image" />
             <span>{movie.original_title}</span>
             <button className='add-movie-btn' onClick={() => add_movie(movie.titleID)}>Add</button>
           </div>

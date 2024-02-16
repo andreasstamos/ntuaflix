@@ -4,11 +4,21 @@ import AuthContext from '../context/AuthContext'
 import { useContext, useEffect, useState } from 'react'
 import NotRegistered from './NotRegistered';
 import axiosInstance from '../api/api'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 export default function NewReview (props) {
     const { pathname } = useLocation();
+    const [searchParams] = useSearchParams();
+    const [revtitle, setRevtitle] = useState('');
+
+    useEffect(() => {
+        const revtitleParam = searchParams.get('revtitle');
+        if (revtitleParam) {
+            setRevtitle(revtitleParam);
+            setTitle(revtitleParam); //Auto-fills first input in the form
+        }
+      }, [searchParams]);
 
     const navigate = useNavigate();
     const gotomovies = () => {
@@ -74,7 +84,7 @@ export default function NewReview (props) {
             <form className = "review-form" onSubmit = {make_review} >
             <label for="title">Movie Title</label>
             <input value = {title} onChange = {(e) => setTitle(e.target.value)} 
-             type="text" placeholder="Enter Original Title" id="title" name="title" required/>
+             type="text" placeholder={revtitle? revtitle : "Enter Original Title"} id="title" name="title" required/>
 
                 <label>Your Rating: {rating}</label>
                 <div className="stars-container">

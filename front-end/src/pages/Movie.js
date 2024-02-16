@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext} from 'react'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import './Movie.css'
 import axiosInstance from '../api/api';
@@ -6,7 +6,9 @@ import Preloader from '../components/Preloader';
 import { Link, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import { Select, MenuItem } from '@mui/material'
+import { Select, MenuItem } from '@mui/material';
+import { Navigate } from 'react-router-dom';
+
 
 
 export default function Movie() {
@@ -99,6 +101,8 @@ function cancelBtn() {
     setError(null);
 }
 
+
+
   if (loading) return <Preloader/>
   return (
     <div className='movie-page-container' style={{background: `linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)), url(${movieData.titlePoster})`}}>
@@ -139,13 +143,23 @@ function cancelBtn() {
                                     <div onClick={() => addMovieToWatchlist(watchlist)} className='select-watchlist-btn'>{watchlist.library_name}</div>
                                    </MenuItem>
                             })}
+                            {!watchlists && 
+                            <h3>You don't have any watchlists created yet!</h3>
+                            }
 
                             </div>
                             <button className='cancel-btn' onClick={cancelBtn}>Cancel</button>
 
                         </div>
                         ): (
+                            <div>
                             <button className='btn btn-primary' onClick ={handle_watchlists}>Add to WatchList</button>
+                            <br></br>
+                            <br></br>
+                            <Link to={`/makereview?revtitle=${encodeURIComponent(movieData.original_title)}`}>
+                            <button className='btn btn-primary'>Make a Review</button>
+                            </Link>
+                            </div>
                         )}
                             {error && <p className='form-error'>{error}</p>}
                             {success && <p className='form-success'>{success}</p>}
