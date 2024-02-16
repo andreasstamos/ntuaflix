@@ -7,6 +7,7 @@ import axiosInstance from '../api/api'
 import { Link } from 'react-router-dom';
 import { CgClapperBoard } from "react-icons/cg";
 import { useLocation } from 'react-router-dom';
+import WatclistIcon from '../assets/images/watchlist_container.png'
 
 export default function Watchlist() {
   const { pathname } = useLocation();
@@ -73,7 +74,7 @@ export default function Watchlist() {
 
         {watchlists.map((watchlist) => (
         <Link to={`/libcontents/${watchlist.library_name}`} key={watchlist.library_name}>
-          {watchlist.library_name}
+          <img src={WatclistIcon} className='watchlist-icon'/>{watchlist.library_name}
           <br></br>
           <span> <CgClapperBoard/>{watchlist.items} items</span>
         </Link>
