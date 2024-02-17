@@ -1768,6 +1768,11 @@
     ],
     "principals": [
       {
+        "nameID": "nm0253652",
+        "primaryName": "George Eliot",
+        "category": "writer"
+      },
+      {
         "nameID": "nm0537402",
         "primaryName": "Rex Maidment",
         "category": "cinematographer"
@@ -1800,11 +1805,6 @@
       {
         "nameID": "nm0905547",
         "primaryName": "Maggie Wadey",
-        "category": "writer"
-      },
-      {
-        "nameID": "nm0253652",
-        "primaryName": "George Eliot",
         "category": "writer"
       },
       {

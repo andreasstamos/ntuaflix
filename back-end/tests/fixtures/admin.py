@@ -28,11 +28,11 @@ def admin_token(client, admin_register, db_sessionmaker):
         with db_sessionmaker() as test_db:
             admin = test_db.query(models.User).filter_by(username = "test_admin").first()
             assert admin is not None
-        params = {
+        data = {
                 "username": "test_admin",
                 "password": "123456",
                 }
-        response = client().post("login/", params=params)
+        response = client().post("login/", data=data)
         assert response.status_code == 200, response.text
 
         token = response.json()['token']
