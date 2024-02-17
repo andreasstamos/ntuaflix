@@ -43,7 +43,7 @@ def user_parser(users, db: db_dependency):
             'email': row["email"],
             'password': pwd_context.hash(row["password"]),
             'dob': row["dob"],
-            'is_admin': False
+            'is_admin': row["is_admin"]
         }
         user = User(**user_data)
         try:

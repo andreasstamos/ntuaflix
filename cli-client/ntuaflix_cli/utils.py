@@ -76,6 +76,9 @@ def handle_request(path, *, method="POST", api_key=None, **kwargs):
                 )
         if response.status_code == 200:
             return response
+        elif response.status_code == 401:
+            print(response.text)
+            print(":stop_sign: [bold red]Your token appears to be outdated. Please logout and relogin. [/bold red]")
         else:
             print(":no_good: [bold red]Server responded in an irregular manner (bad status code). Please contact system administrator.[/bold red]")
     except requests.ConnectionError:

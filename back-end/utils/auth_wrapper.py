@@ -41,7 +41,7 @@ def authorize_user(func):
         if user_id == None: 
             raise credentials_exception
         if user_id != session_id:
-            raise HTTPException(status_code=403, detail="Permission denied: Cross user validation failed")
+            raise HTTPException(status_code=401, detail="Permission denied: Cross user validation failed")
         return await func(*args, user_id=user_id, session_id=session_id, **kwargs)
     return wrapper
 
@@ -64,7 +64,7 @@ def admin_required(func):
     @wraps(func)
     async def admin_wrapper(*args, role:role_dependency, **kwargs):
         if (role!="admin") :
-            raise HTTPException(status_code=403, detail=f"Permission Denied: Only admin can access this source!")
+            raise HTTPException(status_code=401, detail=f"Permission Denied: Only admin can access this source!")
         return await func(*args, role=role, **kwargs)
     return admin_wrapper
  
