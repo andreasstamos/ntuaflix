@@ -17,8 +17,9 @@ Access NTUAFLIX [here](https://ntuaflix.ddnsfree.com/ "here").
 
 ### Tech Stack
 <div style="display:flex; justify-content: space-between;">
-<img src="https://cdn.worldvectorlogo.com/logos/fastapi.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="17%"/><img src="https://cdn.worldvectorlogo.com/logos/material-ui-1.svg" width="17%"/><img src="https://www.svgrepo.com/show/354115/nginx.svg" width="17%"/>
+<img src="https://cdn.worldvectorlogo.com/logos/fastapi.svg" width="17%"/><img src="https://www.svgrepo.com/show/354115/nginx.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="17%"/><img src="https://cdn.worldvectorlogo.com/logos/material-ui-1.svg" width="17%"/>
 </div>
+
 
 ## Quick start (docker)
 
