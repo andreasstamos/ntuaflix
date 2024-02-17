@@ -52,7 +52,7 @@ export default function Register() {
         <h1 className='title-with-line'>Sign up</h1>
 
             <div className='form-input'>
-                <input type='text' placeholder='Username' required value={username} onChange={(e) => setUsername(e.target.value)}/>
+                <input type='text' placeholder='Username' required value={username} autoCapitalize={false} onChange={(e) => setUsername(e.target.value)}/>
             </div>
 
             <div className='form-input'>
