@@ -1,21 +1,15 @@
 [![Backend Tests](https://github.com/ntua/softeng23-34/actions/workflows/backend_test.yml/badge.svg)](https://github.com/ntua/softeng23-34/actions/workflows/backend_test.yml)
 [![Docker Compose build and up, tests for CLI client](https://github.com/ntua/softeng23-34/actions/workflows/cli_test.yml/badge.svg)](https://github.com/ntua/softeng23-34/actions/workflows/cli_test.yml)
 
-# SoftEng-template
-
-Template repository, used for NTUA/ECE Software Engineering, 2023-2024
-
-Το αρχείο αυτό περιέχει οδηγίες για το στήσιμο του git repository που θα
-χρησιμοποιήσετε.  Στο τέλος, θα το αντικαταστήσετε με το `README.md` που
-θα περιγράφει το δικό σας project.
-
 # NTUAFLIX
 
-### Introduction
+## Introduction
+Unlock Infinite Entertainment with NTUAFLIX: Your Gateway to Movies and Series Extravaganza! Immerse Yourself in a World of Blockbusters and Binge-Worthy Delights. Join the Streaming Revolution Now! #NTUAFLIX #Movies #Series #StreamingExcellence
+
 Access NTUAFLIX [here](https://ntuaflix.ddnsfree.com/ "here").
 <img src="/front-end/public/meta-image.png" style="border-radius:8px;"/>
 
-### Tech Stack
+## Tech Stack
 <div style="display:flex; justify-content: space-between;">
 <img src="https://cdn.worldvectorlogo.com/logos/fastapi.svg" width="17%"/><img src="https://www.svgrepo.com/show/354115/nginx.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" width="17%"/><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="17%"/><img src="https://cdn.worldvectorlogo.com/logos/material-ui-1.svg" width="17%"/>
 </div>
