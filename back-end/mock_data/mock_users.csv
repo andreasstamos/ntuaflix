@@ -1,7 +1,7 @@
 id,username,first_name,last_name,email,password,dob,is_admin
-1,admin_Pik,Admin1,Last1,admin_Pik@example.com,admin1,1991-01-01,True
+1,admin,Admin,Admin,admin@example.com,admin,1991-01-01,True
 2,admin_andreas,Admin2,Last2,admin_andreas@example.com,admin2,1992-01-01,True
-3,admin_BigNick,Admin3,Last3,admin_BigNick@example.com,admin3,1993-01-01,True
+3,admin_bignick,Admin3,Last3,admin_BigNick@example.com,admin3,1993-01-01,True
 4,stefadmin,Admin4,Last4,stefadmin@example.com,admin4,1994-01-01,True
 5,friday_admin,Admin5,Last5,friday_admin@example.com,admin5,1995-01-01,True
 6,mlazoy_as_admin,Admin6,Last6,mlazoy_as_admin@example.com,admin6,1996-01-01,True
