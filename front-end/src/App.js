@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Admin from './pages/admin/Admin';
 import './App.css';
 import Index from './pages/Index';
 import Auth from './pages/auth/Auth';
@@ -7,7 +6,6 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Navbar from './components/Navbar';
 import Movie from './pages/Movie';
-import Preloader from './components/Preloader';
 import Movies from './pages/Movies';
 import { AuthProvider } from './context/AuthContext';
 import Watchlist from './pages/Watchlist';
@@ -51,12 +49,9 @@ function App() {
               <Route path='/person/:personID/' exact element={<Person />} />
               <Route path='/movies/' exact element={<Movies />} />
 
-              <Route path='/preloader/' exact element={<Preloader />} />
-              <Route path='/admin/' exact element={<Admin />} />
-              <Route path='/watchlist/'  element={<Watchlist />} />
               <Route path='/recommend/' exact element={<Recommender />} />
 
-
+              <Route path='/watchlist/'  element={<Watchlist />} />
               <Route path='/reviews/' exact element = {<UserProtectedRoute><Reviews /></UserProtectedRoute>} />
               <Route path='/makereview/:title?' exact element = {<UserProtectedRoute><NewReview /></UserProtectedRoute>} />
               <Route path='/libcontents/:library_name/' exact element={<UserProtectedRoute><LibContents /></UserProtectedRoute>} />

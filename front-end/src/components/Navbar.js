@@ -124,7 +124,8 @@ const {logoutUser, user} = useContext(AuthContext);
           <li className="item"><NavLink to={`/reviews/`}>Reviews</NavLink></li> */}
           {/* <li className="item"><NavLink to={`/statistics/`}>Statistics</NavLink></li> */}
           <li className="item"><NavLink to={`/recommend/`}>Recommender</NavLink></li>
-
+          <li className='item'><NavLink to={`/watchlist`}>Watchlist</NavLink></li>
+          
           <li className={`item has-submenu ${!user && 'hidden'}`}>
             <a tabIndex="0">Account Info<ExpandMoreIcon/></a>
             <ul className="submenu">
