@@ -2,7 +2,7 @@
 name = "ntuaflix-cli"
 description = "CLI Manager for NTUAflix"
 version = "0.1.0"
-readme = "documentation.md"
+readme = "README.md"
 dependencies = [
 	"typer[all]",
 	"requests"

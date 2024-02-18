@@ -40,8 +40,9 @@ services:
       additional_contexts:
         - frontend_src=./front-end
     ports:
-      - "8000:6000"
-      - "5000:7000"
+      - "80:80"
+      - "443:443"
+      - "9876:9876"
     depends_on:
       - backend
     networks:

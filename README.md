@@ -97,7 +97,7 @@ You can then immediately run the cli:
 ntuaflix-cli [OPTIONS]
 ```
 
-Further documentation for the cli client can be found [here](cli-client/documentation.md).
+Further documentation for the cli client can be found [here](cli-client/README.md).
 
 ## Manual run
 
