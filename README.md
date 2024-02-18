@@ -66,13 +66,21 @@ npm install
 
 ## Local App Demo
 
-1. Create `back-end/.env` file to configure your database credentials, check the `.env` template in `back-end/README.md`. 
-2. Create a database in your DBMS, for example `ntuaflix` and save the name in the `back-end/.env`. For the next steps your DBMS should be running (on localhost).
-3. Run `back-end/models.py` to create tables of the schema.
-4. Place `tsv` files for data import into a folder `back-end/truncated_data`
-5. Run `back-end/input_tsv.py` to import data into the database from the tsv files.
-6. Run `back-end/main.py` to run the back-end code
-7. While `back-end/main.py` is running, run `npm start` in `front-end/` folder to start the front-end
+1. Create `back-end/.env` file to configure your database credentials, check the `.env` template in `back-end/README.md`.
+2. Add the following parameters for the authentication schema in the .env file you just created:
+   ```
+   SECRET_KEY=469155679be5db1afdb6613292c4c7805dfa71d2be7fde22d5abb522d6f23ef2
+   ALGORITHM=HS256
+   FORGET_PWD_SECRET_KEY=658955679be4fr3afdb6613292c4c7805dfa71d2be7fde2297abb535d6f23ef2
+   ```
+   
+4. Create a database in your DBMS, for example `ntuaflix` and save the name in the `back-end/.env`. For the next steps your DBMS should be running (on localhost).
+5. Run `back-end/models.py` to create tables of the schema.
+6. Place `tsv` files for data import into a folder `back-end/truncated_data`
+7. Run `back-end/input_tsv.py` to import data into the database from the tsv files.
+8. Run `back-end/main.py` to run the back-end code.
+9. Run `back-end/mock_data_parser.py` in a new terminal to insert mock data in the database for a full app expierence demo.
+10. While `back-end/main.py` is running, open a new terminal and run `npm start` in `front-end/` folder to start the front-end.
 
 ### CLI Client
 
