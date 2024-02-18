@@ -53,7 +53,7 @@ function App() {
 
               <Route path='/watchlist/'  element={<Watchlist />} />
               <Route path='/reviews/' exact element = {<UserProtectedRoute><Reviews /></UserProtectedRoute>} />
-              <Route path='/makereview/:title?' exact element = {<UserProtectedRoute><NewReview /></UserProtectedRoute>} />
+              <Route path='/makereview/:revtitle?' exact element = {<UserProtectedRoute><NewReview /></UserProtectedRoute>} />
               <Route path='/libcontents/:library_name/' exact element={<UserProtectedRoute><LibContents /></UserProtectedRoute>} />
               <Route path='/account/profile' element={<UserProtectedRoute><Profile/></UserProtectedRoute>} />
               <Route path='/account/statistics/' exact element = {<UserProtectedRoute><Statistics /></UserProtectedRoute>} />
