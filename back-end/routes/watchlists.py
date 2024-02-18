@@ -90,6 +90,8 @@ async def create_watchlist(lib_name: str, user_id: int, session_id: token_depend
 @authorize_user            
 async def remove_watchlist(lib_name: str, user_id: int, session_id: token_dependency, db: db_dependency):
     db_watchlist = db.query(Watchlist).filter(and_(Watchlist.library_name == lib_name),Watchlist.user_id==user_id).first()
+    if not db_watchlist:
+        raise HTTPException(status_code=404, detail=f"You have not created a watchlist with name {lib_name}")
     watchlist_id = db_watchlist.id
     #remove references 
     db.query(WatchlistContent).filter(WatchlistContent.watchlist_id == watchlist_id).delete()
@@ -137,5 +139,5 @@ async def remove_contents(movie_tconst: str, lib_name: str, db: db_dependency, u
     else:
         raise HTTPException(status_code=400, detail=f"Movie {movie_tconst} is not in this watchlist")
     db.commit()
-    return JSONResponse(content={"message": " Watchlist removed successfully!"}, status_code=200)
+    return JSONResponse(content={"message": " Movie removed successfully from watchlist!"}, status_code=200)
     

@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func 
 from database import get_db
@@ -19,6 +19,8 @@ async def get_title(
         db: Session = Depends(get_db)
         ) -> Optional[TitleObject]:
     title = db.query(Title).filter_by(tconst=titleID).first()
+    if not title:
+        raise HTTPException(status_code=404, detail=f"Movie with tconst {titleID} doesn't exist")
     if format == FormatType.csv: return CSVResponse([TitleObject.model_validate(title)] if title is not None else [])
     return title
 
@@ -28,7 +30,9 @@ async def search_title_name(
         query: TqueryObject,
         format: FormatType = FormatType.json,
         db: Session = Depends(get_db)) -> list[TitleObject]:
-    titles = db.query(Title).filter(Title.original_title.contains(query.titlePart))
+    titles = db.query(Title).filter(Title.original_title.contains(query.titlePart)).all()
+    if titles==[]:
+        raise HTTPException(status_code=204, detail=f"titlePart didn't match!")
     if format == FormatType.csv: return CSVResponse(map(TitleObject.model_validate, titles))
     return titles
 

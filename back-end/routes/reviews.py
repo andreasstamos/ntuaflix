@@ -143,6 +143,8 @@ async def remove_review(review_id: int, db: db_dependency, user_id: int, session
     db_review = db.query(Review).filter(Review.id==review_id).first()
     if not db_review:
         raise HTTPException(status_code=404, detail=f"Review {review_id} doesn't exist")
+    if not (db_review.user_id==user_id):
+        raise HTTPException(status_code=401, detail=f"this review doens't belong to you!")
     else:
         db.query(ReviewReactions).filter(ReviewReactions.review_id == review_id).delete()
         db.delete(db_review)
