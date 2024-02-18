@@ -10,17 +10,17 @@ from sqlalchemy.orm import joinedload
 
 router = APIRouter()
 
-@router.get("/name/{nameID}", response_model = Optional[NameObject])
+@router.get("/name/{nameID}", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 async def get_person(
         nameID: str,
         format: FormatType = FormatType.json,
-        db: Session = Depends(get_db)):
+        db: Session = Depends(get_db)) -> Optional[NameObject]:
     person = db.query(Person).filter_by(nconst=nameID).first()
     if format == FormatType.csv: return CSVResponse([NameObject.model_validate(person)] if person is not None else [])
     return person
 
-@router.get("/searchname")
-@router.post("/searchname")
+@router.get("/searchname", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
+@router.post("/searchname", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 async def search_person_name(
         query: NqueryObject,
         format: FormatType = FormatType.json,

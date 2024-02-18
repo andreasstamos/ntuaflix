@@ -22,12 +22,12 @@ router = APIRouter()
 
 db_dependency = Annotated[Session,Depends(get_db)]
 
-@router.get("/healthcheck")
+@router.get("/healthcheck", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def connection_status(
     role: role_dependency, 
     db: db_dependency,
-    format: FormatType = FormatType.json):
+    format: FormatType = FormatType.json) -> HealthCheckObject:
     response = {"status":"failed", "dataconnection": str(db.bind.url)}
     try:
         db.execute(text('SELECT 1'))
@@ -38,7 +38,7 @@ async def connection_status(
         if format == FormatType.csv : return CSVResponse([HealthCheckObject.model_validate(response)])
         return response
 
-@router.post('/resetall')
+@router.post('/resetall', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def reset_all(
         role: role_dependency,
@@ -61,7 +61,7 @@ class UploadFileAdapter:
         data = self.decoder.decode(data)
         return data
 
-@router.post('/upload/titlebasics')
+@router.post('/upload/titlebasics', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def upload_title_basics(
     role: role_dependency,
@@ -79,7 +79,7 @@ async def upload_title_basics(
     if format == FormatType.csv: return CSVResponse([UploadFileObject.model_validate(ret)])
     return ret
 
-@router.post('/upload/titleakas')
+@router.post('/upload/titleakas', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def upload_title_akas(
         role: role_dependency,
@@ -97,7 +97,7 @@ async def upload_title_akas(
     if format == FormatType.csv: return CSVResponse([UploadFileObject.model_validate(ret)])
     return ret
 
-@router.post('/upload/namebasics')
+@router.post('/upload/namebasics', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def upload_name_basics(
         role: role_dependency,
@@ -115,7 +115,7 @@ async def upload_name_basics(
     if format == FormatType.csv: return CSVResponse([UploadFileObject.model_validate(ret)])
     return ret
 
-@router.post('/upload/titlecrew')
+@router.post('/upload/titlecrew', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def upload_title_crew(
         role: role_dependency,
@@ -137,7 +137,7 @@ async def upload_title_crew(
     if format == FormatType.csv: return CSVResponse([UploadFileObject.model_validate(ret)])
     return ret
 
-@router.post('/upload/titleepisode')
+@router.post('/upload/titleepisode', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def upload_title_episode(
         role: role_dependency,
@@ -156,7 +156,7 @@ async def upload_title_episode(
     return ret
 
 
-@router.post('/upload/titleprincipals')
+@router.post('/upload/titleprincipals', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def upload_title_principals(
         role: role_dependency,
@@ -174,7 +174,7 @@ async def upload_title_principals(
     if format == FormatType.csv: return CSVResponse([UploadFileObject.model_validate(ret)])
     return ret
 
-@router.post('/upload/titleratings')
+@router.post('/upload/titleratings', responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 @admin_required
 async def upload_title_ratings(
         role: role_dependency,

@@ -12,18 +12,18 @@ from math import ceil
 
 router = APIRouter()
 
-@router.get("/title/{titleID}", response_model = Optional[TitleObject])
+@router.get("/title/{titleID}", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 async def get_title(
         titleID: str,
         format: FormatType = FormatType.json,
         db: Session = Depends(get_db)
-        ):
+        ) -> Optional[TitleObject]:
     title = db.query(Title).filter_by(tconst=titleID).first()
     if format == FormatType.csv: return CSVResponse([TitleObject.model_validate(title)] if title is not None else [])
     return title
 
-@router.get("/searchtitle")
-@router.post("/searchtitle")
+@router.get("/searchtitle", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
+@router.post("/searchtitle", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 async def search_title_name(
         query: TqueryObject,
         format: FormatType = FormatType.json,
@@ -32,7 +32,7 @@ async def search_title_name(
     if format == FormatType.csv: return CSVResponse(map(TitleObject.model_validate, titles))
     return titles
 
-@router.get("/bygenre")
+@router.get("/bygenre", responses = {200: {"content": {"text/csv": {}}, "description": "CSV analogue of JSON"}})
 async def search_title_genre(
         query: GqueryObject,
         format: FormatType = FormatType.json,
