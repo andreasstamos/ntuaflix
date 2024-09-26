@@ -1,5 +1,5 @@
-[![Backend Tests](https://github.com/ntua/softeng23-34/actions/workflows/backend_test.yml/badge.svg)](https://github.com/ntua/softeng23-34/actions/workflows/backend_test.yml)
-[![Docker Compose build and up, tests for CLI client](https://github.com/ntua/softeng23-34/actions/workflows/cli_test.yml/badge.svg)](https://github.com/ntua/softeng23-34/actions/workflows/cli_test.yml)
+[![Backend Tests](https://github.com/andreasstamos/ntuaflix/actions/workflows/backend_test.yml/badge.svg)](https://github.com/andreasstamos/ntuaflix/actions/workflows/backend_test.yml)
+[![Docker Compose build and up, tests for CLI client](https://github.com/andreasstamos/ntuaflix/actions/workflows/cli_test.yml/badge.svg)](https://github.com/andreasstamos/ntuaflix/actions/workflows/cli_test.yml)
 
 # NTUAFLIX
 
